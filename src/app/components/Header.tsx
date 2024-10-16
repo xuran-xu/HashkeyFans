@@ -2,10 +2,12 @@
 
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
+import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
+import { useState } from "react";
 import { FaTelegram, FaDiscord, FaTwitter } from "react-icons/fa";
 import { IoEarthOutline } from "react-icons/io5";
+import i18n from '../../i18n';  // 确保路径正确
 
 const languages = [
   { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -13,23 +15,21 @@ const languages = [
 ];
 
 export default function Header() {
-  const { i18n } = useTranslation();
+  const router = useRouter();
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
 
-  useEffect(() => {
-    console.log("isLangMenuOpen changed:", isLangMenuOpen);
-  }, [isLangMenuOpen]);
-
   const toggleLangMenu = () => {
-    console.log("Toggling language menu");
     setIsLangMenuOpen(prevState => !prevState);
   };
 
   const changeLanguage = (lng: string) => {
-    console.log("Changing language to:", lng);
     i18n.changeLanguage(lng);
     setIsLangMenuOpen(false);
+    // 更新 URL
+    const newPathname = pathname.replace(/^\/[a-z]{2}/, `/${lng}`);
+    router.push(newPathname);
   };
 
   return (
@@ -38,13 +38,12 @@ export default function Header() {
         <div className="flex items-center justify-between px-4 py-3">
           {/* Logo */}
           <Link href="/" className="text-xl font-bold">
-            <img src="/img/logo.png" alt="Logo" className="h-8" />
+            Hashkey Fans
           </Link>
 
           {/* 桌面导航 */}
           <div className="hidden md:flex items-center space-x-6">
             <a href="https://t.me/HashKeyChainHSK" className="text-gray-600 hover:text-blue-500 transition-colors duration-200">
-              <FaTelegram className="w-5 h-5" />
             </a>
             <a href="https://discord.gg/qvPkbrYY" className="text-gray-600 hover:text-indigo-500 transition-colors duration-200">
               <FaDiscord className="w-5 h-5" />
