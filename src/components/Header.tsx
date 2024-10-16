@@ -34,8 +34,8 @@ export default function Header() {
 
   return (
     <header className="shadow-sm">
-      <div className="container mx-auto px-4 py-3">
-        <div className="flex items-center justify-between">
+      <div className="container mx-auto md:px-4 md:py-3">
+        <div className="flex items-center justify-between px-4 py-3">
           {/* Logo */}
           <Link href="/" className="text-xl font-bold">
             <img src="/img/logo.png" alt="Logo" className="h-8" />
@@ -89,7 +89,7 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 space-y-4">
+          <div className="md:hidden mt-4 space-y-4 p-2 bg-white/50">
             <a href="https://t.me/HashKeyChainHSK" className="block text-gray-600 hover:text-blue-500 transition-colors duration-200">
               <FaTelegram className="w-5 h-5 inline-block mr-2" /> Telegram
             </a>
