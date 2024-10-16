@@ -5,7 +5,7 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import { I18nextProvider } from 'react-i18next'
 import i18n from '../../i18n';
-import './globals.css'
+import '../globals.css'
 
 const firaCode = Fira_Code({ subsets: ['latin'] })
 const notoSansSC = Noto_Sans_SC({ subsets: ['latin'] })
