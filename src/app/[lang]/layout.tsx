@@ -1,10 +1,10 @@
 "use client";
 
 import { Fira_Code, Noto_Sans_SC } from 'next/font/google'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import Header from '../../components/Header'
+import Footer from '../../components/Footer'
 import { I18nextProvider } from 'react-i18next'
-import i18n from '../i18n';
+import i18n from '../../i18n';
 import './globals.css'
 
 const firaCode = Fira_Code({ subsets: ['latin'] })
