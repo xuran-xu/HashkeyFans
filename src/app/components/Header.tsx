@@ -2,7 +2,6 @@
 
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import { FaTelegram, FaDiscord, FaTwitter } from "react-icons/fa";
