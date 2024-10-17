@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import { useTranslation } from "react-i18next";
-import Image from 'next/image';
 import Link from 'next/link';
 
 interface Partner {
@@ -52,7 +52,7 @@ export default function Partners() {
           {partners.map((partner, index) => (
             <Link key={index} href={partner.link} target="_blank" rel="noopener noreferrer"
                   className="bg-white p-4 rounded shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
-              <Image 
+              <img 
                 src={partner.image} 
                 alt={partner.name} 
                 width={partner.width} 

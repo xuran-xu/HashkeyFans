@@ -6,7 +6,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import { FaTelegram, FaDiscord, FaTwitter } from "react-icons/fa";
 import { IoEarthOutline } from "react-icons/io5";
-import i18n from '../../i18n';  // 确保路径正确
+import { useTranslation } from 'react-i18next';
 
 const languages = [
   { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -18,6 +18,7 @@ export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
+  const { i18n } = useTranslation();
 
   const toggleLangMenu = () => {
     setIsLangMenuOpen(prevState => !prevState);
@@ -37,7 +38,7 @@ export default function Header() {
         <div className="flex items-center justify-between px-4 py-3">
           {/* Logo */}
           <Link href="/" className="text-xl font-bold">
-            Hashkey Fans
+            <img src="/img/logo.png" alt="Logo" width={32} height={32} />
           </Link>
 
           {/* 桌面导航 */}
