@@ -3,6 +3,9 @@
 import { Fira_Code, Noto_Sans_SC } from 'next/font/google'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { useEffect } from 'react';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '../../i18n';
 
 import '../globals.css'
 
@@ -16,8 +19,13 @@ export default function RootLayout({
   children: React.ReactNode
   params: { lang: string }
 }) {
+  useEffect(() => {
+    i18n.changeLanguage(lang);
+  }, [lang]);
+
   return (
-    <html lang={lang} className={`${firaCode.className} ${notoSansSC.className}`}>
+    <I18nextProvider i18n={i18n}>
+      <html lang={lang} className={`${firaCode.className} ${notoSansSC.className}`}>
         <body className="relative min-h-screen font-sans">
           <div 
             className="fixed inset-0 bg-cover bg-center bg-no-repeat blur-sm z-[-1]"
@@ -29,6 +37,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </body>
-    </html>
+      </html>
+    </I18nextProvider>
   )
 }
