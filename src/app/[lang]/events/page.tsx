@@ -67,12 +67,18 @@ export default function EventList() {
         </p>
         <h3 className="text-xl font-bold mb-2 text-gray-800">{event.title}</h3>
         <p className="text-gray-700 mb-4">{event.content}</p>
-        <Link href={event.button.link} className="w-full h-12 md:h-14 bg-white text-black font-semibold text-base md:text-lg rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-shadow duration-300 inline-flex items-center justify-center">
-          <span className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"></span>
-          <span className="relative z-10 group-hover:text-white transition-colors duration-700 tracking-wide">
-            {event.button.text}
-          </span>
-        </Link>
+        {event.buttons && event.buttons.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {event.buttons.map((button, index) => (
+              <Link key={index} href={button.link} className="flex-grow h-12 md:h-14 bg-white text-black font-semibold text-base md:text-lg rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-shadow duration-300 inline-flex items-center justify-center">
+                <span className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"></span>
+                <span className="relative z-10 group-hover:text-white transition-colors duration-700 tracking-wide">
+                  {button.text}
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

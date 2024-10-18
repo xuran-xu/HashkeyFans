@@ -22,10 +22,7 @@ const defaultItem: EventItem = {
   content: "更多精彩活动即将揭晓，敬请期待！",
   theme: "未来展望",
   endDate: "",
-  button: {
-    text: "",
-    link: ""
-  }
+  buttons: []
 };
 
 export default function Roadmap() {
@@ -79,11 +76,11 @@ export default function Roadmap() {
                     <img src={item.image} alt={item.theme || item.title} width={200} height={150} className="w-full h-24 md:h-32 object-cover mb-2 md:mb-3 rounded transition-all duration-700 group-hover:opacity-90" />
                     <h3 className="text-lg md:text-xl font-bold mb-1 md:mb-2 bg-gradient-to-b from-black via-gray-600 to-gray-400 bg-clip-text text-transparent group-hover:text-white transition-all duration-700">{item.theme || item.title}</h3>
                     <p className="bg-gradient-to-b from-gray-700 to-gray-400 bg-clip-text text-transparent mb-2 md:mb-3 text-xs md:text-sm line-clamp-3 group-hover:text-white transition-all duration-700">{item.content}</p>
-                    {item.button && (
-                      <Link href={item.button.link} className="inline-block mt-1 md:mt-2 px-3 md:px-4 py-1 md:py-2 bg-white text-black font-semibold text-xs md:text-sm rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-all duration-300">
+                    {item.buttons && (
+                      <Link href={item.buttons[0].link} className="inline-block mt-1 md:mt-2 px-3 md:px-4 py-1 md:py-2 bg-white text-black font-semibold text-xs md:text-sm rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-all duration-300">
                         <span className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-400 to-gray-600 opacity-0 group-hover:opacity-80 transition-all duration-1000 ease-in-out transform scale-105 group-hover:scale-100"></span>
                         <span className="relative z-10 group-hover:text-white transition-colors duration-700">
-                          {item.button.text}
+                          {item.buttons[0].text}
                         </span>
                       </Link>
                     )}
