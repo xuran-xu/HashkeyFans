@@ -22,15 +22,15 @@ export const eventData: Record<string, EventItem[]> = {
       image: "/img/hacker1.png",
       title: "太初 Hackerhouse - 巴厘岛",
       content: "加入我们的巴厘岛黑客屋,探索区块链技术的前沿!",
-      link: "/events/bali-2024",
+      link: "/events",
       buttons: [
         {
           text: "申请参加",
-          link: "/apply/bali-2024"
+          link: "/"
         },
         {
           text: "查看详情",
-          link: "/events/bali-2024"
+          link: "/events"
         }
       ]
     },
@@ -48,11 +48,11 @@ export const eventData: Record<string, EventItem[]> = {
       buttons: [
         {
           text: "Apply Now",
-          link: "/apply/bali-2024"
+          link: "/"
         },
         {
           text: "Learn More",
-          link: "/events/bali-2024"
+          link: "/events"
         }
       ]
     },
