@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function Subscribe() {
   const [email, setEmail] = useState("");
   const { t } = useTranslation();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -13,6 +18,10 @@ export default function Subscribe() {
     console.log("Subscribed:", email);
     setEmail("");
   };
+
+  if (!isClient) {
+    return null; // 或者返回一个加载指示器
+  }
 
   return (
     <div className="py-20 bg-gradient-to-b bg-white/5">

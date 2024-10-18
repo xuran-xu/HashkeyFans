@@ -26,14 +26,16 @@ export default function RootLayout({
   return (
     <I18nextProvider i18n={i18n}>
       <html lang={lang} className={`${firaCode.className} ${notoSansSC.className}`}>
-        <body className="relative min-h-screen font-sans">
+        <body className="relative min-h-screen font-sans flex flex-col">
           <div 
             className="fixed inset-0 bg-cover bg-center bg-no-repeat blur-sm z-[-1]"
             style={{ backgroundImage: "url('/img/bg.png')" }}
           ></div>
-          <div className="relative z-10">
+          <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
-            {children}
+            <main className="flex-grow">
+              {children}
+            </main>
             <Footer />
           </div>
         </body>

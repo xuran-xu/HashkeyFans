@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaTelegram, FaDiscord, FaTwitter } from "react-icons/fa";
 import { IoEarthOutline } from "react-icons/io5";
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,15 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const { i18n } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null; // 或者返回一个加载指示器
+  }
 
   const toggleLangMenu = () => {
     setIsLangMenuOpen(prevState => !prevState);

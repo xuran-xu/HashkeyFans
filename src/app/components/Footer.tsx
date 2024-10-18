@@ -1,8 +1,20 @@
+"use client"
+
 import { useTranslation } from "react-i18next";
 import { FaTelegram, FaDiscord, FaTwitter } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
   const { t } = useTranslation();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null; // 或者返回一个加载占位符
+  }
 
   return (
     <footer className="bg-gradient-to-b from-white/5 to-white/10 text-white py-10">
