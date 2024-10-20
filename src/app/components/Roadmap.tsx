@@ -1,34 +1,30 @@
 /* eslint-disable @next/next/no-img-element */
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from 'next/link';
 import { eventData, EventItem } from "@/app/data/eventData";
 
 const roadmapContent = {
   zh: {
     title: "路线图",
+    futureEvent: "未来活动",
+    futureContent: "更多精彩活动即将揭晓，敬请期待！",
+    futureTheme: "未来展望"
   },
   en: {
     title: "Roadmap",
+    futureEvent: "Future Event",
+    futureContent: "More exciting events coming soon, stay tuned!",
+    futureTheme: "Future Outlook"
   }
-};
-
-// 默认的补充项目
-const defaultItem: EventItem = {
-  type: 'future',
-  startDate: "",
-  image: "/img/pending.png",
-  title: "未来活动",
-  content: "更多精彩活动即将揭晓，敬请期待！",
-  theme: "未来展望",
-  endDate: "",
-  buttons: []
 };
 
 export default function Roadmap() {
   const { i18n } = useTranslation();
   const [content, setContent] = useState(roadmapContent.zh);
   const [roadmapItems, setRoadmapItems] = useState<EventItem[]>([]);
+  const [visibleItems, setVisibleItems] = useState<boolean[]>([]);
+  const timelineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const language = i18n.language as keyof typeof roadmapContent;
@@ -36,17 +32,63 @@ export default function Roadmap() {
 
     const currentEventData = eventData[language] || eventData.zh;
     
-    // 对所有事件进行排序
     const sortedItems = [...currentEventData].sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
 
-    // 如果不足5个，用默认项目补充
+    const defaultItem: EventItem = {
+      type: 'future',
+      startDate: "",
+      image: "/img/pending.png",
+      title: content.futureEvent,
+      content: content.futureContent,
+      theme: content.futureTheme,
+      endDate: "",
+      buttons: []
+    };
+
     const fullItems = [
       ...sortedItems,
       ...Array(Math.max(0, 5 - sortedItems.length)).fill(defaultItem)
     ].slice(0, 5);
 
     setRoadmapItems(fullItems);
-  }, [i18n.language]);
+    setVisibleItems(new Array(fullItems.length).fill(false));
+  }, [i18n.language, content]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const index = Number(entry.target.getAttribute('data-index'));
+          setVisibleItems(prev => {
+            const newVisible = [...prev];
+            newVisible[index] = true;
+            return newVisible;
+          });
+        }
+      });
+    }, { threshold: 0.1 });
+
+    const items = document.querySelectorAll('.roadmap-item');
+    items.forEach(item => observer.observe(item));
+
+    return () => observer.disconnect();
+  }, [roadmapItems]);
+
+  useEffect(() => {
+    if (timelineRef.current) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            timelineRef.current?.classList.add('timeline-visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      observer.observe(timelineRef.current);
+
+      return () => observer.disconnect();
+    }
+  }, []);
 
   return (
     <div className="py-12 bg-gradient-to-b bg-white/5">
@@ -56,10 +98,10 @@ export default function Roadmap() {
         </h2>
         <div className="relative">
           {/* 时间轴 */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-white/30"></div>
+          <div ref={timelineRef} className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-white/30 timeline-animation"></div>
           
           {roadmapItems.map((item, index) => (
-            <div key={index} className="w-full justify-between flex flex-col md:flex-row items-start md:items-center mb-10">
+            <div key={index} className={`roadmap-item w-full justify-between flex flex-col md:flex-row items-start md:items-center mb-10 transition-all duration-1000 ease-in-out ${visibleItems[index] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`} data-index={index}>
               {/* 时间点 */}
               <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white rounded-full border-2 border-black z-10"></div>
               

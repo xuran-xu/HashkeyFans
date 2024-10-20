@@ -1,6 +1,6 @@
 "use client";
 
-import { Fira_Code, Noto_Sans_SC } from 'next/font/google'
+import { Inter, Noto_Sans_SC } from 'next/font/google'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { useEffect } from 'react';
@@ -9,7 +9,7 @@ import i18n from '../../i18n';
 
 import '../globals.css'
 
-const firaCode = Fira_Code({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin'] })
 const notoSansSC = Noto_Sans_SC({ subsets: ['latin'] })
 
 export default function RootLayout({
@@ -25,7 +25,7 @@ export default function RootLayout({
 
   return (
     <I18nextProvider i18n={i18n}>
-      <html lang={lang} className={`${firaCode.className} ${notoSansSC.className}`}>
+      <html lang={lang} className={`${inter.className} ${notoSansSC.className}`}>
         <body className="relative min-h-screen font-sans flex flex-col">
           <div 
             className="fixed inset-0 bg-cover bg-center bg-no-repeat blur-sm z-[-1]"
@@ -33,9 +33,9 @@ export default function RootLayout({
           ></div>
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow">
+            <div className="min-w-screen flex-grow flex justify-center">
               {children}
-            </main>
+            </div>
             <Footer />
           </div>
         </body>

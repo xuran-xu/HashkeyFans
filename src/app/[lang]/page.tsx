@@ -7,11 +7,11 @@ import Subscribe from '../components/Subscribe'
 
 export default function Home() {
   return (
-    <main>
+    <div className="w-full">
       <Hero />
       <Roadmap />
       <Partners />
       <Subscribe />
-    </main>
+    </div>
   )
 }

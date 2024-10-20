@@ -79,7 +79,7 @@ export default function Partners() {
 
   const renderPartners = (partnerList: Partner[], title: string) => (
     <div className="mb-12">
-      <h3 className="text-2xl text-center font-bold mb-6 font-mono text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] tracking-wide">{currentTranslations[title as keyof typeof currentTranslations]}</h3>
+      <h3 className="text-2xl text-center font-bold mb-6 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] tracking-wide">{currentTranslations[title as keyof typeof currentTranslations]}</h3>
       <div className="flex flex-wrap justify-center items-center gap-8">
         {partnerList.map((partner, index) => (
           <Link key={index} href={partner.link} target="_blank" rel="noopener noreferrer"
@@ -100,11 +100,11 @@ export default function Partners() {
   return (
     <div className="py-20">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl text-center font-bold mb-12 font-mono text-white drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] tracking-wide">{currentTranslations["Our Partners"]}</h2>
+        <h2 className="text-3xl text-center font-bold mb-12 text-white drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] tracking-wide">{currentTranslations["Our Partners"]}</h2>
         {renderPartners(partners.collaborators, "Collaborators")}
         {renderPartners(partners.mediaPartners, "Media Partners")}
         <div className="mt-16 text-center">
-          <h3 className="text-2xl font-bold mb-4 font-mono text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] tracking-wide">{currentTranslations["Interested in Partnering?"]}</h3>
+          <h3 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] tracking-wide">{currentTranslations["Interested in Partnering?"]}</h3>
           <p className="text-white mb-6">{currentTranslations["If you're interested in partnering with us, we'd love to hear from you!"]}</p>
           <Link href="/sponsor" className="inline-block w-60 h-14 bg-white text-black font-semibold text-lg rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-shadow duration-300">
             <span className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"></span>

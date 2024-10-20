@@ -26,7 +26,7 @@ export default function Subscribe() {
   return (
     <div className="py-20 bg-gradient-to-b bg-white/5">
       <div className="container mx-auto text-center px-4">
-        <h2 className="text-4xl font-bold mb-6 font-mono text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)] tracking-wide">
+        <h2 className="text-4xl font-bold mb-6 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)] tracking-wide">
           {t("Subscribe to Our Newsletter")}
         </h2>
         <form onSubmit={handleSubmit} className="max-w-3xl mx-auto flex">

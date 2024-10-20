@@ -21,7 +21,7 @@ export const eventData: Record<string, EventItem[]> = {
       endDate: "2024-12-20",
       image: "/img/hacker1.png",
       title: "太初 Hackerhouse - 巴厘岛",
-      content: "加入我们的巴厘岛黑客屋,探索区块链技术的前沿!",
+      content: "加入我们的巴厘岛Hackerhouse, 一起探索PayFi Summer Infra!",
       link: "/events",
       buttons: [
         {
@@ -30,11 +30,10 @@ export const eventData: Record<string, EventItem[]> = {
         },
         {
           text: "查看详情",
-          link: "/events"
+          link: "https://opaque-mistake-40f.notion.site/HashKey-Hackerhouse-Bali-704f5f2f04b34f3583e1392ae5de82ab?pvs=74"
         }
       ]
     },
-    // 可以添加更多中文事件...
   ],
   en: [
     {
@@ -52,10 +51,9 @@ export const eventData: Record<string, EventItem[]> = {
         },
         {
           text: "Learn More",
-          link: "/events"
+          link: "https://opaque-mistake-40f.notion.site/HashKey-Hackerhouse-Bali-Taichu-125e2f6b83c88019aed6c092f3ed796b?pvs=4"
         }
       ]
     },
-    // 可以添加更多英文事件...
   ]
 };

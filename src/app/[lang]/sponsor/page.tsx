@@ -53,10 +53,10 @@ export default function SponsorPage() {
   );
 
   return (
-    <div className="flex items-center bg-gradient-to-b from-white/10 to-white/5 min-h-[calc(100vh-90px)]">
+    <div className="flex flex-grow items-center bg-gradient-to-b from-white/10 to-white/5 min-h-[calc(100vh-90px)]">
       <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center text-gray-800">{content.title}</h1>
-        <p className="text-xl text-center text-gray-700 mb-12">{content.description}</p>
+        <h1 className="text-3xl md:text-4xl font-bold mb-4 text-center text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.title}</h1>
+        <p className="text-xl text-center text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)] mb-12">{content.description}</p>
         
         <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
           {renderContactOption(

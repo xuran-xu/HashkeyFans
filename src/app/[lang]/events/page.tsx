@@ -58,7 +58,7 @@ export default function EventList() {
   const pastEvents = events.filter(event => new Date(event.endDate) < currentDate);
 
   const renderEventCard = (event: EventItem) => (
-    <div className="bg-white/90 rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl">
+    <div className=" bg-white/90 rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl">
       <img src={event.image} alt={event.title} width={400} height={200} className="w-full h-48 object-cover" />
       <div className="p-4">
         <p className="text-sm text-gray-600 mb-2">
@@ -70,7 +70,7 @@ export default function EventList() {
         {event.buttons && event.buttons.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {event.buttons.map((button, index) => (
-              <Link key={index} href={button.link} className="flex-grow h-12 md:h-14 bg-white text-black font-semibold text-base md:text-lg rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-shadow duration-300 inline-flex items-center justify-center">
+              <Link target="_blank" key={index} href={button.link} className="flex-grow h-12 md:h-14 bg-white text-black font-semibold text-base md:text-lg rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-shadow duration-300 inline-flex items-center justify-center">
                 <span className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"></span>
                 <span className="relative z-10 group-hover:text-white transition-colors duration-700 tracking-wide">
                   {button.text}
@@ -92,14 +92,14 @@ export default function EventList() {
   );
 
   return (
-    <div className="py-12 bg-gradient-to-b from-white/10 to-white/5">
+    <div className="w-full py-12 bg-gradient-to-b from-white/10 to-white/5">
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-gray-800">{content.title}</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.title}</h1>
         
         {loading ? (
           <>
             <section className="mb-12">
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">{content.loading}</h2>
+              <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.loading}</h2>
               {renderSkeletonSection(3)}
             </section>
           </>
@@ -107,7 +107,7 @@ export default function EventList() {
           <>
             {currentEvents.length > 0 && (
               <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-4 text-gray-800">{content.current}</h2>
+                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.current}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentEvents.map((event, index) => (
                     <div key={index}>{renderEventCard(event)}</div>
@@ -118,7 +118,7 @@ export default function EventList() {
 
             {upcomingEvents.length > 0 && (
               <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-4 text-gray-800">{content.upcoming}</h2>
+                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.upcoming}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {upcomingEvents.map((event, index) => (
                     <div key={index}>{renderEventCard(event)}</div>
@@ -129,7 +129,7 @@ export default function EventList() {
 
             {pastEvents.length > 0 && (
               <section>
-                <h2 className="text-2xl font-bold mb-4 text-gray-800">{content.past}</h2>
+                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.past}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {pastEvents.map((event, index) => (
                     <div key={index}>{renderEventCard(event)}</div>
