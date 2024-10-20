@@ -68,7 +68,10 @@ export default function Invitation({ params }: { params: { lang: string, code: s
           {content.location}
         </div>
         <div className="text-xl font-light text-shadow-lg">
-          {new Date().toLocaleDateString(i18n.language, { year: 'numeric', month: 'long', day: 'numeric' })}
+          PayFi Infrastructure Hackerhouse
+        </div>
+        <div className="text-xl font-light text-shadow-lg">
+          2024-12-12
         </div>
       </div>
     </div>
