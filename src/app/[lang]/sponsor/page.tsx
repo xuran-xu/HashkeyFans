@@ -3,8 +3,9 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import Link from 'next/link';
-import { Mail, FileText, Send, MessageCircle } from 'lucide-react';
+import { Mail, FileText, Send } from 'lucide-react';
 import React from "react";
+import { FaDiscord } from "react-icons/fa";
 
 const sponsorContent = {
   zh: {
@@ -13,7 +14,8 @@ const sponsorContent = {
     email: "邮件",
     form: "表单",
     telegram: "Telegram",
-    discord: "Discord"
+    discord: "Discord",
+    emailSubject: "太初 Hackerhouse 赞助申请"
   },
   en: {
     title: "Apply for Sponsorship",
@@ -21,7 +23,8 @@ const sponsorContent = {
     email: "Email",
     form: "Form",
     telegram: "Telegram",
-    discord: "Discord"
+    discord: "Discord",
+    emailSubject: "Taichu Hackerhouse Sponsorship Application"
   }
 };
 
@@ -52,6 +55,9 @@ export default function SponsorPage() {
     </Link>
   );
 
+  // 创建带有主题的邮件链接
+  const emailLink = `mailto:francis.li@hashkey.com?subject=${encodeURIComponent(content.emailSubject)}`;
+
   return (
     <div className="flex flex-grow items-center bg-gradient-to-b from-white/10 to-white/5 min-h-[calc(100vh-90px)]">
       <div className="container mx-auto px-4 py-12">
@@ -62,7 +68,7 @@ export default function SponsorPage() {
           {renderContactOption(
             <Mail size={48} />,
             content.email,
-            "mailto:sponsor@example.com",
+            emailLink,
             true
           )}
           {renderContactOption(
@@ -74,13 +80,13 @@ export default function SponsorPage() {
           {renderContactOption(
             <Send size={48} />,
             content.telegram,
-            "https://t.me/your_telegram_channel",
+            "https://t.me/bitfrancis",
             true
           )}
           {renderContactOption(
-            <MessageCircle size={48} />,
+            <FaDiscord size={48} />,
             content.discord,
-            "https://discord.gg/your_discord_server",
+            "https://discord.gg/qvPkbrYY",
             false
           )}
         </div>
