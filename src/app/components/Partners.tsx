@@ -14,13 +14,6 @@ interface Partner {
 const partners: { [key: string]: Partner[] } = {
   collaborators: [
     {
-      name: "Antaplha Lab",
-      image: "/img/antalphalab.png",
-      link: "https://partner1.com",
-      width: 80,
-      height: 80
-    },
-    {
       name: "Rebase",
       image: "/img/rebase.png",
       link: "https://partner3.com",
