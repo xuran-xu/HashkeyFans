@@ -20,8 +20,8 @@ export const eventData: Record<string, EventItem[]> = {
       startDate: "2024-12-12",
       endDate: "2024-12-20",
       image: "/img/hacker1.png",
-      title: "太初 Hackerhouse - 巴厘岛",
-      content: "加入我们的巴厘岛Hackerhouse, 一起探索PayFi Summer Infra!",
+      title: "太初 Hackerhouse - 香港",
+      content: "加入我们的香港Hackerhouse, 一起探索Web3!",
       link: "/events",
       buttons: [
         {
@@ -41,8 +41,8 @@ export const eventData: Record<string, EventItem[]> = {
       startDate: "2024-12-12",
       endDate: "2024-12-20",
       image: "/img/hacker1.png",
-      title: "Taichu Hackerhouse - Bali",
-      content: "Join us in Bali for a cutting-edge blockchain hacker house!",
+      title: "Taichu Hackerhouse - HongKong",
+      content: "Join us in HongKong for a cutting-edge blockchain hacker house!",
       link: "/events/bali-2024",
       buttons: [
         {

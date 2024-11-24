@@ -10,14 +10,14 @@ const invitationContent = {
     loading: "正在加载邀请函...",
     errorTitle: "邀请函未找到",
     errorMessage: "抱歉，我们无法找到您的邀请函。",
-    location: "巴厘岛",
+    location: "香港",
   },
   en: {
     title: "INVITATION",
     loading: "Loading invitation...",
     errorTitle: "Invitation Not Found",
     errorMessage: "We're sorry, but we couldn't find your invitation.",
-    location: "Bali, Indonesia",
+    location: "HongKong",
   }
 };
 

@@ -5,7 +5,7 @@ import Link from 'next/link';
 const heroContent = {
   zh: {
     slogan: "太初",
-    description: "Hashkey Chain Hackerhouse · 巴厘岛",
+    description: "Hashkey Chain Hackerhouse · 香港",
     buttonJoin: {
       text: "申请参加",
       link: "/"
@@ -17,7 +17,7 @@ const heroContent = {
   },
   en: {
     slogan: "Taichu",
-    description: "Hashkey Chain Hackerhouse · Bali",
+    description: "Hashkey Chain Hackerhouse · HongKong",
     buttonJoin: {
       text: "Join Event",
       link: "/"
