@@ -29,7 +29,7 @@ export default function RootLayout({
         <body className="relative min-h-screen font-sans flex flex-col">
           <div 
             className="fixed inset-0 bg-cover bg-center bg-no-repeat blur-sm z-[-1]"
-            style={{ backgroundImage: "url('/img/bg.png')" }}
+            style={{ backgroundImage: "url('/img/bg.jpg')" }}
           ></div>
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />

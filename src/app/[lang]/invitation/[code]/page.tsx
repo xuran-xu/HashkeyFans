@@ -53,7 +53,7 @@ export default function Invitation({ params }: { params: { lang: string, code: s
   if (error) return <div className="flex flex-col items-center justify-center flex-grow"><h1>{content.errorTitle}</h1><p>{content.errorMessage}</p></div>;
 
   return (
-    <div className="flex flex-col justify-between flex-grow bg-white/10 text-white p-8 font-sans">
+    <div className="flex flex-col justify-between flex-grow bg-white/10 text-black p-8 font-sans">
       <div>
         <h1 className="text-2xl font-bold">Taichu</h1>
         <p>HSK Hackerhouse</p>
@@ -68,7 +68,7 @@ export default function Invitation({ params }: { params: { lang: string, code: s
           {content.location}
         </div>
         <div className="text-xl font-light text-shadow-lg">
-          PayFi Infrastructure Hackerhouse
+          Hashkey Hackerhouse
         </div>
         <div className="text-xl font-light text-shadow-lg">
           2024-12-12
