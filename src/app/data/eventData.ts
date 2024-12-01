@@ -17,8 +17,8 @@ export const eventData: Record<string, EventItem[]> = {
   zh: [
     {
       type: 'event',
-      startDate: "2024-12-12",
-      endDate: "2024-12-20",
+      startDate: "2024-12-20",
+      endDate: "2024-12-22",
       image: "/img/hacker1.png",
       title: "太初 Hackerhouse - 香港",
       content: "加入我们的香港Hackerhouse, 一起探索Web3!",
@@ -38,8 +38,8 @@ export const eventData: Record<string, EventItem[]> = {
   en: [
     {
       type: 'event',
-      startDate: "2024-12-12",
-      endDate: "2024-12-20",
+      startDate: "2024-12-20",
+      endDate: "2024-12-22",
       image: "/img/hacker1.png",
       title: "Taichu Hackerhouse - HongKong",
       content: "Join us in HongKong for a cutting-edge blockchain hacker house!",

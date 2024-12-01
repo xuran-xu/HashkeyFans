@@ -71,7 +71,7 @@ export default function Invitation({ params }: { params: { lang: string, code: s
           Hashkey Hackerhouse
         </div>
         <div className="text-xl font-light text-shadow-lg">
-          2024-12-12
+          2024-12-20
         </div>
       </div>
     </div>
