@@ -8,7 +8,7 @@ const heroContent = {
     description: "Hashkey Chain Hackerhouse · 香港",
     buttonJoin: {
       text: "申请参加",
-      link: "/"
+      link: "https://lu.ma/0q26h11p"
     },
     buttonReview: {
       text: "查看所有活动",
@@ -20,7 +20,7 @@ const heroContent = {
     description: "Hashkey Chain Hackerhouse · HongKong",
     buttonJoin: {
       text: "Join Event",
-      link: "/"
+      link: "https://lu.ma/0q26h11p"
     },
     buttonReview: {
       text: "Review All Events",
