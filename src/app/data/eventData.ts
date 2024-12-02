@@ -21,7 +21,7 @@ export const eventData: Record<string, EventItem[]> = {
       endDate: "2024-12-22",
       image: "/img/hacker1.png",
       title: "太初 Hackerhouse - 香港",
-      content: "加入我们的香港Hackerhouse, 一起探索Web3!",
+      content: "加入我们的香港Hackerhouse, 一起探索合规框架下的Web3发展!",
       link: "/events",
       buttons: [
         {
