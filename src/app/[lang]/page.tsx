@@ -3,7 +3,7 @@
 import Hero from '../components/Hero'
 import Roadmap from '../components/Roadmap'
 import Partners from '../components/Partners'
-import Subscribe from '../components/Subscribe'
+// import Subscribe from '../components/Subscribe'
 
 export default function Home() {
   return (
@@ -11,7 +11,7 @@ export default function Home() {
       <Hero />
       <Roadmap />
       <Partners />
-      <Subscribe />
+      {/* <Subscribe /> */}
     </div>
   )
 }
