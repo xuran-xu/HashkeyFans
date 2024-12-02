@@ -30,7 +30,7 @@ export const eventData: Record<string, EventItem[]> = {
         },
         {
           text: "查看详情",
-          link: "https://opaque-mistake-40f.notion.site/HashKey-Hackerhouse-Bali-704f5f2f04b34f3583e1392ae5de82ab?pvs=74"
+          link: "https://wooded-tortoise-0a3.notion.site/HashKey-Hackerhouse-1264635d81288097a856ffd67bcb81d1"
         }
       ]
     },
@@ -51,7 +51,7 @@ export const eventData: Record<string, EventItem[]> = {
         },
         {
           text: "Learn More",
-          link: "https://opaque-mistake-40f.notion.site/HashKey-Hackerhouse-Bali-Taichu-125e2f6b83c88019aed6c092f3ed796b?pvs=4"
+          link: "https://wooded-tortoise-0a3.notion.site/HashKey-Hackerhouse-Taichu-1264635d8128800aaafdd5493b9296d1"
         }
       ]
     },
