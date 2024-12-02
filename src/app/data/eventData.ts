@@ -84,7 +84,7 @@ export const eventData: Record<string, EventItem[]> = {
       type: 'event',
       startDate: "2024-12-20",
       endDate: "2024-12-22",
-      image: "/img/hacker1.png",
+      image: "/img/taichu.jpg",
       title: "Taichu Hackerhouse - HongKong",
       content: "Join us in HongKong for a cutting-edge blockchain hacker house!",
       link: "/events/bali-2024",
