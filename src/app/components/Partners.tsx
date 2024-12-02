@@ -16,24 +16,38 @@ const partners: { [key: string]: Partner[] } = {
     {
       name: "Rebase",
       image: "/img/rebase.png",
-      link: "https://partner3.com",
+      link: "https://rebase.network/",
       width: 180,
       height: 80
     },
-  ],
-  mediaPartners: [
     {
       name: "BuidlerDAO",
-      image: "/img/buidlerdao.jpg",
-      link: "https://partner2.com",
-      width: 80,
+      image: "/img/builderdao.webp",
+      link: "https://buidlerdao.xyz/",
+      width: 300,
       height: 80
     },
     {
       name: "Deng Lian",
       image: "/img/denglian.webp",
-      link: "https://partner2.com",
+      link: "https://learnblockchain.cn/",
       width: 80,
+      height: 80
+    },
+    {
+      name: "Antalpha Lab",
+      image: "/img/antalphalab.png",
+      link: "https://labs.antalpha.com/",
+      width: 400,
+      height: 80
+    }
+  ],
+  mediaPartners: [
+    {
+      name: "PANews",
+      image: "/img/panews.png",
+      link: "https://www.panewslab.com/",
+      width: 300,
       height: 80
     }
   ]
