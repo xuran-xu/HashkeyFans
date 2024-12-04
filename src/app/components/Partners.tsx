@@ -84,6 +84,13 @@ const partners: { [key: string]: Partner[] } = {
       link: "https://www.panewslab.com/",
       width: 300,
       height: 80
+    },
+    {
+      name: "Metaera",
+      image: "/img/MetaEra.png",
+      link: "https://www.metaera.hk/",
+      width: 300,
+      height: 80
     }
   ]
 };
