@@ -69,6 +69,13 @@ const partners: { [key: string]: Partner[] } = {
       width: 90,
       height: 20
     },
+    {
+      name: "LXDAO",
+      image: "/img/LXDAO.png",
+      link: "https://lxdao.io/",
+      width: 90,
+      height: 20
+    },
   ],
   mediaPartners: [
     {
