@@ -17,30 +17,51 @@ const partners: { [key: string]: Partner[] } = {
       name: "Rebase",
       image: "/img/rebase.png",
       link: "https://rebase.network/",
-      width: 180,
-      height: 80
+      width: 90,
+      height: 20
     },
     {
       name: "BuidlerDAO",
       image: "/img/builderdao.webp",
       link: "https://buidlerdao.xyz/",
-      width: 300,
-      height: 80
+      width: 90,
+      height: 20
     },
     {
       name: "Deng Lian",
-      image: "/img/denglian.webp",
+      image: "/img/denglian.png",
       link: "https://learnblockchain.cn/",
-      width: 80,
-      height: 80
+      width: 90,
+      height: 20
+    },
+    {
+      name: "OpenBuild",
+      image: "/img/openbuild.svg",
+      link: "https://openbuild.xyz/",
+      width: 90,
+      height: 20
     },
     {
       name: "Antalpha Lab",
       image: "/img/antalphalab.png",
       link: "https://labs.antalpha.com/",
-      width: 400,
-      height: 80
-    }
+      width: 90,
+      height: 20
+    },
+    {
+      name: "Dorahack",
+      image: "/img/dorahack.png",
+      link: "https://dorahacks.io/home",
+      width: 90,
+      height: 20
+    },
+    {
+      name: "SeeGrowth",
+      image: "/img/seegrowth.png",
+      link: "https://seegrowth.framer.website/",
+      width: 90,
+      height: 20
+    },
   ],
   mediaPartners: [
     {
@@ -89,14 +110,17 @@ export default function Partners() {
       <h3 className="text-2xl text-center font-bold mb-6 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] tracking-wide">{currentTranslations[title as keyof typeof currentTranslations]}</h3>
       <div className="flex flex-wrap justify-center items-center gap-8">
         {partnerList.map((partner, index) => (
-          <Link key={index} href={partner.link} target="_blank" rel="noopener noreferrer"
-                className="bg-white p-4 rounded shadow-md hover:shadow-lg transition-shadow duration-300 flex items-center justify-center">
+          <Link 
+            key={index} 
+            href={partner.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="bg-white/20 backdrop-blur-xl w-[200px] h-[100px] rounded shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center p-4 group border border-white/30"
+          >
             <img 
               src={partner.image} 
               alt={partner.name} 
-              width={partner.width} 
-              height={partner.height}
-              className="object-contain"
+              className="w-full h-auto max-h-full object-contain grayscale opacity-90 contrast-125 group-hover:grayscale-0 group-hover:opacity-100 group-hover:contrast-100 transition-all duration-300"
             />
           </Link>
         ))}
