@@ -62,6 +62,13 @@ const partners: { [key: string]: Partner[] } = {
       width: 90,
       height: 20
     },
+    {
+      name: "SHENZHEN University",
+      image: "/img/shenda.svg",
+      link: "https://x.com/0xSZUBAgst",
+      width: 90,
+      height: 20
+    },
   ],
   mediaPartners: [
     {
@@ -120,7 +127,7 @@ export default function Partners() {
             <img 
               src={partner.image} 
               alt={partner.name} 
-              className="w-full h-auto max-h-full object-contain grayscale opacity-90 contrast-125 group-hover:grayscale-0 group-hover:opacity-100 group-hover:contrast-100 transition-all duration-300"
+              className="w-full h-auto max-h-full object-contain grayscale opacity-90 contrast-150 brightness-90 group-hover:grayscale-0 group-hover:opacity-100 group-hover:contrast-100 group-hover:brightness-100 transition-all duration-300"
             />
           </Link>
         ))}
