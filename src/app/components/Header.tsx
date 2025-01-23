@@ -56,6 +56,9 @@ export default function Header() {
               <Link href="/news" className="text-white hover:text-gray-600 transition-colors duration-200">
                 {t('News')}
               </Link>
+              <Link href="/projects" className="text-white hover:text-gray-600 transition-colors duration-200">
+                {t('Projects')}
+              </Link>
             </nav>
           </div>
 
