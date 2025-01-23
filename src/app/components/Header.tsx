@@ -109,27 +109,24 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 space-y-4 p-2 bg-white/50">
-            <Link href="/" className="block text-gray-600 hover:text-blue-500 transition-colors duration-200">
-              {t('home')}
+          <div className="md:hidden mt-4 space-y-4 p-2">
+            <Link href="/news" className=" pl-4 block text-white hover:text-gray-600 transition-colors duration-200">
+                {t('News')}
             </Link>
-            <Link href="/menu" className="block text-gray-600 hover:text-blue-500 transition-colors duration-200">
-              {t('menu')}
-            </Link>
-            <Link href="/news" className="block text-gray-600 hover:text-blue-500 transition-colors duration-200">
-              {t('news')}
+            <Link href="/projects" className="pl-4 block text-white hover:text-gray-600 transition-colors duration-200">
+              {t('Projects')}
             </Link>
             <div className="border-t border-gray-200 my-2"></div>
-            <a href="https://t.me/HashKeyChainHSK" className="block text-gray-600 hover:text-blue-500 transition-colors duration-200">
+            <a href="https://t.me/HashKeyChainHSK" className="pl-4 block text-gray-600 hover:text-blue-500 transition-colors duration-200">
               <FaTelegram className="w-5 h-5 inline-block mr-2" /> Telegram
             </a>
-            <a href="https://discord.gg/qvPkbrYY" className="block text-gray-600 hover:text-indigo-500 transition-colors duration-200">
+            <a href="https://discord.gg/qvPkbrYY" className="pl-4 block text-gray-600 hover:text-indigo-500 transition-colors duration-200">
               <FaDiscord className="w-5 h-5 inline-block mr-2" /> Discord
             </a>
-            <a href="https://x.com/HashKeyHSK" className="block text-gray-600 hover:text-black transition-colors duration-200">
+            <a href="https://x.com/HashKeyHSK" className="pl-4 block text-gray-600 hover:text-black transition-colors duration-200">
               <FaTwitter className="w-5 h-5 inline-block mr-2" /> X
             </a>
-            <div className="relative">
+            <div className="relative pl-4 ">
               <button
                 onClick={toggleLangMenu}
                 className="flex items-center space-x-1 text-gray-600 hover:text-blue-500 transition-colors duration-200"
