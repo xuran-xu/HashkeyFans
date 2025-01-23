@@ -4,27 +4,27 @@ import Link from 'next/link';
 
 const heroContent = {
   zh: {
-    slogan: "太初",
-    description: "Hashkey Chain Hackerhouse · 香港",
+    slogan: "Web3大航海",
+    description: "区块链如何融入人类文明主叙事 · 香港",
     buttonJoin: {
       text: "申请参加",
-      link: "https://lu.ma/0q26h11p"
+      link: "https://lu.ma/hzz6mel6"
     },
     buttonReview: {
-      text: "查看所有活动",
-      link: "/events"
+      text: "查看链上项目",
+      link: "/projects"
     }
   },
   en: {
-    slogan: "Taichu",
-    description: "Hashkey Chain Hackerhouse · HongKong",
+    slogan: "Web3 Voyage",
+    description: "How Blockchain Shapes Humanity’s Main Narrative · HongKong",
     buttonJoin: {
       text: "Join Event",
-      link: "https://lu.ma/0q26h11p"
+      link: "https://lu.ma/hzz6mel6"
     },
     buttonReview: {
-      text: "Review All Events",
-      link: "/events"
+      text: "All Projects",
+      link: "/projects"
     }
   }
 };

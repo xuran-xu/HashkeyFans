@@ -18,7 +18,7 @@ export default function Header() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -36,7 +36,6 @@ export default function Header() {
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
     setIsLangMenuOpen(false);
-    // 更新 URL
     const newPathname = pathname.replace(/^\/[a-z]{2}/, `/${lng}`);
     router.push(newPathname);
   };
@@ -45,10 +44,20 @@ export default function Header() {
     <header className="shadow-sm">
       <div className="container mx-auto md:px-4 md:py-3">
         <div className="flex items-center justify-between px-4 py-3">
-          {/* Logo */}
-          <Link href="/" className="text-xl font-bold">
-            <img src="/img/logo.png" alt="Logo" width={32} height={32} />
-          </Link>
+          {/* Logo and Menu */}
+          <div className="flex items-center space-x-6">
+            <Link href="/" className="text-xl font-bold">
+              <img src="/img/logo.png" alt="Logo" width={32} height={32} />
+            </Link>
+            <nav className="hidden md:flex items-center space-x-6">
+              <Link href="/events" className="text-white hover:text-gray-600 transition-colors duration-200">
+                {t('Events')}
+              </Link>
+              <Link href="/news" className="text-white hover:text-gray-600 transition-colors duration-200">
+                {t('News')}
+              </Link>
+            </nav>
+          </div>
 
           {/* 桌面导航 */}
           <div className="hidden md:flex items-center space-x-6">
@@ -98,6 +107,16 @@ export default function Header() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 space-y-4 p-2 bg-white/50">
+            <Link href="/" className="block text-gray-600 hover:text-blue-500 transition-colors duration-200">
+              {t('home')}
+            </Link>
+            <Link href="/menu" className="block text-gray-600 hover:text-blue-500 transition-colors duration-200">
+              {t('menu')}
+            </Link>
+            <Link href="/news" className="block text-gray-600 hover:text-blue-500 transition-colors duration-200">
+              {t('news')}
+            </Link>
+            <div className="border-t border-gray-200 my-2"></div>
             <a href="https://t.me/HashKeyChainHSK" className="block text-gray-600 hover:text-blue-500 transition-colors duration-200">
               <FaTelegram className="w-5 h-5 inline-block mr-2" /> Telegram
             </a>

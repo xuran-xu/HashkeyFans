@@ -8,12 +8,14 @@ const roadmapContent = {
   zh: {
     title: "路线图",
     applyButton: "申请参加",
-    stayTuned: "敬请期待"
+    stayTuned: "敬请期待",
+    eventEnded: "活动已结束"
   },
   en: {
     title: "Roadmap",
     applyButton: "Apply Now",
-    stayTuned: "Stay Tuned"
+    stayTuned: "Stay Tuned",
+    eventEnded: "Event Ended"
   }
 };
 
@@ -118,11 +120,22 @@ export default function Roadmap() {
                     {item.buttons && item.buttons.length > 0 && item.buttons[0].link ? (
                       <Link 
                         href={item.buttons[0].link} 
-                        className="inline-block w-full text-center py-2 bg-white text-black font-semibold text-sm rounded-lg overflow-hidden group/btn relative shadow-md group-hover:bg-black transition-all duration-300"
+                        className={`inline-block w-full text-center py-2 ${
+                          new Date(item.endDate) < new Date() 
+                            ? 'bg-gray-100 text-gray-500 cursor-not-allowed' 
+                            : 'bg-white text-black hover:bg-black'
+                        } font-semibold text-sm rounded-lg overflow-hidden group/btn relative shadow-md group-hover:bg-black transition-all duration-300`}
+                        onClick={(e) => {
+                          if (new Date(item.endDate) < new Date()) {
+                            e.preventDefault();
+                          }
+                        }}
                       >
                         <span className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-400 to-gray-600 opacity-0 group-hover:opacity-80 transition-all duration-1000 ease-in-out transform scale-105 group-hover:scale-100"></span>
                         <span className="relative z-10 group-hover:text-white transition-colors duration-700">
-                          {content.applyButton}
+                          {new Date(item.endDate) < new Date() 
+                            ? content.eventEnded 
+                            : content.applyButton}
                         </span>
                       </Link>
                     ) : (

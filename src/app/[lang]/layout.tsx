@@ -27,10 +27,11 @@ export default function RootLayout({
     <I18nextProvider i18n={i18n}>
       <html lang={lang} className={`${inter.className} ${notoSansSC.className}`}>
         <body className="relative min-h-screen font-sans flex flex-col">
-          <div 
-            className="fixed inset-0 bg-cover bg-center bg-no-repeat blur-sm z-[-1]"
-            style={{ backgroundImage: "url('/img/bg.jpg')" }}
-          ></div>
+          {/* 渐变背景层 */}
+          <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
+          {/* 纹理遮罩层 */}
+          <div className="fixed inset-0 opacity-30 bg-[url('/img/noise.png')] mix-blend-soft-light"></div>
+          
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
             <div className="min-w-screen flex-grow flex justify-center">

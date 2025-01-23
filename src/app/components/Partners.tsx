@@ -42,23 +42,9 @@ const partners: { [key: string]: Partner[] } = {
       height: 20
     },
     {
-      name: "Antalpha Lab",
-      image: "/img/antalphalab.png",
-      link: "https://labs.antalpha.com/",
-      width: 90,
-      height: 20
-    },
-    {
-      name: "Dorahack",
-      image: "/img/dorahack.png",
-      link: "https://dorahacks.io/home",
-      width: 90,
-      height: 20
-    },
-    {
-      name: "SeeGrowth",
-      image: "/img/seegrowth.png",
-      link: "https://seegrowth.framer.website/",
+      name: "coset",
+      image: "/img/coset.png",
+      link: "https://coset.io/",
       width: 90,
       height: 20
     },

@@ -25,12 +25,23 @@ export const eventData: Record<string, EventItem[]> = {
       link: "/events",
       buttons: [
         {
-          text: "申请参加",
-          link: "https://lu.ma/0q26h11p"
-        },
-        {
           text: "查看详情",
           link: "https://wooded-tortoise-0a3.notion.site/HashKey-Hackerhouse-1264635d81288097a856ffd67bcb81d1"
+        }
+      ]
+    },
+    {
+      type: 'event',
+      startDate: "2025-02-20",
+      endDate: "2025-02-20",
+      image: "/img/voyage.avif",
+      title: "Web3大航海",
+      content: "区块链如何融入人类文明主叙事",
+      link: "/events",
+      buttons: [
+        {
+          text: "申请参加",
+          link: "https://lu.ma/hzz6mel6"
         }
       ]
     },
@@ -90,12 +101,23 @@ export const eventData: Record<string, EventItem[]> = {
       link: "/events/bali-2024",
       buttons: [
         {
-          text: "Apply Now",
-          link: "/"
-        },
-        {
           text: "Learn More",
           link: "https://wooded-tortoise-0a3.notion.site/HashKey-Hackerhouse-Taichu-1264635d8128800aaafdd5493b9296d1"
+        }
+      ]
+    },
+    {
+      type: 'event',
+      startDate: "2025-02-20",
+      endDate: "2025-02-20",
+      image: "/img/voyage.avif",
+      title: "Web3 Voyage",
+      content: "Conference",
+      link: "/events",
+      buttons: [
+        {
+          text: "Apply Now",
+          link: "https://lu.ma/hzz6mel6"
         }
       ]
     },
