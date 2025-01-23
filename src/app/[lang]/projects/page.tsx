@@ -5,8 +5,7 @@ import { useState, useEffect } from "react";
 import { projectsData, Project, tagConfig } from "@/app/data/projectsData";
 import { FaDiscord, FaTelegram, FaExternalLinkAlt } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
-import { IoCopy, IoGift, IoShield, IoTrophy, IoFlash } from "react-icons/io5";
-import Image from 'next/image';
+import { IoCopy, IoShield, IoTrophy, IoFlash } from "react-icons/io5";
 
 const projectsContent = {
   zh: {
@@ -32,8 +31,8 @@ const projectsContent = {
 };
 
 export default function Projects({ params }: { params: { lang: string } }) {
-  const { t, i18n } = useTranslation();
-  const [content, setContent] = useState(projectsContent[params.lang as keyof typeof projectsContent]);
+  const { i18n } = useTranslation();
+  const [content] = useState(projectsContent[params.lang as keyof typeof projectsContent]);
   const [copyMsg, setCopyMsg] = useState("");
 
   useEffect(() => {
@@ -66,22 +65,6 @@ export default function Projects({ params }: { params: { lang: string } }) {
         return <FaDiscord className="w-6 h-6" />;
       case 'telegram':
         return <FaTelegram className="w-6 h-6" />;
-      default:
-        return null;
-    }
-  };
-
-  const renderPointsBonusIcon = (type: string) => {
-    switch (type) {
-      case 'interaction':
-        return (
-          <>
-            <IoShield className="w-4 h-4 text-green-600" />
-            <IoTrophy className="w-4 h-4 text-green-600" />
-          </>
-        );
-      case 'bonus':
-        return <IoGift className="w-4 h-4" />;
       default:
         return null;
     }

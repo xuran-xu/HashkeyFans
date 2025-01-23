@@ -2,9 +2,8 @@
 
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { newsData } from "@/app/data/newsData";
+import { newsData, NewsItem } from "@/app/data/newsData";
 import { useParams } from "next/navigation";
-import dynamic from 'next/dynamic';
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote } from 'next-mdx-remote';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
@@ -26,8 +25,7 @@ export default function NewsDetail() {
   const { i18n } = useTranslation();
   const params = useParams();
   const [content, setContent] = useState(newsDetailContent.zh);
-  const [newsItem, setNewsItem] = useState<any>(null);
-  const [Content, setContentModule] = useState<any>(null);
+  const [newsItem, setNewsItem] = useState<NewsItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [mdxSource, setMdxSource] = useState<MDXRemoteSerializeResult | null>(null);
 
@@ -44,7 +42,6 @@ export default function NewsDetail() {
 
         if (currentNews) {
           setNewsItem(currentNews);
-          // 使用与图片相同的路径处理方式
           const response = await fetch(`/content/news/${params.lang}/${params.slug}.mdx`);
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -60,7 +57,7 @@ export default function NewsDetail() {
     };
 
     loadNewsContent();
-  }, [params.slug, params.lang]);
+  }, [params.slug, params.lang, i18n.language]);
 
   if (loading) {
     return (
