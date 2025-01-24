@@ -86,9 +86,8 @@ We welcome contributions from the community! Please read our contributing guidel
 
 ## Connect With Us
 
-- Twitter: [@HashKeyChain](https://twitter.com/HashKeyChain)
+- Twitter: [@HashFans](https://x.com/HashKeyfans)
 - Discord: [Join our community](https://discord.gg/hashkey)
-- Telegram: [HashKey Official](https://t.me/hashkey)
 
 ## License
 
