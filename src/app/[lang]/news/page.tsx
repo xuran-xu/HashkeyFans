@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { newsData, NewsItem } from "@/app/data/newsData";
 import Link from 'next/link';
+import { i18n as I18nType } from "i18next";
 
 const newsListContent = {
   zh: {
@@ -28,7 +29,7 @@ const SkeletonCard = () => (
   </div>
 );
 
-const renderNewsCard = (news: NewsItem, i18n: any) => (
+const renderNewsCard = (news: NewsItem, i18n: I18nType) => (
   <div className="w-full px-2 group">
     <div className="bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 backdrop-blur-sm 
                   rounded-lg shadow-lg p-6 h-[420px] flex flex-col transform 
