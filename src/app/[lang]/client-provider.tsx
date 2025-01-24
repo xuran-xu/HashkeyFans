@@ -12,7 +12,9 @@ export default function ClientProvider({
   lang: string;
 }) {
   useEffect(() => {
-    i18n.changeLanguage(lang);
+    if (i18n.language !== lang) {
+      i18n.changeLanguage(lang);
+    }
   }, [lang]);
 
   return (

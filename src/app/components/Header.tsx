@@ -30,21 +30,34 @@ export default function Header() {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    // 从 URL 中获取当前语言
+    const urlLang = pathname.split('/')[1];
+    if (urlLang && (urlLang === 'en' || urlLang === 'zh') && urlLang !== i18n.language) {
+      i18n.changeLanguage(urlLang);
+    }
+  }, [pathname]);
 
-  if (!mounted) {
-    return null; // 或者返回一个加载指示器
-  }
+  if (!mounted) return null;
 
   const toggleLangMenu = () => {
     setIsLangMenuOpen(prevState => !prevState);
   };
 
   const changeLanguage = (lng: string) => {
+    const segments = pathname.split('/');
+    segments[1] = lng;
+    const newPath = segments.join('/');
+    
+    // 先更新路由
+    router.push(newPath);
+    // 然后更新语言
     i18n.changeLanguage(lng);
     setIsLangMenuOpen(false);
-    const newPathname = pathname.replace(/^\/[a-z]{2}/, `/${lng}`);
-    router.push(newPathname);
+  };
+
+  // 添加一个辅助函数来生成带语言的链接
+  const getLocalizedHref = (path: string) => {
+    return `/${i18n.language}${path}`;
   };
 
   return (
@@ -53,19 +66,19 @@ export default function Header() {
         <div className="flex items-center justify-between px-4 py-3">
           {/* Logo and Menu */}
           <div className="flex items-center space-x-6">
-            <Link href="/" className="text-xl font-bold rounded-full">
+            <Link href={getLocalizedHref('/')} className="text-xl font-bold rounded-full">
               <img className="rounded-full" src="/img/logo.png" alt="Logo" width={32} height={32} />
             </Link>
             <nav className="hidden md:flex items-center space-x-6">
-              <Link href="/events" className="flex items-center space-x-2 text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">
+              <Link href={getLocalizedHref('/events')} className="flex items-center space-x-2 text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">
                 <IoCalendarOutline className="w-5 h-5" />
                 <span>{t('Events')}</span>
               </Link>
-              <Link href="/news" className="flex items-center space-x-2 text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">
+              <Link href={getLocalizedHref('/news')} className="flex items-center space-x-2 text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">
                 <IoNewspaperOutline className="w-5 h-5" />
                 <span>{t('News')}</span>
               </Link>
-              <Link href="/projects" className="flex items-center space-x-2 text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">
+              <Link href={getLocalizedHref('/projects')} className="flex items-center space-x-2 text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">
                 <IoGridOutline className="w-5 h-5" />
                 <span>{t('Projects')}</span>
               </Link>
@@ -122,15 +135,15 @@ export default function Header() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 space-y-2 p-2 bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 rounded-lg">
-            <Link href="/events" className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+            <Link href={getLocalizedHref('/events')} className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
               <IoCalendarOutline className="w-5 h-5" />
               <span>{t('Events')}</span>
             </Link>
-            <Link href="/news" className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+            <Link href={getLocalizedHref('/news')} className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
               <IoNewspaperOutline className="w-5 h-5" />
               <span>{t('News')}</span>
             </Link>
-            <Link href="/projects" className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+            <Link href={getLocalizedHref('/projects')} className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
               <IoGridOutline className="w-5 h-5" />
               <span>{t('Projects')}</span>
             </Link>
