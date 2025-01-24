@@ -2,29 +2,16 @@
 "use client"
 
 import { useTranslation } from "react-i18next";
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 import Link from 'next/link';
-import { eventData, EventItem } from "@/app/data/eventData";
-
-const eventListContent = {
-  zh: {
-    title: "活动列表",
-    upcoming: "即将到来的活动",
-    current: "正在进行的活动",
-    past: "往期活动",
-    loading: "加载中..."
-  },
-  en: {
-    title: "Event List",
-    upcoming: "Upcoming Events",
-    current: "Current Events",
-    past: "Past Events",
-    loading: "Loading..."
-  }
-};
+import { Card } from "@/components/common/Card";
+import { Button } from "@/components/common/Button";
+import { EventItem } from "@/types";
+import { eventData } from "@/data/eventData";
 
 const SkeletonCard = () => (
-  <div className="bg-gradient-to-br from-[#1a237e]/30 via-[#311b92]/25 to-[#4a148c]/20 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden animate-pulse">
+  <Card gradient={false} className="animate-pulse">
     <div className="w-full h-48 bg-white/10"></div>
     <div className="p-6">
       <div className="h-4 bg-white/10 rounded w-3/4 mb-2"></div>
@@ -32,25 +19,23 @@ const SkeletonCard = () => (
       <div className="h-4 bg-white/10 rounded w-full mb-4"></div>
       <div className="h-10 bg-white/10 rounded w-full"></div>
     </div>
-  </div>
+  </Card>
 );
 
 export default function EventList() {
-  const { i18n } = useTranslation();
-  const [content, setContent] = useState(eventListContent.zh);
+  const { t } = useTranslation();
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const params = useParams();
+  const lang = params?.lang as string || 'en';
 
   useEffect(() => {
-    const language = i18n.language as keyof typeof eventListContent;
-    setContent(eventListContent[language] || eventListContent.zh);
     setLoading(true);
-    // 模拟数据加载延迟
     setTimeout(() => {
-      setEvents(eventData[language] || eventData.zh);
+      setEvents(eventData[lang as keyof typeof eventData] || eventData.zh);
       setLoading(false);
     }, 1000);
-  }, [i18n.language]);
+  }, [lang]);
 
   const currentDate = new Date();
   const upcomingEvents = events.filter(event => new Date(event.startDate) > currentDate);
@@ -59,7 +44,7 @@ export default function EventList() {
 
   const renderEventCard = (event: EventItem) => (
     <div className="w-full px-2">
-      <div className="bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 backdrop-blur-sm rounded-lg shadow-lg p-6 h-[420px] flex flex-col">
+      <Card className="h-[420px] flex flex-col p-6">
         <div className="h-48 overflow-hidden rounded-lg mb-4">
           <img 
             src={event.image} 
@@ -77,27 +62,20 @@ export default function EventList() {
           {event.buttons && event.buttons.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {event.buttons.map((button, index) => (
-                <Link 
-                  target="_blank" 
-                  key={index} 
-                  href={button.link} 
-                  className="block w-full text-center py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-300"
+                <Button 
+                  key={index}
+                  variant="secondary"
+                  className="w-full"
                 >
-                  {button.text}
-                </Link>
+                  <Link href={button.link} target="_blank">
+                    {button.text}
+                  </Link>
+                </Button>
               ))}
             </div>
           )}
         </div>
-      </div>
-    </div>
-  );
-
-  const renderSkeletonSection = (count: number) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {Array(count).fill(0).map((_, index) => (
-        <SkeletonCard key={index} />
-      ))}
+      </Card>
     </div>
   );
 
@@ -105,22 +83,26 @@ export default function EventList() {
     <div className="w-full py-12">
       <div className="container mx-auto px-4">
         <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-          {content.title}
+          {t('events.title')}
         </h1>
         
         {loading ? (
           <section className="mb-12">
             <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-              {content.loading}
+              {t('common.loading')}
             </h2>
-            {renderSkeletonSection(3)}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1,2,3].map((_, index) => (
+                <SkeletonCard key={index} />
+              ))}
+            </div>
           </section>
         ) : (
           <>
             {currentEvents.length > 0 && (
               <section className="mb-12">
                 <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                  {content.current}
+                  {t('events.current')}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentEvents.map((event, index) => (
@@ -133,7 +115,7 @@ export default function EventList() {
             {upcomingEvents.length > 0 && (
               <section className="mb-12">
                 <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                  {content.upcoming}
+                  {t('events.upcoming')}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {upcomingEvents.map((event, index) => (
@@ -146,7 +128,7 @@ export default function EventList() {
             {pastEvents.length > 0 && (
               <section>
                 <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                  {content.past}
+                  {t('events.past')}
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {pastEvents.map((event, index) => (

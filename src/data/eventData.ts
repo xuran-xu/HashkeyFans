@@ -1,17 +1,4 @@
-export interface EventItem {
-  type: 'event' | 'roadmap' | 'future';
-  startDate: string;
-  endDate: string;
-  image: string;
-  title: string;
-  content: string;
-  link?: string;
-  theme?: string;
-  buttons?: {
-    text: string;
-    link: string;
-  }[];
-}
+import { EventItem } from "@/types";
 
 export const eventData: Record<string, EventItem[]> = {
   zh: [

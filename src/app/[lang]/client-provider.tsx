@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from 'react';
+import i18n from '@/i18n';
+import { useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
-import i18n from '../../i18n';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function ClientProvider({
   children,
@@ -11,11 +12,57 @@ export default function ClientProvider({
   children: React.ReactNode;
   lang: string;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [currentLang, setCurrentLang] = useState(lang);
+
   useEffect(() => {
-    if (i18n.language !== lang) {
-      i18n.changeLanguage(lang);
-    }
-  }, [lang]);
+    const initI18n = async () => {
+      // 如果 localStorage 中有语言设置，优先使用它
+      const savedLang = localStorage.getItem('i18nextLng');
+      const targetLang = savedLang || lang;
+      
+      console.log('Initializing with:', {
+        savedLang,
+        urlLang: lang,
+        currentI18nLang: i18n.language
+      });
+
+      if (i18n.language !== targetLang) {
+        try {
+          await i18n.changeLanguage(targetLang);
+          localStorage.setItem('i18nextLng', targetLang);
+          setCurrentLang(targetLang);
+          
+          // 更新 URL 以匹配语言
+          const segments = pathname.split('/');
+          if (segments[1] !== targetLang) {
+            segments[1] = targetLang;
+            const newPath = segments.join('/');
+            router.replace(newPath);
+          }
+        } catch (error) {
+          console.error('Language change error:', error);
+        }
+      }
+    };
+
+    initI18n();
+  }, [lang, pathname, router]);
+
+  // 监听语言变化
+  useEffect(() => {
+    const handleLanguageChanged = (newLang: string) => {
+      console.log('Language changed to:', newLang);
+      localStorage.setItem('i18nextLng', newLang);
+      setCurrentLang(newLang);
+    };
+
+    i18n.on('languageChanged', handleLanguageChanged);
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, []);
 
   return (
     <I18nextProvider i18n={i18n}>

@@ -1,10 +1,10 @@
 "use client"
 
 import { useTranslation } from "react-i18next";
-import { FaTelegram, FaDiscord, FaTwitter } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { Icon } from "../common/Icon";
 
-export default function Footer() {
+export const Footer = () => {
   const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
@@ -13,7 +13,7 @@ export default function Footer() {
   }, []);
 
   if (!mounted) {
-    return null; // 或者返回一个加载占位符
+    return null;
   }
 
   return (
@@ -25,17 +25,17 @@ export default function Footer() {
           </p>
           <div className="flex space-x-6">
             <a href="https://t.me/HashKeyChainHSK" className="text-white hover:text-blue-500 transition-colors duration-200">
-              <FaTelegram className="w-6 h-6" />
+              <Icon name="telegram" />
             </a>
             <a href="https://discord.gg/qvPkbrYY" className="text-white hover:text-indigo-500 transition-colors duration-200">
-              <FaDiscord className="w-6 h-6" />
+              <Icon name="discord" />
             </a>
             <a href="https://x.com/HashKeyHSK" className="text-white hover:text-gray-300 transition-colors duration-200">
-              <FaTwitter className="w-6 h-6" />
+              <Icon name="twitter" />
             </a>
           </div>
         </div>
       </div>
     </footer>
   );
-}
+} 

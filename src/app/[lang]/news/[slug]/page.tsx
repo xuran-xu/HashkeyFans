@@ -2,41 +2,25 @@
 
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { newsData, NewsItem } from "@/app/data/newsData";
 import { useParams } from "next/navigation";
 import { serialize } from 'next-mdx-remote/serialize';
 import { MDXRemote } from 'next-mdx-remote';
 import { MDXRemoteSerializeResult } from 'next-mdx-remote';
-
-const newsDetailContent = {
-  zh: {
-    loading: "加载中...",
-    notFound: "未找到文章",
-    backToNews: "返回新闻列表"
-  },
-  en: {
-    loading: "Loading...",
-    notFound: "Article not found",
-    backToNews: "Back to News"
-  }
-};
+import { NewsItem } from "@/types";
+import { newsData } from "@/data/newsData";
 
 export default function NewsDetail() {
-  const { i18n } = useTranslation();
+  const { t } = useTranslation();
   const params = useParams();
-  const [content, setContent] = useState(newsDetailContent.zh);
   const [newsItem, setNewsItem] = useState<NewsItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [mdxSource, setMdxSource] = useState<MDXRemoteSerializeResult | null>(null);
 
   useEffect(() => {
-    const language = i18n.language as keyof typeof newsDetailContent;
-    setContent(newsDetailContent[language] || newsDetailContent.zh);
-    
     const loadNewsContent = async () => {
       setLoading(true);
       try {
-        const currentNews = newsData[i18n.language as keyof typeof newsData].find(
+        const currentNews = newsData[params.lang as keyof typeof newsData]?.find(
           news => news.slug === params.slug
         );
 
@@ -57,13 +41,13 @@ export default function NewsDetail() {
     };
 
     loadNewsContent();
-  }, [params.slug, params.lang, i18n.language]);
+  }, [params.slug, params.lang]);
 
   if (loading) {
     return (
       <div className="w-full py-12">
         <div className="container mx-auto px-4">
-          <div className="text-center text-white">{content.loading}</div>
+          <div className="text-center text-white">{t('common.loading')}</div>
         </div>
       </div>
     );
@@ -73,7 +57,7 @@ export default function NewsDetail() {
     return (
       <div className="w-full py-12">
         <div className="container mx-auto px-4">
-          <div className="text-center text-white">{content.notFound}</div>
+          <div className="text-center text-white">{t('news.notFound')}</div>
         </div>
       </div>
     );
@@ -92,7 +76,7 @@ export default function NewsDetail() {
             {newsItem.title}
           </h1>
           <p className="text-gray-300 mb-8">
-            {new Date(newsItem.date).toLocaleDateString(i18n.language, {
+            {new Date(newsItem.date).toLocaleDateString(params.lang, {
               year: 'numeric',
               month: 'long',
               day: 'numeric'

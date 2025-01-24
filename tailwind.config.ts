@@ -5,6 +5,16 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/data/**/*.{js,ts}",
+  ],
+  safelist: [
+    'h-8',
+    'w-8',
+    'w-16',
+    'w-24',
+    'w-32',
+    'w-auto',
+    'rounded-full'
   ],
   theme: {
     extend: {

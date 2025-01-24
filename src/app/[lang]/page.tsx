@@ -1,9 +1,8 @@
 "use client";
 
-import Hero from '../components/Hero'
-import Roadmap from '../components/Roadmap'
-import Partners from '../components/Partners'
-// import Subscribe from '../components/Subscribe'
+import { Hero } from "@/components/sections/Hero";
+import { Partners } from "@/components/sections/Partners";
+import { Roadmap } from "@/components/sections/Roadmap";
 
 export default function Home() {
   return (
@@ -11,7 +10,6 @@ export default function Home() {
       <Hero />
       <Roadmap />
       <Partners />
-      {/* <Subscribe /> */}
     </div>
   )
 }

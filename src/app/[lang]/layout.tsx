@@ -1,9 +1,10 @@
 import { Poppins, Noto_Sans_SC } from 'next/font/google'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import { Header } from '@/components/layout/Header'
 import ClientProvider from './client-provider'
 import type { Metadata } from 'next'
 import '../globals.css'
+import { Footer } from '@/components/layout/Footer'
+import { ReactNode } from 'react'
 
 const poppins = Poppins({ 
   weight: ['400', '500', '600', '700'],
@@ -71,13 +72,16 @@ export const metadata: Metadata = {
   themeColor: '#000000',
 };
 
-export default function RootLayout({
-  children,
-  params: { lang },
-}: {
-  children: React.ReactNode
-  params: { lang: string }
-}) {
+interface RootLayoutProps {
+  children: ReactNode;
+  params: {
+    lang: string;
+  };
+}
+
+export default function RootLayout({ children, params: { lang } }: RootLayoutProps) {
+  console.log('RootLayout rendered with lang:', lang);
+  
   return (
     <html lang={lang} className={`${poppins.variable} ${notoSansSC.variable}`}>
       <head>
@@ -100,5 +104,9 @@ export default function RootLayout({
         </div>
       </body>
     </html>
-  )
+  );
+}
+
+export async function generateStaticParams() {
+  return [{ lang: 'en' }, { lang: 'zh' }];
 }

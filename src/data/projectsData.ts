@@ -16,17 +16,17 @@ export interface Project {
   name: string;
   logo: string;
   imgClassName?: string;
-  link: string;  // 项目链接
-  tags: ProjectTag[];  // 多个标签
-  isVerified?: boolean;  // 控制验证图标
-  contractAddress?: string;  // 添加这个字段
+  link: string;  
+  tags: ProjectTag[]; 
+  isVerified?: boolean; 
+  contractAddress?: string; 
   description?: {
     en: string;
     zh: string;
   };
   pointsBonus?: {
     type: 'interaction' | 'bonus' | 'reward';
-    hasExtraPoints?: boolean;  // 控制闪电图标
+    hasExtraPoints?: boolean;  
     description: {
       en: string;
       zh: string;
