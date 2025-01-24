@@ -86,11 +86,11 @@ export default function Projects({ params }: { params: { lang: string } }) {
               <div className="flex items-center gap-2">
                 {project.isVerified && (
                   <div 
-                    className="bg-white/10 p-1.5 rounded-full group relative"
+                    className="bg-white/10 p-1.5 rounded-full group relative cursor-pointer"
                     title={content.verifiedProject}
                   >
-                    <IoShield className="w-4 h-4 text-emerald-400" />
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-[60]">
+                    <IoShield className="w-4 h-4 text-emerald-400 cursor-pointer" />
+                    <div className="absolute bottom-full cursor-pointer left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap z-[60]">
                       {content.verifiedProject}
                     </div>
                   </div>
@@ -99,7 +99,7 @@ export default function Projects({ params }: { params: { lang: string } }) {
                 {project.pointsBonus && (
                   <>
                     <div 
-                      className="bg-white/10 p-1.5 rounded-full group relative"
+                      className="bg-white/10 p-1.5 rounded-full group relative cursor-pointer"
                       title={content.interactionReward}
                     >
                       <IoTrophy className="w-4 h-4 text-amber-400" />
@@ -110,7 +110,7 @@ export default function Projects({ params }: { params: { lang: string } }) {
 
                     {project.pointsBonus.hasExtraPoints && (
                       <div 
-                        className="bg-white/10 p-1.5 rounded-full group relative"
+                        className="bg-white/10 p-1.5 rounded-full group relative cursor-pointer"
                         title={content.extraPoints}
                       >
                         <IoFlash className="w-4 h-4 text-blue-400" />

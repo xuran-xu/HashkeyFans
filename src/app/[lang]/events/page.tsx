@@ -24,13 +24,13 @@ const eventListContent = {
 };
 
 const SkeletonCard = () => (
-  <div className="bg-white/90 rounded-lg shadow-md overflow-hidden animate-pulse">
-    <div className="w-full h-48 bg-gray-300"></div>
-    <div className="p-4">
-      <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-      <div className="h-6 bg-gray-300 rounded w-1/2 mb-2"></div>
-      <div className="h-4 bg-gray-300 rounded w-full mb-4"></div>
-      <div className="h-10 bg-gray-300 rounded w-full"></div>
+  <div className="bg-gradient-to-br from-[#1a237e]/30 via-[#311b92]/25 to-[#4a148c]/20 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden animate-pulse">
+    <div className="w-full h-48 bg-white/10"></div>
+    <div className="p-6">
+      <div className="h-4 bg-white/10 rounded w-3/4 mb-2"></div>
+      <div className="h-6 bg-white/10 rounded w-1/2 mb-2"></div>
+      <div className="h-4 bg-white/10 rounded w-full mb-4"></div>
+      <div className="h-10 bg-white/10 rounded w-full"></div>
     </div>
   </div>
 );
@@ -58,27 +58,37 @@ export default function EventList() {
   const pastEvents = events.filter(event => new Date(event.endDate) < currentDate);
 
   const renderEventCard = (event: EventItem) => (
-    <div className=" bg-white/90 rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl">
-      <img src={event.image} alt={event.title} width={400} height={200} className="w-full h-48 object-cover" />
-      <div className="p-4">
-        <p className="text-sm text-gray-600 mb-2">
-          {new Date(event.startDate).toLocaleDateString(i18n.language, { year: 'numeric', month: 'long', day: 'numeric' })} - 
-          {new Date(event.endDate).toLocaleDateString(i18n.language, { year: 'numeric', month: 'long', day: 'numeric' })}
+    <div className="w-full px-2">
+      <div className="bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 backdrop-blur-sm rounded-lg shadow-lg p-6 h-[420px] flex flex-col">
+        <div className="h-48 overflow-hidden rounded-lg mb-4">
+          <img 
+            src={event.image} 
+            alt={event.title} 
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <h3 className="text-xl font-bold mb-2 text-white">
+          {event.title}
+        </h3>
+        <p className="text-gray-300 text-sm mb-4 flex-grow line-clamp-3">
+          {event.content}
         </p>
-        <h3 className="text-xl font-bold mb-2 text-gray-800">{event.title}</h3>
-        <p className="text-gray-700 mb-4">{event.content}</p>
-        {event.buttons && event.buttons.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {event.buttons.map((button, index) => (
-              <Link target="_blank" key={index} href={button.link} className="flex-grow h-12 md:h-14 bg-white text-black font-semibold text-base md:text-lg rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-shadow duration-300 inline-flex items-center justify-center">
-                <span className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"></span>
-                <span className="relative z-10 group-hover:text-white transition-colors duration-700 tracking-wide">
+        <div className="mt-auto">
+          {event.buttons && event.buttons.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {event.buttons.map((button, index) => (
+                <Link 
+                  target="_blank" 
+                  key={index} 
+                  href={button.link} 
+                  className="block w-full text-center py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-300"
+                >
                   {button.text}
-                </span>
-              </Link>
-            ))}
-          </div>
-        )}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -92,22 +102,26 @@ export default function EventList() {
   );
 
   return (
-    <div className="w-full py-12 bg-gradient-to-b from-white/10 to-white/5">
+    <div className="w-full py-12">
       <div className="container mx-auto px-4">
-        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.title}</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+          {content.title}
+        </h1>
         
         {loading ? (
-          <>
-            <section className="mb-12">
-              <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.loading}</h2>
-              {renderSkeletonSection(3)}
-            </section>
-          </>
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+              {content.loading}
+            </h2>
+            {renderSkeletonSection(3)}
+          </section>
         ) : (
           <>
             {currentEvents.length > 0 && (
               <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.current}</h2>
+                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                  {content.current}
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentEvents.map((event, index) => (
                     <div key={index}>{renderEventCard(event)}</div>
@@ -118,7 +132,9 @@ export default function EventList() {
 
             {upcomingEvents.length > 0 && (
               <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.upcoming}</h2>
+                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                  {content.upcoming}
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {upcomingEvents.map((event, index) => (
                     <div key={index}>{renderEventCard(event)}</div>
@@ -129,7 +145,9 @@ export default function EventList() {
 
             {pastEvents.length > 0 && (
               <section>
-                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">{content.past}</h2>
+                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                  {content.past}
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {pastEvents.map((event, index) => (
                     <div key={index}>{renderEventCard(event)}</div>

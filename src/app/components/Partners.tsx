@@ -114,7 +114,9 @@ export default function Partners() {
 
   const renderPartners = (partnerList: Partner[], title: string) => (
     <div className="mb-12">
-      <h3 className="text-2xl text-center font-bold mb-6 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] tracking-wide">{currentTranslations[title as keyof typeof currentTranslations]}</h3>
+      <h3 className="text-2xl text-center font-bold mb-6 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] tracking-wide">
+        {currentTranslations[title as keyof typeof currentTranslations]}
+      </h3>
       <div className="flex flex-wrap justify-center items-center gap-8">
         {partnerList.map((partner, index) => (
           <Link 
@@ -122,12 +124,17 @@ export default function Partners() {
             href={partner.link} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="bg-white/20 backdrop-blur-xl w-[200px] h-[100px] rounded shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center p-4 group border border-white/30"
+            className="bg-gradient-to-br from-[#1a237e]/30 via-[#311b92]/25 to-[#4a148c]/20 backdrop-blur-sm 
+                     w-[200px] h-[100px] rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 
+                     flex items-center justify-center p-4 group border border-white/10 
+                     hover:border-white/20 hover:from-[#1a237e]/40 hover:via-[#311b92]/35 hover:to-[#4a148c]/30"
           >
             <img 
               src={partner.image} 
               alt={partner.name} 
-              className="w-full h-auto max-h-full object-contain grayscale opacity-90 contrast-150 brightness-90 group-hover:grayscale-0 group-hover:opacity-100 group-hover:contrast-100 group-hover:brightness-100 transition-all duration-300"
+              className="w-full h-auto max-h-full object-contain brightness-90 contrast-125 
+                       group-hover:brightness-110 group-hover:contrast-100 transition-all duration-300
+                       filter invert"
             />
           </Link>
         ))}
@@ -138,15 +145,29 @@ export default function Partners() {
   return (
     <div className="py-20">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl text-center font-bold mb-12 text-white drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] tracking-wide">{currentTranslations["Our Partners"]}</h2>
+        <h2 className="text-3xl text-center font-bold mb-12 text-white drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] tracking-wide">
+          {currentTranslations["Our Partners"]}
+        </h2>
         {renderPartners(partners.collaborators, "Collaborators")}
         {renderPartners(partners.mediaPartners, "Media Partners")}
+        
         <div className="mt-16 text-center">
-          <h3 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] tracking-wide">{currentTranslations["Interested in Partnering?"]}</h3>
-          <p className="text-white mb-6">{currentTranslations["If you're interested in partnering with us, we'd love to hear from you!"]}</p>
-          <Link href="/sponsor" className="inline-block w-60 h-14 bg-white text-black font-semibold text-lg rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-shadow duration-300">
-            <span className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"></span>
-            <span className="relative z-10 group-hover:text-white transition-colors duration-700 tracking-wide flex items-center justify-center h-full">
+          <h3 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.5)] tracking-wide">
+            {currentTranslations["Interested in Partnering?"]}
+          </h3>
+          <p className="text-gray-300 mb-6">
+            {currentTranslations["If you're interested in partnering with us, we'd love to hear from you!"]}
+          </p>
+          <Link 
+            href="/sponsor" 
+            className="group/button inline-block px-8 py-3 bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 
+                     text-white font-semibold rounded-lg overflow-hidden relative shadow-md hover:shadow-xl 
+                     transition-all duration-300"
+          >
+            <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 
+                          opacity-0 group-hover/button:opacity-100 transition-opacity duration-700 ease-in-out">
+            </span>
+            <span className="relative z-10 tracking-wide">
               {currentTranslations["Apply for Partnership"]}
             </span>
           </Link>

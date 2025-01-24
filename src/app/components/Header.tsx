@@ -6,7 +6,14 @@ import { useRouter, usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FaTelegram, FaDiscord } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
-import { IoEarthOutline, IoNewspaperOutline, IoGridOutline, IoCalendarOutline } from "react-icons/io5";
+import { 
+  IoEarthOutline, 
+  IoNewspaperOutline, 
+  IoGridOutline, 
+  IoCalendarOutline,
+  IoLanguageOutline,
+  IoChevronDownOutline 
+} from "react-icons/io5";
 import { useTranslation } from 'react-i18next';
 
 const languages = [
@@ -80,18 +87,19 @@ export default function Header() {
             <div className="relative">
               <button
                 onClick={toggleLangMenu}
-                className="flex items-center space-x-1 text-gray-300 hover:text-white transition-colors duration-200"
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg text-white hover:bg-white/10 transition-all duration-200"
               >
-                <IoEarthOutline className="w-5 h-5" />
+                <IoLanguageOutline className="w-5 h-5" />
                 <span>{languages.find(lang => lang.code === i18n.language)?.flag}</span>
+                <IoChevronDownOutline className="w-4 h-4" />
               </button>
               {isLangMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                <div className="absolute right-0 mt-2 w-48 bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 rounded-lg shadow-lg py-1 z-10">
                   {languages.map((lang) => (
                     <button
                       key={lang.code}
                       onClick={() => changeLanguage(lang.code)}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 transition-all duration-200"
                     >
                       {lang.flag} {lang.name}
                     </button>
@@ -103,10 +111,10 @@ export default function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-300 focus:outline-none"
+            className="md:hidden text-white hover:bg-white/10 p-2 rounded-lg transition-all duration-200"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
             </svg>
           </button>
@@ -114,45 +122,49 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 space-y-2 p-2">
-            <Link href="/events" className="pl-4 flex items-center space-x-2 text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">
+          <div className="md:hidden mt-4 space-y-2 p-2 bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 rounded-lg">
+            <Link href="/events" className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
               <IoCalendarOutline className="w-5 h-5" />
               <span>{t('Events')}</span>
             </Link>
-            <Link href="/news" className="pl-4 flex items-center space-x-2 text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">
+            <Link href="/news" className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
               <IoNewspaperOutline className="w-5 h-5" />
               <span>{t('News')}</span>
             </Link>
-            <Link href="/projects" className="pl-4 flex items-center space-x-2 text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200">
+            <Link href="/projects" className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
               <IoGridOutline className="w-5 h-5" />
               <span>{t('Projects')}</span>
             </Link>
-            <div className="border-t border-gray-200 my-2"></div>
-            <a href="https://t.me/HashKeyChainHSK" className="pl-4 flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-200">
-              <FaTelegram className="w-5 h-5" /> <span>Telegram</span>
+            <div className="border-t border-white/10 my-2"></div>
+            <a href="https://t.me/HashKeyChainHSK" className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+              <FaTelegram className="w-5 h-5" />
+              <span>Telegram</span>
             </a>
-            <a href="https://discord.gg/qvPkbrYY" className="pl-4 flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-200">
-              <FaDiscord className="w-5 h-5" /> <span>Discord</span>
+            <a href="https://discord.gg/qvPkbrYY" className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+              <FaDiscord className="w-5 h-5" />
+              <span>Discord</span>
             </a>
-            <a href="https://x.com/HashKeyHSK" className="pl-4 flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-200">
-              <FaSquareXTwitter className="w-5 h-5" /> <span>X</span>
+            <a href="https://x.com/HashKeyHSK" className="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+              <FaSquareXTwitter className="w-5 h-5" />
+              <span>X</span>
             </a>
-            <div className="relative pl-4">
+            <div className="relative px-4">
               <button
                 onClick={toggleLangMenu}
-                className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-200"
+                className="flex items-center space-x-2 py-2 text-white w-full hover:bg-white/10 rounded-lg transition-all duration-200"
               >
-                <IoEarthOutline className="w-5 h-5" />
+                <IoLanguageOutline className="w-5 h-5" />
                 <span>{languages.find(lang => lang.code === i18n.language)?.flag}</span>
                 <span>{languages.find(lang => lang.code === i18n.language)?.name}</span>
+                <IoChevronDownOutline className="w-4 h-4 ml-auto" />
               </button>
               {isLangMenuOpen && (
-                <div className="mt-2 bg-white rounded-md shadow-lg py-1">
+                <div className="mt-2 bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 rounded-lg shadow-lg py-1">
                   {languages.map((lang) => (
                     <button
                       key={lang.code}
                       onClick={() => changeLanguage(lang.code)}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="block w-full text-left px-4 py-2 text-sm text-white hover:bg-white/10 transition-all duration-200"
                     >
                       {lang.flag} {lang.name}
                     </button>

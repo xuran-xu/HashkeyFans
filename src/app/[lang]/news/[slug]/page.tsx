@@ -80,7 +80,7 @@ export default function NewsDetail() {
   }
 
   return (
-    <div className="w-full py-12 bg-gradient-to-b from-white/10 to-white/5">
+    <div className="w-full py-12">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <img 

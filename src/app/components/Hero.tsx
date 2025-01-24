@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import Link from 'next/link';
+import { IoTicketOutline, IoGridOutline } from "react-icons/io5";
 
 const heroContent = {
   zh: {
@@ -17,7 +18,7 @@ const heroContent = {
   },
   en: {
     slogan: "Web3 Voyage",
-    description: "How Blockchain Shapes Humanity’s Main Narrative · HongKong",
+    description: "How Blockchain Shapes Humanity's Main Narrative · HongKong",
     buttonJoin: {
       text: "Join Event",
       link: "https://lu.ma/hzz6mel6"
@@ -48,16 +49,32 @@ export default function Hero() {
           {content.description}
         </p>
         <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-10">
-          <Link href={content.buttonJoin.link} className="w-full md:w-60 h-12 md:h-14 bg-white text-black font-semibold text-base md:text-lg rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-shadow duration-300 inline-flex items-center justify-center">
-            <span className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"></span>
-            <span className="relative z-10 group-hover:text-white transition-colors duration-700 tracking-wide">
-              {content.buttonJoin.text}
+          <Link 
+            href={content.buttonJoin.link} 
+            className="group/button w-full md:w-60 h-12 md:h-14 bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 
+                     text-white font-semibold text-base md:text-lg rounded-lg overflow-hidden relative shadow-md 
+                     hover:shadow-xl transition-all duration-300 inline-flex items-center justify-center"
+          >
+            <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 
+                          opacity-0 group-hover/button:opacity-100 transition-opacity duration-700 ease-in-out">
+            </span>
+            <span className="relative z-10 flex items-center space-x-2 tracking-wide">
+              <IoTicketOutline className="w-5 h-5" />
+              <span>{content.buttonJoin.text}</span>
             </span>
           </Link>
-          <Link href={content.buttonReview.link} className="w-full md:w-60 h-12 md:h-14 bg-white text-black font-semibold text-base md:text-lg rounded-lg overflow-hidden group relative shadow-md hover:shadow-lg transition-shadow duration-300 inline-flex items-center justify-center">
-            <span className="absolute inset-0 bg-gradient-to-r from-black via-gray-700 to-black opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out"></span>
-            <span className="relative z-10 group-hover:text-white transition-colors duration-700 tracking-wide">
-              {content.buttonReview.text}
+          <Link 
+            href={content.buttonReview.link} 
+            className="group/button w-full md:w-60 h-12 md:h-14 bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 
+                     text-white font-semibold text-base md:text-lg rounded-lg overflow-hidden relative shadow-md 
+                     hover:shadow-xl transition-all duration-300 inline-flex items-center justify-center"
+          >
+            <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 
+                          opacity-0 group-hover/button:opacity-100 transition-opacity duration-700 ease-in-out">
+            </span>
+            <span className="relative z-10 flex items-center space-x-2 tracking-wide">
+              <IoGridOutline className="w-5 h-5" />
+              <span>{content.buttonReview.text}</span>
             </span>
           </Link>
         </div>
