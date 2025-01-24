@@ -16,6 +16,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
     await navigator.clipboard.writeText(text);
     console.log(copyMsg);
     setCopyMsg(t('projects.copySuccess'));
+    console.log(copyMsg);
     setTimeout(() => setCopyMsg(""), 2000);
   };
 
@@ -202,7 +203,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
 export default function Projects() {
   const { t } = useTranslation();
-  const [copyMsg, setCopyMsg] = useState("");
+  const [copyMsg] = useState("");
 
   return (
     <div className="w-full py-12">

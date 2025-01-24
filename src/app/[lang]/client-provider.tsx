@@ -18,10 +18,9 @@ export default function ClientProvider({
 
   useEffect(() => {
     const initI18n = async () => {
-      // 如果 localStorage 中有语言设置，优先使用它
       const savedLang = localStorage.getItem('i18nextLng');
       const targetLang = savedLang || lang;
-      
+      console.log('currentLang', currentLang);
       console.log('Initializing with:', {
         savedLang,
         urlLang: lang,

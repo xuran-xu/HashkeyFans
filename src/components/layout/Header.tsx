@@ -10,11 +10,6 @@ import { SocialLinks } from "../common/SocialLinks";
 import { LanguageSelector } from "../common/LanguageSelector";
 import { MobileMenu } from "../common/MobileMenu";
 
-const languages = [
-  { code: "zh", name: "中文", flag: "🇨🇳" },
-  { code: "en", name: "English", flag: "🇺🇸" },
-];
-
 export const Header = () => {
   const router = useRouter();
   const pathname = usePathname();

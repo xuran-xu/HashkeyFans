@@ -16,7 +16,7 @@ interface Partner {
 }
 
 export const Partners = () => {
-  const { i18n, t } = useTranslation();
+  const { t } = useTranslation();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
