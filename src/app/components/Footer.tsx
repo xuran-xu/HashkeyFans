@@ -20,7 +20,7 @@ export default function Footer() {
     <footer className="bg-gradient-to-b from-black/5 to-black/10 text-black py-10">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
-          <p className="text-center md:text-left mb-4 md:mb-0">
+          <p className="text-center text-white md:text-left mb-4 md:mb-0">
             &copy; 2024 Hashkey Chain Fans. {t("All rights reserved.")}
           </p>
           <div className="flex space-x-6">
