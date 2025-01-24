@@ -340,31 +340,6 @@ export const projectsData: Project[] = [
       }
     ]
   },
-  {
-    id: 'izumi',
-    name: 'iZumi',
-    logo: '/img/izumi.png',
-    imgClassName: 'h-8 w-8 rounded-full',
-    link: 'https://izumi.finance/trade/swap',
-    tags: ['DeFi', 'Dex'],
-    pointsBonus: {
-        type: 'interaction',
-        description: {
-        en: 'Bonus for contract interactions',
-        zh: '合约交互奖励'
-        }
-    },
-    socials: [
-      {
-        platform: 'x',
-        link: 'https://x.com/DigiFTTech'
-      },
-      {
-        platform: 'telegram',
-        link: 'https://t.me/DigiFTTech'
-      }
-    ]
-  },
   
   {
     id: 'supra',

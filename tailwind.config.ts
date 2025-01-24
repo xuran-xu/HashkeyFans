@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        poppins: ['var(--font-poppins)'],
+        noto: ['var(--font-noto-sans)'],
+      },
       textShadow: {
         'md': '2px 2px 4px rgba(0, 0, 0, 0.5)',
         'lg': '3px 3px 6px rgba(0, 0, 0, 0.5)',

@@ -1,12 +1,21 @@
-import { Inter, Noto_Sans_SC } from 'next/font/google'
+import { Poppins, Noto_Sans_SC } from 'next/font/google'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import ClientProvider from './client-provider'
 import type { Metadata } from 'next'
 import '../globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
-const notoSansSC = Noto_Sans_SC({ subsets: ['latin'] })
+const poppins = Poppins({ 
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  variable: '--font-poppins'
+});
+
+const notoSansSC = Noto_Sans_SC({ 
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+  variable: '--font-noto-sans'
+});
 
 export const metadata: Metadata = {
   title: 'Hash Fans',
@@ -70,13 +79,13 @@ export default function RootLayout({
   params: { lang: string }
 }) {
   return (
-    <html lang={lang} className={`${inter.className} ${notoSansSC.className}`}>
+    <html lang={lang} className={`${poppins.variable} ${notoSansSC.variable}`}>
       <head>
         <link rel="icon" href="/img/logo.png" />
         <link rel="apple-touch-icon" href="/img/logo.png" />
         <meta name="theme-color" content="#000000" />
       </head>
-      <body className="relative min-h-screen font-sans flex flex-col">
+      <body className={`relative min-h-screen font-sans flex flex-col ${lang === 'en' ? 'font-poppins' : 'font-noto'}`}>
         <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
         <div className="fixed inset-0 opacity-30 bg-[url('/img/noise.png')] mix-blend-soft-light"></div>
         
