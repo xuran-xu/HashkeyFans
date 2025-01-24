@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HashFans - HashKey Chain Community Hub
+
+HashFans is the official community website for HashKey Chain, serving as a central platform for ecosystem updates, project showcases, and community engagement.
+
+## About
+
+HashFans connects builders, users, and enthusiasts within the HashKey Chain ecosystem. The platform features:
+
+- 🎯 Latest ecosystem activities and campaigns
+- 🚀 Featured projects building on HashKey Chain
+- 📰 Network updates and news
+- 🤝 Community engagement opportunities
+
+## Features
+
+- Multi-language support
+- Project directory
+- Event calendar
+- Network statistics
+- Community resources
+
+## Submit Your Project
+
+We welcome projects building on HashKey Chain to submit their information for listing. Please follow the format below:
+
+```typescript
+{
+  id: "your-project-id",
+  name: "Your Project Name",
+  logo: "/path/to/logo.png", // Provide logo URL or file
+  imgClassName: "h-8 w-auto", // Optional: Custom image styling
+  link: "https://your-project-url.com",
+  tags: ["category1", "category2"], // Choose from: infrastructure, bridge, wallet, RWA, defi, oracle, gaming, DeFi, Dex
+  isVerified: false, // Will be reviewed by the team
+  description: {
+    en: "English description of your project (max 150 characters)",
+    zh: "Chinese description of your project (max 150 characters)"
+  },
+  // Optional fields
+  contractAddress: "0x...", // If applicable
+  pointsBonus: {
+    type: "interaction", // interaction | bonus | reward
+    hasExtraPoints: false,
+    description: {
+      en: "Bonus description in English",
+      zh: "Bonus description in Chinese"
+    }
+  },
+  socials: [
+    {
+      platform: "x", // x | discord | telegram
+      link: "https://x.com/your-handle"
+    }
+  ],
+  buttons: [
+    {
+      text: "Button Text",
+      link: "https://action-url.com"
+    }
+  ]
+}
+```
+
+To submit your project:
+1. Fork this repository
+2. Add your project information to `src/data/projectsData.ts`
+3. Create a pull request with the subject "Project Submission: [Project Name]"
+4. Include any additional information or context in the PR description
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contributing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+We welcome contributions from the community! Please read our contributing guidelines before submitting PRs.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Connect With Us
 
-## Learn More
+- Twitter: [@HashKeyChain](https://twitter.com/HashKeyChain)
+- Discord: [Join our community](https://discord.gg/hashkey)
+- Telegram: [HashKey Official](https://t.me/hashkey)
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT License - see LICENSE.md for details
