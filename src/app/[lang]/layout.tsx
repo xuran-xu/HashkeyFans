@@ -1,26 +1,12 @@
-import { Poppins, Noto_Sans_SC, Sora } from 'next/font/google'
+import { Sora } from 'next/font/google'
 import { Header } from '@/components/layout/Header'
 import ClientProvider from './client-provider'
 import type { Metadata } from 'next'
 import '../globals.css'
 import { Footer } from '@/components/layout/Footer'
 import { ReactNode } from 'react'
-import { headers } from 'next/headers'
 import ContextProvider from '@/context'
 import '@rainbow-me/rainbowkit/styles.css';
-
-
-const poppins = Poppins({ 
-  weight: ['400', '500', '600', '700'],
-  subsets: ['latin'],
-  variable: '--font-poppins'
-});
-
-const notoSansSC = Noto_Sans_SC({ 
-  weight: ['400', '500', '700'],
-  subsets: ['latin'],
-  variable: '--font-noto-sans'
-});
 
 const sora = Sora({
   weight: ['400', '500', '700'],
@@ -91,7 +77,6 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children, params: { lang } }: RootLayoutProps) {
   console.log('RootLayout rendered with lang:', lang);
-  const cookies = headers().get('cookie')
 
   return (
     <html lang={lang} className={`${sora.variable}`}>
@@ -106,7 +91,7 @@ export default function RootLayout({ children, params: { lang } }: RootLayoutPro
         
         <div className="relative z-10 flex flex-col min-h-screen">
           <ClientProvider lang={lang}>
-            <ContextProvider cookies={cookies}>
+            <ContextProvider>
               <Header />
               <div className="min-w-screen flex-grow flex justify-center">
                 {children}

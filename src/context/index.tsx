@@ -8,7 +8,7 @@ import { WagmiProvider } from "wagmi";
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 
 
-function ContextProvider({ children, cookies }: { children: ReactNode; cookies: string | null }) {
+function ContextProvider({ children }: { children: ReactNode}) {
   const client = new QueryClient();
   
   return (

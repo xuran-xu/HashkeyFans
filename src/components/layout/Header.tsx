@@ -6,7 +6,6 @@ import { useRouter, usePathname } from "next/navigation";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Button } from "../common/Button";
 import { Icon } from "../common/Icon";
-import { NavLink } from "../common/NavLink";
 import { SocialLinks } from "../common/SocialLinks";
 import { LanguageSelector } from "../common/LanguageSelector";
 import { MobileMenu } from "../common/MobileMenu";
@@ -32,6 +31,7 @@ export const Header = () => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (exploreRef.current && !exploreRef.current.contains(event.target as Node)) {
+        console.log('isExploreOpen', isExploreOpen);
         setIsExploreOpen(false);
       }
     };

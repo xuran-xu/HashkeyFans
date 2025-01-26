@@ -16,21 +16,6 @@ import {
   IoChevronDownOutline
 } from "react-icons/io5";
 
-type IconName = 
-  | "menu" 
-  | "telegram" 
-  | "discord" 
-  | "twitter" 
-  | "news" 
-  | "grid" 
-  | "calendar" 
-  | "language" 
-  | "chevronLeft" 
-  | "chevronRight"
-  | "compass"
-  | "chevron-up"
-  | "chevron-down";
-
 const icons = {
   telegram: FaTelegram,
   discord: FaDiscord,
