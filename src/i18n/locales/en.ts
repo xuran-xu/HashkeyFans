@@ -11,6 +11,7 @@ export default {
     events: "Events",
     news: "News",
     projects: "Projects",
+    explore: "explore"
   },
   home: {
     slogan: "Web3 Voyage",

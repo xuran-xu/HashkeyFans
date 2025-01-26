@@ -10,8 +10,26 @@ import {
   IoLanguageOutline,
   IoMenuOutline,
   IoChevronBackOutline,
-  IoChevronForwardOutline
+  IoChevronForwardOutline,
+  IoCompassOutline,
+  IoChevronUpOutline,
+  IoChevronDownOutline
 } from "react-icons/io5";
+
+type IconName = 
+  | "menu" 
+  | "telegram" 
+  | "discord" 
+  | "twitter" 
+  | "news" 
+  | "grid" 
+  | "calendar" 
+  | "language" 
+  | "chevronLeft" 
+  | "chevronRight"
+  | "compass"
+  | "chevron-up"
+  | "chevron-down";
 
 const icons = {
   telegram: FaTelegram,
@@ -23,7 +41,10 @@ const icons = {
   language: IoLanguageOutline,
   menu: IoMenuOutline,
   chevronLeft: IoChevronBackOutline,
-  chevronRight: IoChevronForwardOutline
+  chevronRight: IoChevronForwardOutline,
+  compass: IoCompassOutline,
+  "chevron-up": IoChevronUpOutline,
+  "chevron-down": IoChevronDownOutline
 };
 
 interface IconProps {

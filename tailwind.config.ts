@@ -18,15 +18,29 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        poppins: ['var(--font-poppins)'],
-        noto: ['var(--font-noto-sans)'],
-      },
       textShadow: {
         'md': '2px 2px 4px rgba(0, 0, 0, 0.5)',
         'lg': '3px 3px 6px rgba(0, 0, 0, 0.5)',
         'xl': '4px 4px 8px rgba(0, 0, 0, 0.5)',
         '3xl': '0 0 3px #ffffff, 0 0 5px #ffffff, 0 0 7px #ffffff, 0 0 10px #ffffff',
+      },
+      fontFamily: {
+        sora: ['var(--font-sora)'],
+        noto: ['var(--font-noto-sans)'],
+        poppins: ['var(--font-poppins)'],
+      },
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(to right, var(--tw-gradient-stops))',
+      },
+      colors: {
+        'blue': {
+          600: '#2563eb',
+          700: '#1d4ed8',
+        },
+        'indigo': {
+          600: '#4f46e5',
+          700: '#4338ca',
+        },
       },
     },
   },
