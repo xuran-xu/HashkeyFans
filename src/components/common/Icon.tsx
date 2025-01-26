@@ -10,7 +10,10 @@ import {
   IoLanguageOutline,
   IoMenuOutline,
   IoChevronBackOutline,
-  IoChevronForwardOutline
+  IoChevronForwardOutline,
+  IoCompassOutline,
+  IoChevronUpOutline,
+  IoChevronDownOutline
 } from "react-icons/io5";
 
 const icons = {
@@ -23,7 +26,10 @@ const icons = {
   language: IoLanguageOutline,
   menu: IoMenuOutline,
   chevronLeft: IoChevronBackOutline,
-  chevronRight: IoChevronForwardOutline
+  chevronRight: IoChevronForwardOutline,
+  compass: IoCompassOutline,
+  "chevron-up": IoChevronUpOutline,
+  "chevron-down": IoChevronDownOutline
 };
 
 interface IconProps {

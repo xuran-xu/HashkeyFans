@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { NavLink } from './NavLink';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { SocialLinks } from './SocialLinks';
 
 interface MobileMenuProps {
@@ -15,6 +16,9 @@ export const MobileMenu = ({ onClose }: MobileMenuProps) => {
       <NavLink href="/news" icon="news" text={t('nav.news')} />
       <NavLink href="/projects" icon="grid" text={t('nav.projects')} />
       <div className="border-t border-white/10 my-2"></div>
+      <div className="flex justify-center">
+        <ConnectButton />
+      </div>
       <div className="flex justify-around py-2">
         <SocialLinks />
       </div>

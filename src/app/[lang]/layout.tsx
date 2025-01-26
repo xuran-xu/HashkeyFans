@@ -1,22 +1,18 @@
-import { Poppins, Noto_Sans_SC } from 'next/font/google'
+import { Sora } from 'next/font/google'
 import { Header } from '@/components/layout/Header'
 import ClientProvider from './client-provider'
 import type { Metadata } from 'next'
 import '../globals.css'
 import { Footer } from '@/components/layout/Footer'
 import { ReactNode } from 'react'
+import ContextProvider from '@/context'
+import '@rainbow-me/rainbowkit/styles.css';
 
-const poppins = Poppins({ 
-  weight: ['400', '500', '600', '700'],
-  subsets: ['latin'],
-  variable: '--font-poppins'
-});
-
-const notoSansSC = Noto_Sans_SC({ 
+const sora = Sora({
   weight: ['400', '500', '700'],
   subsets: ['latin'],
-  variable: '--font-noto-sans'
-});
+  variable: '--font-sora'
+})
 
 export const metadata: Metadata = {
   title: 'Hash Fans',
@@ -81,25 +77,27 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children, params: { lang } }: RootLayoutProps) {
   console.log('RootLayout rendered with lang:', lang);
-  
+
   return (
-    <html lang={lang} className={`${poppins.variable} ${notoSansSC.variable}`}>
+    <html lang={lang} className={`${sora.variable}`}>
       <head>
         <link rel="icon" href="/img/logo.png" />
         <link rel="apple-touch-icon" href="/img/logo.png" />
         <meta name="theme-color" content="#000000" />
       </head>
-      <body className={`relative min-h-screen font-sans flex flex-col ${lang === 'en' ? 'font-poppins' : 'font-noto'}`}>
+      <body className={`relative min-h-screen flex flex-col ${lang === 'en' ? 'font-sora' : 'font-noto'}`}>
         <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
         <div className="fixed inset-0 opacity-30 bg-[url('/img/noise.png')] mix-blend-soft-light"></div>
         
         <div className="relative z-10 flex flex-col min-h-screen">
           <ClientProvider lang={lang}>
-            <Header />
-            <div className="min-w-screen flex-grow flex justify-center">
-              {children}
-            </div>
-            <Footer />
+            <ContextProvider>
+              <Header />
+              <div className="min-w-screen flex-grow flex justify-center">
+                {children}
+              </div>
+              <Footer />
+            </ContextProvider>
           </ClientProvider>
         </div>
       </body>

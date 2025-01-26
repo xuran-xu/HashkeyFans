@@ -11,6 +11,7 @@ export default {
     events: "活动",
     news: "新闻",
     projects: "项目",
+    explore: "探索"
   },
   home: {
     slogan: "Web3大航海",
