@@ -6,7 +6,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Button } from "../common/Button";
 import { Icon } from "../common/Icon";
-import { SocialLinks } from "../common/SocialLinks";
+// import { SocialLinks } from "../common/SocialLinks";
 import { LanguageSelector } from "../common/LanguageSelector";
 import { MobileMenu } from "../common/MobileMenu";
 
@@ -80,6 +80,31 @@ export const Header = () => {
                 </div>
               </div>
 
+              {/* Red Packet Dropdown */}
+              <div className="relative group">
+                <button className="flex items-center space-x-2 px-3 py-2 rounded-md group-hover:bg-gray-800 transition-colors">
+                  <Icon name="gift" className="w-5 h-5" />
+                  <span>RedPacket🧧</span>
+                </button>
+
+                <div className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 top-full left-0 mt-2 w-48 rounded-lg bg-gray-800 shadow-lg py-2 transition-all duration-200">
+                  <Link
+                    href={getLocalizedHref('/redpacket/create')}
+                    className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700"
+                  >
+                    <Icon name="plus" className="w-4 h-4 mr-2" />
+                    Send RedPacket
+                  </Link>
+                  <Link
+                    href={getLocalizedHref('/redpacket/history')}
+                    className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700"
+                  >
+                    <Icon name="history" className="w-4 h-4 mr-2" />
+                    RedPacket History
+                  </Link>
+                </div>
+              </div>
+
               {/* Projects Link */}
               <Link
                 href={getLocalizedHref('/projects')}
@@ -93,7 +118,7 @@ export const Header = () => {
 
           {/* Social Links & Language Selector */}
           <div className="hidden md:flex items-center space-x-6">
-            <SocialLinks />
+            {/* <SocialLinks /> */}
             <LanguageSelector 
               isOpen={isLangMenuOpen}
               onToggle={() => setIsLangMenuOpen(!isLangMenuOpen)}
