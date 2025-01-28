@@ -13,8 +13,12 @@ import {
   IoChevronForwardOutline,
   IoCompassOutline,
   IoChevronUpOutline,
-  IoChevronDownOutline
+  IoChevronDownOutline,
+  IoGiftOutline,
+  IoAddOutline,
+  IoTimeOutline
 } from "react-icons/io5";
+
 
 const icons = {
   telegram: FaTelegram,
@@ -29,7 +33,10 @@ const icons = {
   chevronRight: IoChevronForwardOutline,
   compass: IoCompassOutline,
   "chevron-up": IoChevronUpOutline,
-  "chevron-down": IoChevronDownOutline
+  "chevron-down": IoChevronDownOutline,
+  gift: IoGiftOutline,
+  plus: IoAddOutline,
+  history: IoTimeOutline
 };
 
 interface IconProps {

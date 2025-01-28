@@ -86,9 +86,7 @@ export default function RootLayout({ children, params: { lang } }: RootLayoutPro
         <meta name="theme-color" content="#000000" />
       </head>
       <body className={`relative min-h-screen flex flex-col ${lang === 'en' ? 'font-sora' : 'font-noto'}`}>
-        <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>
-        <div className="fixed inset-0 opacity-30 bg-[url('/img/noise.png')] mix-blend-soft-light"></div>
-        
+        <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>        
         <div className="relative z-10 flex flex-col min-h-screen">
           <ClientProvider lang={lang}>
             <ContextProvider>
