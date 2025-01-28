@@ -34,24 +34,31 @@ export const CreateRedPacket = ({
   const [count, setCount] = useState('');
   const [message, setMessage] = useState('HashKey Chain');
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
     const amountNum = parseFloat(amount);
     const countNum = parseInt(count);
+
+    if (isNaN(amountNum) || amountNum <= 0) {
+      alert('请输入有效的金额');
+      return;
+    }
 
     if (amountNum < 0.01) {
       alert('最小金额不能低于0.01 HSK');
       return;
     }
 
-    if (countNum < 1) {
-      alert('红包数量必须大于0');
+    if (isNaN(countNum) || !Number.isInteger(countNum) || countNum <= 0) {
+      alert('红包个数必须是正整数');
       return;
     }
 
     onSubmit({
       amount: amountNum,
       count: countNum,
-      message: message || '蛇年好运'
+      message,
     });
   };
 
@@ -100,14 +107,21 @@ export const CreateRedPacket = ({
           </label>
           <input
             type="number"
+            min="1"
+            step="1"
             value={count}
             onChange={(e) => {
-              setCount(e.target.value);
-              setPreview({ ...preview, count: parseInt(e.target.value) || 0 });
+              const value = e.target.value;
+              if (/^\d*$/.test(value)) {
+                setCount(value);
+                setPreview({
+                  ...preview,
+                  count: parseInt(value) || 0
+                });
+              }
             }}
-            className="w-full px-4 py-3 bg-white rounded-lg text-gray-700 font-medium placeholder-gray-400 border-2 border-white/30 focus:border-white/50 focus:outline-none transition-all"
-            placeholder="1"
-            min="1"
+            className="w-full px-4 py-2 bg-[#2a2a2a] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FF3B3B]"
+            placeholder="输入红包个数"
           />
         </div>
 
