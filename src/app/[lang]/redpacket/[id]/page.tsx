@@ -109,7 +109,7 @@ export default function RedPacketDetailPage() {
 
   return (
     <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-2 py-8">
         <div className="max-w-2xl mx-auto space-y-6">
           {/* 红包预览 */}
           <RedPacket
@@ -118,42 +118,63 @@ export default function RedPacketDetailPage() {
             isOpened={hasClaimed || !hasRemaining}
           />
 
-          {/* 操作按钮 */}
-          <div className="text-center">
-            <button
-              onClick={handleAction}
-              disabled={isClaimLoading || isConfirming}
-              className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
-            >
-              {isClaimLoading || isConfirming ? '处理中...' : 
-               canClaim ? '领取红包' : '查看红包详情'}
-            </button>
-          </div>
+          {/* 操作按钮 - 只在可领取时显示 */}
+          {canClaim && (
+            <div className="text-center">
+              <button
+                onClick={handleAction}
+                disabled={isClaimLoading || isConfirming}
+                className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
+              >
+                {isClaimLoading || isConfirming ? '处理中...' : '领取红包'}
+              </button>
+            </div>
+          )}
 
           {/* 详情部分 */}
           {shouldShowDetails && (
             <>
-              {/* 领取进度 */}
+              {/* 领取进度卡片 */}
               <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
-                <div className="p-6 rounded-xl bg-[#1a1a1a]">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-white/80">总金额</span>
-                    <span className="text-xl font-bold text-[#FFD700]">{info.totalAmount} HKC</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-white/80">领取进度</span>
-                    <span className="text-xl font-bold text-[#FFD700]">
-                      {info.claimed} / {info.totalCount}
-                    </span>
-                  </div>
-                  {hasClaimed && (
-                    <div className="flex justify-between items-center mt-4">
-                      <span className="text-white/80">我的领取</span>
-                      <span className="text-xl font-bold text-[#FFD700]">
-                        {claimedAmount} HKC
-                      </span>
+                <div className="p-6 rounded-xl bg-[#1a1a1a] relative overflow-hidden">
+                  {/* 装饰性背景 */}
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#FFD700]/10 to-transparent rounded-full blur-2xl" />
+                  <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#FF3B3B]/10 to-transparent rounded-full blur-2xl" />
+                  
+                  {/* 内容区域 */}
+                  <div className="relative">
+                    {/* 总金额和领取进度 */}
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div>
+                        <p className="text-white/60 text-sm mb-2">总金额</p>
+                        <div className="flex items-baseline">
+                          <span className="text-4xl font-bold text-[#FFD700]">{info.totalAmount}</span>
+                          <span className="text-lg text-[#FFD700] ml-2">HKC</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-white/60 text-sm mb-2">领取进度</p>
+                        <div className="flex items-baseline justify-end">
+                          <span className="text-4xl font-bold text-[#FFD700]">{info.claimed}/{info.totalCount}</span>
+                          <span className="text-lg text-[#FFD700] ml-2">个</span>
+                        </div>
+                      </div>
                     </div>
-                  )}
+
+                    {/* 我的领取 */}
+                    {hasClaimed && (
+                      <>
+                        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/20 to-transparent mb-6" />
+                        <div className="text-center">
+                          <p className="text-white/60 text-sm mb-2">我的领取</p>
+                          <div className="flex items-baseline justify-center">
+                            <span className="text-4xl font-bold text-[#FFD700]">{parseFloat(claimedAmount).toFixed(4)}</span>
+                            <span className="text-lg text-[#FFD700] ml-2">HKC</span>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
 
