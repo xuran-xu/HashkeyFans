@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { RedPacket } from '@/components/redpacket/RedPacket';
 import { useRedPacketInfo, useRedPacketClaimed, useClaimRedPacket, useRedPacketClaims } from '@/hooks/useRedPacket';
-import { useWaitForTransactionReceipt } from 'wagmi';
+import { useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { formatAddress } from '@/utils/format';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 // 骨架屏组件
 const Skeleton = () => (
@@ -22,6 +23,7 @@ export default function RedPacketDetailPage() {
   const { claims, isLoading: loadingClaims, refetch: refetchClaims } = useRedPacketClaims(id as string);
   const { claimRedPacket, isLoading: isClaimLoading, hash } = useClaimRedPacket();
   const [showDetails, setShowDetails] = useState(false);
+  const { address } = useAccount();
 
   // 监听交易状态
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
@@ -81,6 +83,29 @@ export default function RedPacketDetailPage() {
       setShowDetails(true);
     }
   };
+
+  // 如果用户未连接钱包，显示连接提示
+  if (!address) {
+    return (
+      <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-2xl mx-auto text-center space-y-6">
+            <RedPacket
+              message={info?.message || 'HashKey Chain'}
+              onOpen={() => {}}
+              isOpened={true}
+            />
+            <div className="bg-[#1a1a1a] p-6 rounded-xl max-w-sm mx-auto">
+              <p className="text-white/80 mb-6">请先连接钱包以查看红包详情</p>
+              <div className="flex justify-center">
+                <ConnectButton />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
