@@ -16,7 +16,7 @@ export const RedPacketResult = ({ amount, total, message, participants }: RedPac
       <div className="text-center mb-6">
         <h3 className="text-xl font-bold text-white">{message}</h3>
         <p className="text-gray-400 mt-2">
-          {amount} ETH / {total} packets
+          {amount} HSK / {total} packets
         </p>
       </div>
 
@@ -30,7 +30,7 @@ export const RedPacketResult = ({ amount, total, message, participants }: RedPac
               <span className="text-gray-400">#{index + 1}</span>
               <span className="text-white">{`${participant.address.slice(0, 6)}...${participant.address.slice(-4)}`}</span>
             </div>
-            <span className="text-white font-medium">{participant.amount} ETH</span>
+            <span className="text-white font-medium">{participant.amount} HSK</span>
           </div>
         ))}
       </div>

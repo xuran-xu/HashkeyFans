@@ -42,7 +42,7 @@ const RedPacketCard = ({ id }: { id: bigint }) => {
           <span className="text-white/80">
             {info.claimed} / {info.totalCount} 已领取
           </span>
-          <span className="text-[#FFD700]">{info.totalAmount} HKC</span>
+          <span className="text-[#FFD700]">{info.totalAmount} HSK</span>
         </div>
       </div>
     </div>
