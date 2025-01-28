@@ -107,6 +107,13 @@ export default function RedPacketDetailPage() {
     );
   }
 
+  // 在渲染前添加日志
+  console.log('Claims data:', {
+    claims,
+    loadingClaims,
+    id
+  });
+
   return (
     <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
       <div className="container mx-auto px-2 py-8">
@@ -183,26 +190,30 @@ export default function RedPacketDetailPage() {
                 <div className="p-6 rounded-xl bg-[#1a1a1a]">
                   <h2 className="text-lg font-bold mb-4 text-white">领取记录</h2>
                   <div className="space-y-4">
-                    {claims.map((claim, index) => (
-                      <div 
-                        key={index}
-                        className="bg-gradient-to-r from-[#FF3B3B]/10 to-[#FF5B5C]/10 p-4 rounded-lg"
-                      >
-                        <div className="flex justify-between items-center">
-                          <div>
-                            <p className="font-medium text-white mb-1">{claim.address}</p>
-                            <p className="text-sm text-gray-400">
-                              {new Date(claim.timestamp * 1000).toLocaleString()}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-bold text-[#FFD700]">{Number(claim.amount).toFixed(4)} HSK</p>
+                    {loadingClaims ? (
+                      <div className="text-center py-4 text-gray-400">
+                        加载中...
+                      </div>
+                    ) : claims && claims.length > 0 ? (
+                      claims.map((claim, index) => (
+                        <div 
+                          key={index}
+                          className="bg-gradient-to-r from-[#FF3B3B]/10 to-[#FF5B5C]/10 p-4 rounded-lg"
+                        >
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <p className="font-medium text-white mb-1">{claim.address}</p>
+                              <p className="text-sm text-gray-400">
+                                {new Date(claim.timestamp * 1000).toLocaleString()}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="font-bold text-[#FFD700]">{Number(claim.amount).toFixed(4)} HSK</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-
-                    {claims.length === 0 && (
+                      ))
+                    ) : (
                       <div className="text-center py-4 text-gray-400">
                         暂无领取记录
                       </div>
