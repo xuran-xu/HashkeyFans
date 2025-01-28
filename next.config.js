@@ -14,6 +14,19 @@ const nextConfig = {
       ]
     }
   },
+  async headers() {
+    return [
+      {
+        source: '/.well-known/walletconnect.txt',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'text/plain',
+          },
+        ],
+      },
+    ];
+  },
   images: {
     domains: ['supra.com'],
     unoptimized: process.env.NODE_ENV === 'development'
