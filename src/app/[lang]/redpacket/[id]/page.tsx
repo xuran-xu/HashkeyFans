@@ -149,7 +149,7 @@ export default function RedPacketDetailPage() {
                         <p className="text-white/60 text-sm mb-2">总金额</p>
                         <div className="flex items-baseline">
                           <span className="text-4xl font-bold text-[#FFD700]">{info.totalAmount}</span>
-                          <span className="text-lg text-[#FFD700] ml-2">HKC</span>
+                          <span className="text-lg text-[#FFD700] ml-2">HSK</span>
                         </div>
                       </div>
                       <div className="text-right">
@@ -169,7 +169,7 @@ export default function RedPacketDetailPage() {
                           <p className="text-white/60 text-sm mb-2">我的领取</p>
                           <div className="flex items-baseline justify-center">
                             <span className="text-4xl font-bold text-[#FFD700]">{parseFloat(claimedAmount).toFixed(4)}</span>
-                            <span className="text-lg text-[#FFD700] ml-2">HKC</span>
+                            <span className="text-lg text-[#FFD700] ml-2">HSK</span>
                           </div>
                         </div>
                       </>
@@ -196,7 +196,7 @@ export default function RedPacketDetailPage() {
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold text-[#FFD700]">{Number(claim.amount).toFixed(4)} HKC</p>
+                            <p className="font-bold text-[#FFD700]">{Number(claim.amount).toFixed(4)} HSK</p>
                           </div>
                         </div>
                       </div>
@@ -217,7 +217,7 @@ export default function RedPacketDetailPage() {
                   <h2 className="text-lg font-bold mb-4 text-white">创建信息</h2>
                   <div className="space-y-2 text-white/80">
                     <p>创建者: {formatAddress(info.creator)}</p>
-                    <p>剩余金额: {info.remainingAmount} HKC</p>
+                    <p>剩余金额: {info.remainingAmount} HSK</p>
                   </div>
                 </div>
               </div>

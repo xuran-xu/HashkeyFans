@@ -43,7 +43,7 @@ export function SuccessModal({ amount, count, message, id }: SuccessModalProps) 
         <div className="space-y-4 mb-8">
           <div className="flex justify-between">
             <span className="text-white/80">红包金额</span>
-            <span className="text-[#FFD700]">{amount} ETH</span>
+            <span className="text-[#FFD700]">{amount} HSK</span>
           </div>
           <div className="flex justify-between">
             <span className="text-white/80">红包个数</span>
