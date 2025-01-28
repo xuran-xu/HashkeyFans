@@ -3,7 +3,7 @@ import { Icon } from './Icon';
 
 interface NavLinkProps {
   href: string;
-  icon: "calendar" | "news" | "grid";
+  icon: "calendar" | "news" | "grid" | "gift" | "history";
   text: string;
 }
 
