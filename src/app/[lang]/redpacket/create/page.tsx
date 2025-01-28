@@ -48,6 +48,12 @@ export default function CreateRedPacketPage() {
     message: string;
   }) => {
     try {
+      // 验证红包个数必须是正整数
+      if (!Number.isInteger(data.count) || data.count <= 0) {
+        alert('红包个数必须是正整数');
+        return;
+      }
+
       setShowSuccessModal(false); // 重置状态
       setPacketId(undefined);
       await createRedPacket(data.message, data.amount, data.count);

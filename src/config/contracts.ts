@@ -1,5 +1,5 @@
 export const REDPACKET_CONTRACT = {
-  address: '0x509F3689403a1EAC02a3B5538b360251817BAb17', 
+  address: '0x72D6aE05f33918095bb47466dF40A72FB15b8108', 
   abi: [
     {
       "inputs": [],

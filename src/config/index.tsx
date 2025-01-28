@@ -1,8 +1,8 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { defineChain } from 'viem';
-import {
-  hashkeyTestnet
-} from 'wagmi/chains';
+// import {
+//   hashkeyTestnet
+// } from 'wagmi/chains';
 
 export const hashkeyMainnet = /*#__PURE__*/ defineChain({
     id: 177,
@@ -30,7 +30,7 @@ export const config = getDefaultConfig({
   appName: 'Hash Fans',
   projectId: '1ea1abda1ecbffd1d28108656904c907',
   chains: [
-    hashkeyTestnet
+    hashkeyMainnet
   ],
   ssr: true,
 }); 
