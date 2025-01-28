@@ -39,7 +39,7 @@ export const CreateRedPacket = ({
     const countNum = parseInt(count);
 
     if (amountNum < 0.01) {
-      alert('最小金额不能低于0.01 ETH');
+      alert('最小金额不能低于0.01 HSK');
       return;
     }
 
@@ -78,7 +78,7 @@ export const CreateRedPacket = ({
 
         <div>
           <label className="block text-sm font-bold text-white mb-2 drop-shadow-sm">
-            总金额 (ETH)
+            总金额 (HSK)
           </label>
           <input
             type="number"
