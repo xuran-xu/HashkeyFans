@@ -88,7 +88,8 @@ export default {
       creatorInfo: "Creator Info",
       creator: "Creator",
       remainingAmount: "Remaining Amount",
-      loading: "Loading..."
+      loading: "Loading...",
+      luckiest: "Best Lucky",
     },
     unit: "HSK",
     count: "packets",

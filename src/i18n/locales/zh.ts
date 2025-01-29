@@ -88,7 +88,8 @@ export default {
       creatorInfo: "创建信息",
       creator: "创建者",
       remainingAmount: "剩余金额",
-      loading: "加载中..."
+      loading: "加载中...",
+      luckiest: "手气最佳",
     },
     unit: "HSK",
     count: "个",

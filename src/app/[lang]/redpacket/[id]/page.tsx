@@ -11,6 +11,7 @@ import { toPng } from 'html-to-image';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
 import { useTranslation } from "react-i18next";
 import { toast } from 'react-toastify';
+import { FaTrophy } from 'react-icons/fa';
 
 // 骨架屏组件
 const Skeleton = () => (
@@ -425,24 +426,41 @@ export default function RedPacketDetailPage() {
                           {t('redpacket.details.loading')}
                         </div>
                       ) : claims && claims.length > 0 ? (
-                        claims.map((claim, index) => (
-                          <div 
-                            key={index}
-                            className="bg-gradient-to-r from-[#FF3B3B]/10 to-[#FF5B5C]/10 p-4 rounded-lg"
-                          >
-                            <div className="flex justify-between items-center">
-                              <div>
-                                <p className="font-medium text-white mb-1">{formatAddress(claim.address)}</p>
-                                <p className="text-sm text-gray-400">
-                                  {new Date(claim.timestamp * 1000).toLocaleString()}
-                                </p>
-                              </div>
-                              <div className="text-right">
-                                <p className="font-bold text-[#FFD700]">{Number(claim.amount).toFixed(4)} {t('redpacket.unit')}</p>
+                        claims.map((claim, index) => {
+                          // 找出金额最大的那个领取记录
+                          const isLuckiest = claim.amount === Math.max(...claims.map(c => Number(c.amount))).toString();
+                          
+                          return (
+                            <div 
+                              key={index}
+                              className="bg-gradient-to-r from-[#FF3B3B]/10 to-[#FF5B5C]/10 p-4 rounded-lg"
+                            >
+                              <div className="flex justify-between items-center">
+                                <div>
+                                  <p className="font-medium text-white mb-1">
+                                    {formatAddress(claim.address)}
+                                  </p>
+                                  <p className="text-sm text-gray-400">
+                                    {new Date(claim.timestamp * 1000).toLocaleString()}
+                                  </p>
+                                </div>
+                                <div className="text-right">
+                                  <p className="font-bold text-[#FFD700] mb-1">
+                                    {Number(claim.amount).toFixed(4)} {t('redpacket.unit')}
+                                  </p>
+                                  {isLuckiest && (
+                                    <div className="flex items-center gap-1 text-[#FFD700] justify-end">
+                                      <FaTrophy className="text-sm" />
+                                      <span className="text-xs">
+                                        {t('redpacket.details.luckiest')}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))
+                          );
+                        })
                       ) : (
                         <div className="text-center py-4 text-gray-400">
                           {t('redpacket.details.noRecords')}
