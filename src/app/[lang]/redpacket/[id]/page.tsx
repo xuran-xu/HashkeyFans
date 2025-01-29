@@ -202,7 +202,7 @@ export default function RedPacketDetailPage() {
                         >
                           <div className="flex justify-between items-center">
                             <div>
-                              <p className="font-medium text-white mb-1">{claim.address}</p>
+                              <p className="font-medium text-white mb-1">{formatAddress(claim.address)}</p>
                               <p className="text-sm text-gray-400">
                                 {new Date(claim.timestamp * 1000).toLocaleString()}
                               </p>

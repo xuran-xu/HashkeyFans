@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react';
-import { useReadContract, useWriteContract } from 'wagmi';
+import { useReadContract, useWriteContract, useWatchContractEvent } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
 import { REDPACKET_CONTRACT } from '@/config/contracts';
 import { useAccount } from 'wagmi';
@@ -140,27 +140,31 @@ export function useClaimRedPacket() {
   };
 }
 
-export function useRedPacketClaims(id?: string) {
+export function useRedPacketClaims(packetId: string) {
   const { data, isLoading, refetch } = useReadContract({
     address: REDPACKET_CONTRACT.address as `0x${string}`,
     abi: REDPACKET_CONTRACT.abi,
     functionName: 'getPacketClaimers',
-    args: id ? [BigInt(id)] : undefined,
+    args: [BigInt(packetId)],
   });
 
-  if (!data) return { claims: [], isLoading, refetch };
+  // 使用 useWatchContractEvent 替代 useContractEvent
+  useWatchContractEvent({
+    address: REDPACKET_CONTRACT.address as `0x${string}`,
+    abi: REDPACKET_CONTRACT.abi,
+    eventName: 'PacketClaimed',
+    onLogs() {
+      refetch?.();
+    },
+  });
 
-  const [claimers, amounts] = data;
-  
-  return {
-    isLoading,
-    refetch,
-    claims: claimers.map((address: string, index: number) => ({
-      address: formatAddress(address),
-      amount: formatEther(amounts[index]),
-      timestamp: Math.floor(Date.now() / 1000)
-    }))
-  };
+  const claims = data ? data[0].map((address, index) => ({
+    address,
+    amount: formatEther(data[1][index]),
+    timestamp: Date.now() / 1000
+  })) : [];
+
+  return { claims, isLoading, refetch };
 }
 
 export function useUserRedPackets() {
