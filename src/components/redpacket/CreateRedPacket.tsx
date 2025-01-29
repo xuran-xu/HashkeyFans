@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Button } from '../common/Button';
+import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 
 interface CreateRedPacketProps {
   onSubmit: (data: {
@@ -23,13 +25,14 @@ interface CreateRedPacketProps {
   error?: string | null;
 }
 
-export const CreateRedPacket = ({ 
+export function CreateRedPacket({ 
   onSubmit, 
   preview, 
   setPreview,
   isLoading,
   error 
-}: CreateRedPacketProps) => {
+}: CreateRedPacketProps) {
+  const { t } = useTranslation();
   const [amount, setAmount] = useState('');
   const [count, setCount] = useState('');
   const [message, setMessage] = useState('HashKey Chain');
@@ -41,17 +44,38 @@ export const CreateRedPacket = ({
     const countNum = parseInt(count);
 
     if (isNaN(amountNum) || amountNum <= 0) {
-      alert('请输入有效的金额');
+      toast.error(t('redpacket.create.form.invalidAmount'), {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       return;
     }
 
     if (amountNum < 0.01) {
-      alert('最小金额不能低于0.01 HSK');
+      toast.error(t('redpacket.create.form.minAmount'), {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       return;
     }
 
     if (isNaN(countNum) || !Number.isInteger(countNum) || countNum <= 0) {
-      alert('红包个数必须是正整数');
+      toast.error(t('redpacket.create.form.invalidCount'), {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       return;
     }
 
@@ -64,12 +88,14 @@ export const CreateRedPacket = ({
 
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-gradient-to-b from-[#FFD700] to-[#FF5B5C] rounded-2xl">
-      <h2 className="text-2xl font-bold text-white mb-6 text-center drop-shadow-sm">创建红包</h2>
+      <h2 className="text-2xl font-bold text-white mb-6 text-center drop-shadow-sm">
+        {t('redpacket.create.title')}
+      </h2>
       
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-bold text-white mb-2 drop-shadow-sm">
-            红包标题
+            {t('redpacket.create.form.message')}
           </label>
           <input
             type="text"
@@ -79,13 +105,13 @@ export const CreateRedPacket = ({
               setPreview({ ...preview, message: e.target.value });
             }}
             className="w-full px-4 py-3 bg-white rounded-lg text-gray-700 font-medium placeholder-gray-400 border-2 border-white/30 focus:border-white/50 focus:outline-none transition-all"
-            placeholder="蛇年好运"
+            placeholder={t('redpacket.create.form.messagePlaceholder')}
           />
         </div>
 
         <div>
           <label className="block text-sm font-bold text-white mb-2 drop-shadow-sm">
-            总金额 (HSK)
+            {t('redpacket.create.form.amount')}
           </label>
           <input
             type="number"
@@ -95,15 +121,15 @@ export const CreateRedPacket = ({
               setPreview({ ...preview, amount: parseFloat(e.target.value) || 0 });
             }}
             className="w-full px-4 py-3 bg-white rounded-lg text-gray-700 font-medium placeholder-gray-400 border-2 border-white/30 focus:border-white/50 focus:outline-none transition-all"
-            placeholder="最小 0.01"
+            placeholder={t('redpacket.create.form.amountPlaceholder')}
             min="0.01"
-            step="0.01"
+            step="0.0001"
           />
         </div>
 
         <div>
           <label className="block text-sm font-bold text-white mb-2 drop-shadow-sm">
-            红包个数
+            {t('redpacket.create.form.count')}
           </label>
           <input
             type="number"
@@ -121,7 +147,7 @@ export const CreateRedPacket = ({
               }
             }}
             className="w-full px-4 py-2 bg-[#2a2a2a] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#FF3B3B]"
-            placeholder="输入红包个数"
+            placeholder={t('redpacket.create.form.countPlaceholder')}
           />
         </div>
 
@@ -136,9 +162,9 @@ export const CreateRedPacket = ({
           disabled={isLoading}
           className="w-full mt-8 py-3 bg-gradient-to-r from-[#FFD700] to-[#FFC000] hover:from-[#FFE55C] hover:to-[#FFD700] text-[#FF3B3B] text-lg font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 border-2 border-[#FFE55C]/50 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? '创建中...' : '发红包'}
+          {isLoading ? t('redpacket.create.form.processing') : t('redpacket.create.form.submit')}
         </Button>
       </div>
     </div>
   );
-}; 
+} 

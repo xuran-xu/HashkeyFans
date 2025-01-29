@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FiCopy, FiCheck } from 'react-icons/fi';
+import { useTranslation } from "react-i18next";
 
 interface SuccessModalProps {
   amount: string;
@@ -14,6 +15,7 @@ interface SuccessModalProps {
 export function SuccessModal({ amount, count, message, id }: SuccessModalProps) {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
+  const { t } = useTranslation();
   
   // 格式化链接，只显示前面一部分
   const shareUrl = `${window.location.origin}/redpacket/${id}`;
@@ -38,28 +40,30 @@ export function SuccessModal({ amount, count, message, id }: SuccessModalProps) 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4">
       <div className="bg-[#1a1a1a] rounded-2xl p-8 max-w-md w-full">
-        <h2 className="text-2xl font-bold text-center text-[#FFD700] mb-8">创建成功！</h2>
+        <h2 className="text-2xl font-bold text-center text-[#FFD700] mb-8">
+          {t('redpacket.create.success.title')}
+        </h2>
         
         <div className="space-y-4 mb-8">
           <div className="flex justify-between">
-            <span className="text-white/80">红包金额</span>
-            <span className="text-[#FFD700]">{amount} HSK</span>
+            <span className="text-white/80">{t('redpacket.create.success.amount')}</span>
+            <span className="text-[#FFD700]">{amount} {t('redpacket.unit')}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-white/80">红包个数</span>
-            <span className="text-[#FFD700]">{count} 个</span>
+            <span className="text-white/80">{t('redpacket.create.success.count')}</span>
+            <span className="text-[#FFD700]">{count} {t('redpacket.count')}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-white/80">祝福语</span>
+            <span className="text-white/80">{t('redpacket.create.success.message')}</span>
             <span className="text-[#FFD700]">{message}</span>
           </div>
         </div>
 
         <div className="mb-8">
-          <p className="text-white/80 mb-2">分享链接：</p>
+          <p className="text-white/80 mb-2">{t('redpacket.share.title')}：</p>
           <div className="bg-[#2a2a2a] rounded-lg p-3 flex items-center justify-between">
             <span className="text-white/60 truncate mr-2">{displayUrl}</span>
-            <button 
+            <button
               onClick={handleCopy}
               className="text-white/80 hover:text-white p-1 rounded transition-colors relative"
             >
@@ -76,7 +80,7 @@ export function SuccessModal({ amount, count, message, id }: SuccessModalProps) 
           onClick={handleView}
           className="w-full bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white py-3 rounded-full font-bold"
         >
-          查看红包
+          {t('redpacket.create.success.view')}
         </button>
       </div>
     </div>

@@ -7,6 +7,8 @@ import { Footer } from '@/components/layout/Footer'
 import { ReactNode } from 'react'
 import ContextProvider from '@/context'
 import '@rainbow-me/rainbowkit/styles.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const sora = Sora({
   weight: ['400', '500', '700'],
@@ -98,6 +100,18 @@ export default function RootLayout({ children, params: { lang } }: RootLayoutPro
             </ContextProvider>
           </ClientProvider>
         </div>
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </body>
     </html>
   );

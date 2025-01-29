@@ -4,9 +4,13 @@ import { useState } from 'react';
 import { useUserRedPackets, useRedPacketInfo } from '@/hooks/useRedPacket';
 import { formatAddress } from '@/utils/format';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from "react-i18next";
+import { useAccount } from 'wagmi';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const RedPacketCard = ({ id }: { id: bigint }) => {
   const router = useRouter();
+  const { t } = useTranslation();
   const { info, isLoading } = useRedPacketInfo(id.toString());
 
   // 格式化红包ID，只显示前4位和后6位
@@ -34,15 +38,15 @@ const RedPacketCard = ({ id }: { id: bigint }) => {
     >
       <div className="p-6 rounded-xl bg-[#1a1a1a]">
         <div className="flex justify-between items-center mb-4">
-          <span className="text-white/80">红包 {formattedId}</span>
+          <span className="text-white/80">{t('redpacket.history.title')} {formattedId}</span>
           <span className="text-sm text-gray-400">{formatAddress(info.creator)}</span>
         </div>
         <p className="text-white mb-4">{info.message}</p>
         <div className="flex justify-between items-center text-sm">
           <span className="text-white/80">
-            {info.claimed} / {info.totalCount} 已领取
+            {info.claimed} / {info.totalCount} {t('redpacket.history.count')}
           </span>
-          <span className="text-[#FFD700]">{info.totalAmount} HSK</span>
+          <span className="text-[#FFD700]">{info.totalAmount} {t('redpacket.unit')}</span>
         </div>
       </div>
     </div>
@@ -50,13 +54,28 @@ const RedPacketCard = ({ id }: { id: bigint }) => {
 };
 
 export default function HistoryPage() {
+  const { t } = useTranslation();
+  const { address } = useAccount();
   const { created, claimed, isLoading } = useUserRedPackets();
   const [activeTab, setActiveTab] = useState<'created' | 'claimed'>('created');
+
+  if (!address) {
+    return (
+      <div className="flex-1 flex items-center justify-center  min-h-[calc(100vh-180px)]">
+        <div className="bg-[#1a1a1a] p-6 rounded-xl">
+          <p className="text-white/80 mb-6">{t('redpacket.history.connect')}</p>
+          <div className="flex justify-center">
+            <ConnectButton />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <div className="text-white/80">加载中...</div>
+        <div className="text-white/80">{t('redpacket.history.loading')}</div>
       </div>
     );
   }
@@ -67,7 +86,6 @@ export default function HistoryPage() {
     <div className="flex-1 min-h-[calc(100vh-180px)]">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
-          {/* 标签切换 */}
           <div className="flex space-x-4 mb-6">
             <button
               onClick={() => setActiveTab('created')}
@@ -77,7 +95,7 @@ export default function HistoryPage() {
                   : 'text-white/60'
               }`}
             >
-              我发出的
+              {t('redpacket.history.created')}
             </button>
             <button
               onClick={() => setActiveTab('claimed')}
@@ -87,11 +105,10 @@ export default function HistoryPage() {
                   : 'text-white/60'
               }`}
             >
-              我领取的
+              {t('redpacket.history.received')}
             </button>
           </div>
 
-          {/* 红包列表 */}
           <div className="space-y-4">
             {packets.length > 0 ? (
               packets.map((id) => (
@@ -99,7 +116,7 @@ export default function HistoryPage() {
               ))
             ) : (
               <div className="text-center py-8 text-white/60">
-                暂无{activeTab === 'created' ? '发出' : '领取'}的红包
+                {t('redpacket.history.empty')}
               </div>
             )}
           </div>

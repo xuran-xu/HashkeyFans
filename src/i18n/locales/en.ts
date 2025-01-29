@@ -54,5 +54,89 @@ export default {
     interested: "Interested in Partnering?",
     description: "If you're interested in partnering with us, we'd love to hear from you!",
     apply: "Apply for Partnership"
+  },
+  redpacket: {
+    title: "Red Packet",
+    claim: {
+      button: "Claim",
+      processing: "Processing...",
+      success: "Claimed Successfully",
+      connect: "Please connect wallet to view details"
+    },
+    share: {
+      button: "Share",
+      title: "I Sent a Red Packet",
+      claimed: "Claimed",
+      totalValue: "Total Value",
+      remaining: "Remaining",
+      remainingCount: "{{remaining}} / {{total}} Remaining",
+      from: "From",
+      saveImage: "Save Image",
+      close: "Close",
+      scanQR: "Scan to Claim",
+      creatorInfo: "Total Value {{totalAmount}}{{unit}}, {{remaining}}{{count}} Remaining",
+      remainingStatus: "{{count}}/{{total}} Remaining",
+      noRemaining: "No more packets",
+    },
+    details: {
+      title: "Details",
+      totalAmount: "Total Amount",
+      progress: "Progress",
+      myClaim: "My Claim",
+      claimRecords: "Claim Records",
+      noRecords: "No Records",
+      creatorInfo: "Creator Info",
+      creator: "Creator",
+      remainingAmount: "Remaining Amount",
+      loading: "Loading..."
+    },
+    unit: "HSK",
+    count: "packets",
+    create: {
+      title: "Send Red Packet",
+      form: {
+        message: "Message",
+        messagePlaceholder: "Best wishes for wealth and prosperity",
+        amount: "Amount",
+        amountPlaceholder: "Enter total amount",
+        count: "Count",
+        countPlaceholder: "Enter number of packets",
+        submit: "Send",
+        processing: "Processing...",
+        success: "Sent Successfully"
+      },
+      validation: {
+        messageRequired: "Message is required",
+        amountRequired: "Amount is required",
+        amountMin: "Amount must be greater than 0",
+        countRequired: "Count is required",
+        countMin: "Count must be greater than 0",
+        countInteger: "Count must be an integer"
+      },
+      connect: "Please connect wallet to send red packet",
+      preview: "Red Packet Preview",
+      success: {
+        title: "Created Successfully!",
+        amount: "Amount",
+        count: "Count",
+        message: "Message",
+        view: "View Red Packet"
+      }
+    },
+    history: {
+      title: "Red Packet History",
+      created: "Sent",
+      received: "Received",
+      empty: "No records",
+      loading: "Loading...",
+      connect: "Please connect wallet to view history",
+      amount: "Amount",
+      count: "Count",
+      date: "Date",
+      status: {
+        active: "Active",
+        completed: "Completed"
+      }
+    }
   }
 } 

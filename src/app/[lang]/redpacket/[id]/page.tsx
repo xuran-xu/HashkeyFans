@@ -9,6 +9,8 @@ import { formatAddress } from '@/utils/format';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { toPng } from 'html-to-image';
 import { QRCodeSVG as QRCode } from 'qrcode.react';
+import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 
 // 骨架屏组件
 const Skeleton = () => (
@@ -21,7 +23,6 @@ const Skeleton = () => (
 // 分享结果组件
 const ShareModal = ({ 
   onClose, 
-  amount,
   totalCount,
   remainingCount,
   creator,
@@ -30,7 +31,6 @@ const ShareModal = ({
   totalAmount
 }: { 
   onClose: () => void;
-  amount: string;
   totalCount: number;
   remainingCount: number;
   creator: string;
@@ -39,6 +39,7 @@ const ShareModal = ({
   totalAmount: string;
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
 
   const handleDownload = async () => {
     if (!cardRef.current) return;
@@ -61,16 +62,25 @@ const ShareModal = ({
   const getContent = () => {
     if (isCreator) {
       return {
-        title: "我发了一个红包",
-        subtitle: `总价值 ${totalAmount} HSK，还剩 ${remainingCount} 个`,
+        title: t('redpacket.share.title'),
+        subtitle: t('redpacket.share.remaining', {
+          value: totalAmount,
+          unit: t('redpacket.unit'),
+          count: remainingCount
+        }),
         showAmount: false
       };
     }
     return {
-      title: "领取到了",
+      title: t('redpacket.share.claimed'),
       subtitle: remainingCount > 0 
-        ? `还剩 ${remainingCount} / ${totalCount} 个红包`
-        : `来自 ${formatAddress(creator)}`,
+        ? t('redpacket.share.remainingCount', {
+            remaining: remainingCount,
+            total: totalCount
+          })
+        : t('redpacket.share.from', {
+            address: formatAddress(creator)
+          }),
       showAmount: true
     };
   };
@@ -105,17 +115,21 @@ const ShareModal = ({
                 HashKey Chain 
               </div>
               
-              {/* 金额显示 - 只在领取时显示 */}
-              {content.showAmount && (
-                <div className="text-[#FFD700] text-5xl font-bold mb-3">
-                  {parseFloat(amount).toFixed(4)}
-                  <span className="text-2xl ml-2">HSK</span>
-                </div>
-              )}
+              {/* 金额显示 */}
+              <div className="text-[#FFD700] text-5xl font-bold mb-3">
+                {totalAmount}
+                <span className="text-2xl ml-2">{t('redpacket.unit')}</span>
+              </div>
               
-              {/* 下面一行 - 小号细体 */}
+              {/* 剩余状态显示 */}
               <div className="text-sm font-normal text-white/80">
-                {content.subtitle}
+                {remainingCount > 0 
+                  ? t('redpacket.share.remainingStatus', {
+                      count: remainingCount,
+                      total: totalCount
+                    })
+                  : t('redpacket.share.noRemaining')
+                }
               </div>
             </div>
 
@@ -126,7 +140,7 @@ const ShareModal = ({
                 size={100}
                 className="bg-white p-1 rounded-xl"
               />
-              <p className="text-white/80 text-sm">扫码领取红包</p>
+              <p className="text-white/80 text-sm">{t('redpacket.share.scanQR')}</p>
             </div>
           </div>
         </div>
@@ -137,17 +151,48 @@ const ShareModal = ({
             onClick={handleDownload}
             className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFC000] text-[#FF3B3B] py-3 rounded-full font-bold"
           >
-            保存分享图片
+            {t('redpacket.share.saveImage')}
           </button>
           <button
             onClick={onClose}
             className="w-full bg-white/10 text-white py-3 rounded-full font-bold"
           >
-            关闭
+            {t('redpacket.share.close')}
           </button>
         </div>
       </div>
     </div>
+  );
+};
+
+interface ShareModalWrapperProps {
+  info: {
+    totalCount: number;
+    remainingCount: number;
+    creator: string;
+    totalAmount: string;
+  };
+  onClose: () => void;
+  claimedAmount: string;
+  id: string;
+  address: string;
+}
+
+const ShareModalWrapper = ({ info, ...props }: ShareModalWrapperProps) => {
+  console.log('ShareModal Wrapper Props:', { info, ...props });
+  
+  if (!info) return null;
+  
+  return (
+    <ShareModal
+      onClose={props.onClose}
+      totalCount={info.totalCount}
+      remainingCount={info.remainingCount}
+      creator={info.creator}
+      id={props.id}
+      isCreator={info.creator === props.address}
+      totalAmount={info.totalAmount}
+    />
   );
 };
 
@@ -160,17 +205,48 @@ export default function RedPacketDetailPage() {
   const [showDetails, setShowDetails] = useState(false);
   const { address } = useAccount();
   const [showShareModal, setShowShareModal] = useState(false);
+  const { t } = useTranslation();
 
   // 监听交易状态
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash: hash === '0x0' ? undefined : hash,
   });
 
-  // 交易成功后刷新所有数据并显示分享弹窗
+  // 添加一个新的状态来控制领取过程
+  const [isClaiming, setIsClaiming] = useState(false);
+
+  // 修改加载状态判断
+  const isLoading = loadingInfo || loadingClaim || loadingClaims || isClaimLoading || isConfirming || !info || isClaiming;
+
+  // 修改 handleAction 函数
+  const handleAction = async () => {
+    if (canClaim) {
+      try {
+        setIsClaiming(true);
+        setShowDetails(false);
+        await claimRedPacket(id as string);
+      } catch (err) {
+        console.error('Failed to claim:', err);
+        toast.error(err instanceof Error ? err.message : 'Failed to claim red packet', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+        setIsClaiming(false);
+        setShowDetails(true);
+      }
+    } else {
+      setShowDetails(true);
+    }
+  };
+
+  // 修改 useEffect，在交易成功后重置状态
   useEffect(() => {
-    if (isSuccess) {
-      // 添加延迟确保链上数据已更新
-      setTimeout(async () => {
+    if (isSuccess && hash !== '0x0') {
+      const timer = setTimeout(async () => {
         try {
           await Promise.all([
             refetchInfo?.(),
@@ -179,15 +255,26 @@ export default function RedPacketDetailPage() {
           ]);
           setShowDetails(true);
           setShowShareModal(true);
+          setIsClaiming(false);
+          toast.success(t('redpacket.claim.success'), {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
         } catch (err) {
           console.error('Failed to refresh data:', err);
+          setIsClaiming(false);
         }
-      }, 2000); // 等待 2 秒确保数据已更新
-    }
-  }, [isSuccess, refetchInfo, refetchClaim, refetchClaims]);
+      }, 2000);
 
-  // 加载状态显示骨架屏
-  if (loadingInfo || loadingClaim || loadingClaims || isConfirming || !info) {
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, hash, refetchInfo, refetchClaim, refetchClaims, t]);
+
+  if (isLoading) {
     return (
       <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
         <div className="container mx-auto px-4 py-8">
@@ -199,12 +286,6 @@ export default function RedPacketDetailPage() {
     );
   }
 
-  console.log('Page claim status:', {
-    hasClaimed,
-    claimedAmount,
-    hasRemaining: info.remainingCount > 0
-  });
-
   const isCreator = info.creator === address;
   const hasRemaining = info.remainingCount > 0;
   // 修改 canClaim 逻辑，允许创建者也可以领取
@@ -212,18 +293,6 @@ export default function RedPacketDetailPage() {
 
   // 修改显示详情的条件
   const shouldShowDetails = !canClaim || showDetails || (isCreator && !hasRemaining);
-
-  const handleAction = async () => {
-    if (canClaim) {
-      try {
-        await claimRedPacket(id as string);
-      } catch (err) {
-        console.error('Failed to claim:', err);
-      }
-    } else {
-      setShowDetails(true);
-    }
-  };
 
   // 如果用户未连接钱包，显示连接提示
   if (!address) {
@@ -237,7 +306,7 @@ export default function RedPacketDetailPage() {
               isOpened={true}
             />
             <div className="bg-[#1a1a1a] p-6 rounded-xl max-w-sm mx-auto">
-              <p className="text-white/80 mb-6">请先连接钱包以查看红包详情</p>
+              <p className="text-white/80 mb-6">{t('redpacket.claim.connect')}</p>
               <div className="flex justify-center">
                 <ConnectButton />
               </div>
@@ -247,13 +316,6 @@ export default function RedPacketDetailPage() {
       </div>
     );
   }
-
-  // 在渲染前添加日志
-  console.log('Claims data:', {
-    claims,
-    loadingClaims,
-    id
-  });
 
   return (
     <>
@@ -277,13 +339,13 @@ export default function RedPacketDetailPage() {
                     disabled={isClaimLoading || isConfirming}
                     className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
                   >
-                    {isClaimLoading || isConfirming ? '处理中...' : '领取红包'}
+                    {isClaimLoading || isConfirming ? t('redpacket.claim.processing') : t('redpacket.claim.button')}
                   </button>
                   <button
                     onClick={() => setShowShareModal(true)}
                     className="bg-gradient-to-r from-[#FFD700] to-[#FFC000] text-[#FF3B3B] px-8 py-3 rounded-full font-bold"
                   >
-                    分享红包
+                    {t('redpacket.share.button')}
                   </button>
                 </>
               ) : canClaim ? (
@@ -293,7 +355,7 @@ export default function RedPacketDetailPage() {
                   disabled={isClaimLoading || isConfirming}
                   className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
                 >
-                  {isClaimLoading || isConfirming ? '处理中...' : '领取红包'}
+                  {isClaimLoading || isConfirming ? t('redpacket.claim.processing') : t('redpacket.claim.button')}
                 </button>
               ) : (hasClaimed || isCreator) && (
                 // 已领取或是创建者时显示分享按钮
@@ -301,7 +363,7 @@ export default function RedPacketDetailPage() {
                   onClick={() => setShowShareModal(true)}
                   className="bg-gradient-to-r from-[#FFD700] to-[#FFC000] text-[#FF3B3B] px-8 py-3 rounded-full font-bold"
                 >
-                  分享红包
+                  {t('redpacket.share.button')}
                 </button>
               )}
             </div>
@@ -321,17 +383,17 @@ export default function RedPacketDetailPage() {
                       {/* 总金额和领取进度 */}
                       <div className="grid grid-cols-2 gap-4 mb-6">
                         <div>
-                          <p className="text-white/60 text-sm mb-2">总金额</p>
+                          <p className="text-white/60 text-sm mb-2">{t('redpacket.details.totalAmount')}</p>
                           <div className="flex items-baseline">
                             <span className="text-4xl font-bold text-[#FFD700]">{info.totalAmount}</span>
-                            <span className="text-lg text-[#FFD700] ml-2">HSK</span>
+                            <span className="text-lg text-[#FFD700] ml-2">{t('redpacket.unit')}</span>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-white/60 text-sm mb-2">领取进度</p>
+                          <p className="text-white/60 text-sm mb-2">{t('redpacket.details.progress')}</p>
                           <div className="flex items-baseline justify-end">
                             <span className="text-4xl font-bold text-[#FFD700]">{info.claimed}/{info.totalCount}</span>
-                            <span className="text-lg text-[#FFD700] ml-2">个</span>
+                            <span className="text-lg text-[#FFD700] ml-2">{t('redpacket.count')}</span>
                           </div>
                         </div>
                       </div>
@@ -341,10 +403,10 @@ export default function RedPacketDetailPage() {
                         <>
                           <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/20 to-transparent mb-6" />
                           <div className="text-center">
-                            <p className="text-white/60 text-sm mb-2">我的领取</p>
+                            <p className="text-white/60 text-sm mb-2">{t('redpacket.details.myClaim')}</p>
                             <div className="flex items-baseline justify-center">
                               <span className="text-4xl font-bold text-[#FFD700]">{parseFloat(claimedAmount).toFixed(4)}</span>
-                              <span className="text-lg text-[#FFD700] ml-2">HSK</span>
+                              <span className="text-lg text-[#FFD700] ml-2">{t('redpacket.unit')}</span>
                             </div>
                           </div>
                         </>
@@ -356,11 +418,11 @@ export default function RedPacketDetailPage() {
                 {/* 领取记录 */}
                 <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
                   <div className="p-6 rounded-xl bg-[#1a1a1a]">
-                    <h2 className="text-lg font-bold mb-4 text-white">领取记录</h2>
+                    <h2 className="text-lg font-bold mb-4 text-white">{t('redpacket.details.claimRecords')}</h2>
                     <div className="space-y-4">
                       {loadingClaims ? (
                         <div className="text-center py-4 text-gray-400">
-                          加载中...
+                          {t('redpacket.details.loading')}
                         </div>
                       ) : claims && claims.length > 0 ? (
                         claims.map((claim, index) => (
@@ -376,14 +438,14 @@ export default function RedPacketDetailPage() {
                                 </p>
                               </div>
                               <div className="text-right">
-                                <p className="font-bold text-[#FFD700]">{Number(claim.amount).toFixed(4)} HSK</p>
+                                <p className="font-bold text-[#FFD700]">{Number(claim.amount).toFixed(4)} {t('redpacket.unit')}</p>
                               </div>
                             </div>
                           </div>
                         ))
                       ) : (
                         <div className="text-center py-4 text-gray-400">
-                          暂无领取记录
+                          {t('redpacket.details.noRecords')}
                         </div>
                       )}
                     </div>
@@ -393,10 +455,10 @@ export default function RedPacketDetailPage() {
                 {/* 创建信息 */}
                 <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
                   <div className="p-6 rounded-xl bg-[#1a1a1a]">
-                    <h2 className="text-lg font-bold mb-4 text-white">创建信息</h2>
+                    <h2 className="text-lg font-bold mb-4 text-white">{t('redpacket.details.creatorInfo')}</h2>
                     <div className="space-y-2 text-white/80">
-                      <p>创建者: {formatAddress(info.creator)}</p>
-                      <p>剩余金额: {info.remainingAmount} HSK</p>
+                      <p>{t('redpacket.details.creator')}: {formatAddress(info.creator)}</p>
+                      <p>{t('redpacket.details.remainingAmount')}: {info.remainingAmount} {t('redpacket.unit')}</p>
                     </div>
                   </div>
                 </div>
@@ -407,16 +469,13 @@ export default function RedPacketDetailPage() {
       </div>
 
       {/* 分享弹窗 */}
-      {showShareModal && (
-        <ShareModal
+      {showShareModal && info && (
+        <ShareModalWrapper
+          info={info}
           onClose={() => setShowShareModal(false)}
-          amount={claimedAmount}
-          totalCount={info.totalCount}
-          remainingCount={info.remainingCount}
-          creator={info.creator}
+          claimedAmount={claimedAmount}
           id={id as string}
-          isCreator={isCreator}
-          totalAmount={info.totalAmount}
+          address={address}
         />
       )}
     </>
