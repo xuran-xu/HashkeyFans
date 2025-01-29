@@ -7,11 +7,16 @@ import { CreateRedPacket } from '@/components/redpacket/CreateRedPacket';
 import { RedPacket } from '@/components/redpacket/RedPacket';
 import { useCreateRedPacket } from '@/hooks/useRedPacket';
 import { SuccessModal } from '@/components/redpacket/SuccessModal';
+import { useTranslation } from "react-i18next";
+import { useAccount } from 'wagmi';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 // 直接使用实际的事件 topic
 const PACKET_CREATED_TOPIC = '0x4337e485ef64fde4e43126cb01f1eb59ac3e745b7659977dbbec7e00d3e4dcd2';
 
 export default function CreateRedPacketPage() {
+  const { t } = useTranslation();
+  const { address } = useAccount();
   const { createRedPacket, isLoading, error, hash } = useCreateRedPacket();
   const { data: receipt, isLoading: isConfirming } = useWaitForTransactionReceipt({
     hash: hash === '0x0' ? undefined : hash
@@ -50,7 +55,17 @@ export default function CreateRedPacketPage() {
     try {
       // 验证红包个数必须是正整数
       if (!Number.isInteger(data.count) || data.count <= 0) {
-        alert('红包个数必须是正整数');
+        alert(t('redpacket.create.validation.countInteger'));
+        return;
+      }
+
+      if (data.amount <= 0) {
+        alert(t('redpacket.create.validation.amountMin'));
+        return;
+      }
+
+      if (data.amount < 0.01) {
+        alert(t('redpacket.create.validation.amountMin'));
         return;
       }
 
@@ -61,6 +76,24 @@ export default function CreateRedPacketPage() {
       console.error('Failed to create red packet:', err);
     }
   };
+
+  // 如果用户未连接钱包，显示连接提示
+  if (!address) {
+    return (
+      <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-md mx-auto text-center space-y-6">
+            <div className="bg-[#1a1a1a] p-6 rounded-xl">
+              <p className="text-white/80 mb-6">{t('redpacket.create.connect')}</p>
+              <div className="flex justify-center">
+                <ConnectButton />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -78,10 +111,12 @@ export default function CreateRedPacketPage() {
             </div>
             
             <div className="w-full">
-              <h2 className="text-xl font-bold mb-8 text-center text-[#FFD700]">红包预览</h2>
+              <h2 className="text-xl font-bold mb-8 text-center text-[#FFD700]">
+                {t('redpacket.create.preview')}
+              </h2>
               <div className="max-w-3xl mx-auto p-1 rounded-xl">
                 <RedPacket
-                  message={preview.message}
+                  message={preview.message || t('redpacket.create.form.messagePlaceholder')}
                   onOpen={() => {}}
                   isOpened={false}
                 />
