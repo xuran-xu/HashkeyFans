@@ -25,7 +25,9 @@ const ShareModal = ({
   totalCount,
   remainingCount,
   creator,
-  id
+  id,
+  isCreator,
+  totalAmount
 }: { 
   onClose: () => void;
   amount: string;
@@ -33,6 +35,8 @@ const ShareModal = ({
   remainingCount: number;
   creator: string;
   id: string;
+  isCreator: boolean;
+  totalAmount: string;
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -54,12 +58,24 @@ const ShareModal = ({
     }
   };
 
-  const getSubtitle = () => {
-    if (remainingCount > 0) {
-      return `还剩 ${remainingCount} / ${totalCount} 个红包`;
+  const getContent = () => {
+    if (isCreator) {
+      return {
+        title: "我发了一个红包",
+        subtitle: `总价值 ${totalAmount} HSK，还剩 ${remainingCount} 个`,
+        showAmount: false
+      };
     }
-    return `来自 ${formatAddress(creator)}`;
+    return {
+      title: "领取到了",
+      subtitle: remainingCount > 0 
+        ? `还剩 ${remainingCount} / ${totalCount} 个红包`
+        : `来自 ${formatAddress(creator)}`,
+      showAmount: true
+    };
   };
+
+  const content = getContent();
 
   return (
     <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
@@ -81,7 +97,7 @@ const ShareModal = ({
             <div className="text-center">
               {/* 上面一行 - 小号细体 */}
               <h3 className="text-lg font-normal text-white/80 mb-3">
-                领取到了
+                {content.title}
               </h3>
               
               {/* 中间一行 - 大号粗体 */}
@@ -89,15 +105,17 @@ const ShareModal = ({
                 HashKey Chain 
               </div>
               
-              {/* 金额显示 */}
-              <div className="text-[#FFD700] text-5xl font-bold mb-3">
-                {parseFloat(amount).toFixed(4)}
-                <span className="text-2xl ml-2">HSK</span>
-              </div>
+              {/* 金额显示 - 只在领取时显示 */}
+              {content.showAmount && (
+                <div className="text-[#FFD700] text-5xl font-bold mb-3">
+                  {parseFloat(amount).toFixed(4)}
+                  <span className="text-2xl ml-2">HSK</span>
+                </div>
+              )}
               
               {/* 下面一行 - 小号细体 */}
               <div className="text-sm font-normal text-white/80">
-                {getSubtitle()}
+                {content.subtitle}
               </div>
             </div>
 
@@ -151,14 +169,20 @@ export default function RedPacketDetailPage() {
   // 交易成功后刷新所有数据并显示分享弹窗
   useEffect(() => {
     if (isSuccess) {
-      Promise.all([
-        refetchInfo?.(),
-        refetchClaim?.(),
-        refetchClaims?.()
-      ]).then(() => {
-        setShowDetails(true);
-        setShowShareModal(true);  // 在数据刷新后显示分享弹窗
-      });
+      // 添加延迟确保链上数据已更新
+      setTimeout(async () => {
+        try {
+          await Promise.all([
+            refetchInfo?.(),
+            refetchClaim?.(),
+            refetchClaims?.()
+          ]);
+          setShowDetails(true);
+          setShowShareModal(true);
+        } catch (err) {
+          console.error('Failed to refresh data:', err);
+        }
+      }, 2000); // 等待 2 秒确保数据已更新
     }
   }, [isSuccess, refetchInfo, refetchClaim, refetchClaims]);
 
@@ -181,16 +205,13 @@ export default function RedPacketDetailPage() {
     hasRemaining: info.remainingCount > 0
   });
 
+  const isCreator = info.creator === address;
   const hasRemaining = info.remainingCount > 0;
+  // 修改 canClaim 逻辑，允许创建者也可以领取
   const canClaim = !hasClaimed && hasRemaining;
 
-  console.log('Claim decision:', {
-    canClaim,
-    hasClaimed,
-    hasRemaining
-  });
-
-  const shouldShowDetails = !canClaim || showDetails;
+  // 修改显示详情的条件
+  const shouldShowDetails = !canClaim || showDetails || (isCreator && !hasRemaining);
 
   const handleAction = async () => {
     if (canClaim) {
@@ -243,13 +264,30 @@ export default function RedPacketDetailPage() {
             <RedPacket
               message={info.message}
               onOpen={handleAction}
-              isOpened={hasClaimed || !hasRemaining}
+              isOpened={hasClaimed || !hasRemaining || isCreator} // 创建者总是看到打开状态
             />
 
             {/* 操作按钮区域 */}
-            <div className="text-center">
-              {canClaim ? (
-                // 可领取时显示领取按钮
+            <div className="text-center flex gap-4 justify-center">
+              {/* 创建者且未领取时显示两个按钮 */}
+              {isCreator && !hasClaimed && hasRemaining ? (
+                <>
+                  <button
+                    onClick={handleAction}
+                    disabled={isClaimLoading || isConfirming}
+                    className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
+                  >
+                    {isClaimLoading || isConfirming ? '处理中...' : '领取红包'}
+                  </button>
+                  <button
+                    onClick={() => setShowShareModal(true)}
+                    className="bg-gradient-to-r from-[#FFD700] to-[#FFC000] text-[#FF3B3B] px-8 py-3 rounded-full font-bold"
+                  >
+                    分享红包
+                  </button>
+                </>
+              ) : canClaim ? (
+                // 非创建者且可领取时只显示领取按钮
                 <button
                   onClick={handleAction}
                   disabled={isClaimLoading || isConfirming}
@@ -257,8 +295,8 @@ export default function RedPacketDetailPage() {
                 >
                   {isClaimLoading || isConfirming ? '处理中...' : '领取红包'}
                 </button>
-              ) : hasClaimed && (
-                // 已领取时显示分享按钮
+              ) : (hasClaimed || isCreator) && (
+                // 已领取或是创建者时显示分享按钮
                 <button
                   onClick={() => setShowShareModal(true)}
                   className="bg-gradient-to-r from-[#FFD700] to-[#FFC000] text-[#FF3B3B] px-8 py-3 rounded-full font-bold"
@@ -377,6 +415,8 @@ export default function RedPacketDetailPage() {
           remainingCount={info.remainingCount}
           creator={info.creator}
           id={id as string}
+          isCreator={isCreator}
+          totalAmount={info.totalAmount}
         />
       )}
     </>

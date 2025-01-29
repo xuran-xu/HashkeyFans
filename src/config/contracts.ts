@@ -1,5 +1,10 @@
+// 根据环境选择网络
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export const REDPACKET_CONTRACT = {
-  address: '0x72D6aE05f33918095bb47466dF40A72FB15b8108', 
+  address: isDevelopment 
+    ? '0xe6fE0ce8506F7138d67B66A40527C209b33220Df'  
+    : '0x72D6aE05f33918095bb47466dF40A72FB15b8108', 
   abi: [
     {
       "inputs": [],

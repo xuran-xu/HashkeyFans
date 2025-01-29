@@ -1,8 +1,14 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { defineChain } from 'viem';
-// import {
-//   hashkeyTestnet
-// } from 'wagmi/chains';
+import {
+  hashkeyTestnet
+} from 'wagmi/chains';
+import { 
+  okxWallet,
+  metaMaskWallet,
+  rainbowWallet,
+  walletConnectWallet,
+} from '@rainbow-me/rainbowkit/wallets';
 
 export const hashkeyMainnet = /*#__PURE__*/ defineChain({
     id: 177,
@@ -26,11 +32,25 @@ export const hashkeyMainnet = /*#__PURE__*/ defineChain({
   })
   
 
+// 根据环境选择网络
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export const config = getDefaultConfig({
   appName: 'Hash Fans',
   projectId: '1ea1abda1ecbffd1d28108656904c907',
   chains: [
-    hashkeyMainnet
+    isDevelopment ? hashkeyTestnet : hashkeyMainnet
   ],
   ssr: true,
+  wallets: [
+    {
+      groupName: 'Popular',
+      wallets: [
+        okxWallet,
+        metaMaskWallet,
+        rainbowWallet,
+        walletConnectWallet,
+      ]
+    }
+  ]
 }); 
