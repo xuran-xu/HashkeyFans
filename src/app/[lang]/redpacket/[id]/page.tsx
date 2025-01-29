@@ -1,12 +1,14 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { RedPacket } from '@/components/redpacket/RedPacket';
 import { useRedPacketInfo, useRedPacketClaimed, useClaimRedPacket, useRedPacketClaims } from '@/hooks/useRedPacket';
 import { useWaitForTransactionReceipt, useAccount } from 'wagmi';
 import { formatAddress } from '@/utils/format';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { toPng } from 'html-to-image';
+import { QRCodeSVG as QRCode } from 'qrcode.react';
 
 // 骨架屏组件
 const Skeleton = () => (
@@ -16,6 +18,125 @@ const Skeleton = () => (
   </div>
 );
 
+// 分享结果组件
+const ShareModal = ({ 
+  onClose, 
+  amount,
+  message,
+  totalAmount,
+  totalCount,
+  remainingCount,
+  creator,
+  id
+}: { 
+  onClose: () => void;
+  amount: string;
+  message: string;
+  totalAmount: string;
+  totalCount: number;
+  remainingCount: number;
+  creator: string;
+  id: string;
+}) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleDownload = async () => {
+    if (!cardRef.current) return;
+    
+    try {
+      const dataUrl = await toPng(cardRef.current, {
+        quality: 1.0,
+        pixelRatio: 3
+      });
+      
+      const link = document.createElement('a');
+      link.download = `redpacket-${id}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error('Failed to generate image:', err);
+    }
+  };
+
+  const getSubtitle = () => {
+    if (remainingCount > 0) {
+      return `还剩 ${remainingCount} / ${totalCount} 个红包`;
+    }
+    return `来自 ${formatAddress(creator)}`;
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+      <div className="bg-[#1a1a1a] rounded-2xl p-8 max-w-md w-full">
+        {/* 分享卡片 */}
+        <div ref={cardRef} className="bg-gradient-to-b from-[#1a1a1a] to-[#FF3B3B] rounded-2xl overflow-hidden">
+          {/* 顶部图片区域 */}
+          <div className="">
+            <img 
+              src="/img/cover.png" 
+              alt="HSK Cover"
+              className="w-full"
+            />
+          </div>
+
+          {/* 内容区域 - 红色背景 */}
+          <div className="bg-[#FF3B3B] p-8 space-y-8">
+            {/* 金额信息 */}
+            <div className="text-center">
+              {/* 上面一行 - 小号细体 */}
+              <h3 className="text-lg font-normal text-white/80 mb-3">
+                领取到了
+              </h3>
+              
+              {/* 中间一行 - 大号粗体 */}
+              <div className="text-2xl font-bold text-white mb-3">
+                HashKey Chain 
+              </div>
+              
+              {/* 金额显示 */}
+              <div className="text-[#FFD700] text-5xl font-bold mb-3">
+                {parseFloat(amount).toFixed(4)}
+                <span className="text-2xl ml-2">HSK</span>
+              </div>
+              
+              {/* 下面一行 - 小号细体 */}
+              <div className="text-sm font-normal text-white/80">
+                {getSubtitle()}
+              </div>
+            </div>
+
+            {/* 二维码 */}
+            <div className="flex flex-col items-center space-y-3">
+              <QRCode 
+                value={`${window.location.origin}/redpacket/${id}`}
+                size={100}
+                className="bg-white p-1 rounded-xl"
+              />
+              <p className="text-white/80 text-sm">扫码领取红包</p>
+            </div>
+          </div>
+        </div>
+
+        {/* 操作按钮 */}
+        <div className="mt-8 space-y-4">
+          <button
+            onClick={handleDownload}
+            className="w-full bg-gradient-to-r from-[#FFD700] to-[#FFC000] text-[#FF3B3B] py-3 rounded-full font-bold"
+          >
+            保存分享图片
+          </button>
+          <button
+            onClick={onClose}
+            className="w-full bg-white/10 text-white py-3 rounded-full font-bold"
+          >
+            关闭
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function RedPacketDetailPage() {
   const { id } = useParams();
   const { info, isLoading: loadingInfo, refetch: refetchInfo } = useRedPacketInfo(id as string);
@@ -24,21 +145,24 @@ export default function RedPacketDetailPage() {
   const { claimRedPacket, isLoading: isClaimLoading, hash } = useClaimRedPacket();
   const [showDetails, setShowDetails] = useState(false);
   const { address } = useAccount();
+  const [showShareModal, setShowShareModal] = useState(false);
 
   // 监听交易状态
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
     hash: hash === '0x0' ? undefined : hash,
   });
 
-  // 交易成功后刷新所有数据
+  // 交易成功后刷新所有数据并显示分享弹窗
   useEffect(() => {
     if (isSuccess) {
       Promise.all([
         refetchInfo?.(),
         refetchClaim?.(),
         refetchClaims?.()
-      ]);
-      setShowDetails(true);
+      ]).then(() => {
+        setShowDetails(true);
+        setShowShareModal(true);  // 在数据刷新后显示分享弹窗
+      });
     }
   }, [isSuccess, refetchInfo, refetchClaim, refetchClaims]);
 
@@ -115,127 +239,152 @@ export default function RedPacketDetailPage() {
   });
 
   return (
-    <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
-      <div className="container mx-auto px-2 py-8">
-        <div className="max-w-2xl mx-auto space-y-6">
-          {/* 红包预览 */}
-          <RedPacket
-            message={info.message}
-            onOpen={handleAction}
-            isOpened={hasClaimed || !hasRemaining}
-          />
+    <>
+      <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
+        <div className="container mx-auto px-2 py-8">
+          <div className="max-w-2xl mx-auto space-y-6">
+            {/* 红包预览 */}
+            <RedPacket
+              message={info.message}
+              onOpen={handleAction}
+              isOpened={hasClaimed || !hasRemaining}
+            />
 
-          {/* 操作按钮 - 只在可领取时显示 */}
-          {canClaim && (
+            {/* 操作按钮区域 */}
             <div className="text-center">
-              <button
-                onClick={handleAction}
-                disabled={isClaimLoading || isConfirming}
-                className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
-              >
-                {isClaimLoading || isConfirming ? '处理中...' : '领取红包'}
-              </button>
+              {canClaim ? (
+                // 可领取时显示领取按钮
+                <button
+                  onClick={handleAction}
+                  disabled={isClaimLoading || isConfirming}
+                  className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
+                >
+                  {isClaimLoading || isConfirming ? '处理中...' : '领取红包'}
+                </button>
+              ) : hasClaimed && (
+                // 已领取时显示分享按钮
+                <button
+                  onClick={() => setShowShareModal(true)}
+                  className="bg-gradient-to-r from-[#FFD700] to-[#FFC000] text-[#FF3B3B] px-8 py-3 rounded-full font-bold"
+                >
+                  分享红包
+                </button>
+              )}
             </div>
-          )}
 
-          {/* 详情部分 */}
-          {shouldShowDetails && (
-            <>
-              {/* 领取进度卡片 */}
-              <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
-                <div className="p-6 rounded-xl bg-[#1a1a1a] relative overflow-hidden">
-                  {/* 装饰性背景 */}
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#FFD700]/10 to-transparent rounded-full blur-2xl" />
-                  <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#FF3B3B]/10 to-transparent rounded-full blur-2xl" />
-                  
-                  {/* 内容区域 */}
-                  <div className="relative">
-                    {/* 总金额和领取进度 */}
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                      <div>
-                        <p className="text-white/60 text-sm mb-2">总金额</p>
-                        <div className="flex items-baseline">
-                          <span className="text-4xl font-bold text-[#FFD700]">{info.totalAmount}</span>
-                          <span className="text-lg text-[#FFD700] ml-2">HSK</span>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-white/60 text-sm mb-2">领取进度</p>
-                        <div className="flex items-baseline justify-end">
-                          <span className="text-4xl font-bold text-[#FFD700]">{info.claimed}/{info.totalCount}</span>
-                          <span className="text-lg text-[#FFD700] ml-2">个</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 我的领取 */}
-                    {hasClaimed && (
-                      <>
-                        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/20 to-transparent mb-6" />
-                        <div className="text-center">
-                          <p className="text-white/60 text-sm mb-2">我的领取</p>
-                          <div className="flex items-baseline justify-center">
-                            <span className="text-4xl font-bold text-[#FFD700]">{parseFloat(claimedAmount).toFixed(4)}</span>
+            {/* 详情部分 */}
+            {shouldShowDetails && (
+              <>
+                {/* 领取进度卡片 */}
+                <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
+                  <div className="p-6 rounded-xl bg-[#1a1a1a] relative overflow-hidden">
+                    {/* 装饰性背景 */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#FFD700]/10 to-transparent rounded-full blur-2xl" />
+                    <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#FF3B3B]/10 to-transparent rounded-full blur-2xl" />
+                    
+                    {/* 内容区域 */}
+                    <div className="relative">
+                      {/* 总金额和领取进度 */}
+                      <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                          <p className="text-white/60 text-sm mb-2">总金额</p>
+                          <div className="flex items-baseline">
+                            <span className="text-4xl font-bold text-[#FFD700]">{info.totalAmount}</span>
                             <span className="text-lg text-[#FFD700] ml-2">HSK</span>
                           </div>
                         </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* 领取记录 */}
-              <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
-                <div className="p-6 rounded-xl bg-[#1a1a1a]">
-                  <h2 className="text-lg font-bold mb-4 text-white">领取记录</h2>
-                  <div className="space-y-4">
-                    {loadingClaims ? (
-                      <div className="text-center py-4 text-gray-400">
-                        加载中...
-                      </div>
-                    ) : claims && claims.length > 0 ? (
-                      claims.map((claim, index) => (
-                        <div 
-                          key={index}
-                          className="bg-gradient-to-r from-[#FF3B3B]/10 to-[#FF5B5C]/10 p-4 rounded-lg"
-                        >
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <p className="font-medium text-white mb-1">{formatAddress(claim.address)}</p>
-                              <p className="text-sm text-gray-400">
-                                {new Date(claim.timestamp * 1000).toLocaleString()}
-                              </p>
-                            </div>
-                            <div className="text-right">
-                              <p className="font-bold text-[#FFD700]">{Number(claim.amount).toFixed(4)} HSK</p>
-                            </div>
+                        <div className="text-right">
+                          <p className="text-white/60 text-sm mb-2">领取进度</p>
+                          <div className="flex items-baseline justify-end">
+                            <span className="text-4xl font-bold text-[#FFD700]">{info.claimed}/{info.totalCount}</span>
+                            <span className="text-lg text-[#FFD700] ml-2">个</span>
                           </div>
                         </div>
-                      ))
-                    ) : (
-                      <div className="text-center py-4 text-gray-400">
-                        暂无领取记录
                       </div>
-                    )}
-                  </div>
-                </div>
-              </div>
 
-              {/* 创建信息 */}
-              <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
-                <div className="p-6 rounded-xl bg-[#1a1a1a]">
-                  <h2 className="text-lg font-bold mb-4 text-white">创建信息</h2>
-                  <div className="space-y-2 text-white/80">
-                    <p>创建者: {formatAddress(info.creator)}</p>
-                    <p>剩余金额: {info.remainingAmount} HSK</p>
+                      {/* 我的领取 */}
+                      {hasClaimed && (
+                        <>
+                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/20 to-transparent mb-6" />
+                          <div className="text-center">
+                            <p className="text-white/60 text-sm mb-2">我的领取</p>
+                            <div className="flex items-baseline justify-center">
+                              <span className="text-4xl font-bold text-[#FFD700]">{parseFloat(claimedAmount).toFixed(4)}</span>
+                              <span className="text-lg text-[#FFD700] ml-2">HSK</span>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </>
-          )}
+
+                {/* 领取记录 */}
+                <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
+                  <div className="p-6 rounded-xl bg-[#1a1a1a]">
+                    <h2 className="text-lg font-bold mb-4 text-white">领取记录</h2>
+                    <div className="space-y-4">
+                      {loadingClaims ? (
+                        <div className="text-center py-4 text-gray-400">
+                          加载中...
+                        </div>
+                      ) : claims && claims.length > 0 ? (
+                        claims.map((claim, index) => (
+                          <div 
+                            key={index}
+                            className="bg-gradient-to-r from-[#FF3B3B]/10 to-[#FF5B5C]/10 p-4 rounded-lg"
+                          >
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <p className="font-medium text-white mb-1">{formatAddress(claim.address)}</p>
+                                <p className="text-sm text-gray-400">
+                                  {new Date(claim.timestamp * 1000).toLocaleString()}
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <p className="font-bold text-[#FFD700]">{Number(claim.amount).toFixed(4)} HSK</p>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-center py-4 text-gray-400">
+                          暂无领取记录
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* 创建信息 */}
+                <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
+                  <div className="p-6 rounded-xl bg-[#1a1a1a]">
+                    <h2 className="text-lg font-bold mb-4 text-white">创建信息</h2>
+                    <div className="space-y-2 text-white/80">
+                      <p>创建者: {formatAddress(info.creator)}</p>
+                      <p>剩余金额: {info.remainingAmount} HSK</p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* 分享弹窗 */}
+      {showShareModal && (
+        <ShareModal
+          onClose={() => setShowShareModal(false)}
+          amount={claimedAmount}
+          message={info.message}
+          totalAmount={info.totalAmount}
+          totalCount={info.totalCount}
+          remainingCount={info.remainingCount}
+          creator={info.creator}
+          id={id as string}
+        />
+      )}
+    </>
   );
 } 
