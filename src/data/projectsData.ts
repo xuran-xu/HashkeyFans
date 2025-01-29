@@ -266,7 +266,7 @@ export const projectsData: Project[] = [
     logo: '/img/asteroidx.webp',
     isVerified: true,
     imgClassName: 'h-8 w-8 rounded-full',
-    link: 'https://asteroidx.io/e',
+    link: 'https://asteroidx.io',
     tags: ['RWA'],
     pointsBonus: {
         type: 'interaction',
