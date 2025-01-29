@@ -5,7 +5,6 @@ import { useReadContract, useWriteContract, useWatchContractEvent } from 'wagmi'
 import { parseEther, formatEther } from 'viem';
 import { REDPACKET_CONTRACT } from '@/config/contracts';
 import { useAccount } from 'wagmi';
-import { formatAddress } from '@/utils/format';
 
 export function useCreateRedPacket() {
   const [loading, setLoading] = useState(false);
