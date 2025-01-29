@@ -27,7 +27,7 @@ export function SuccessModal({ amount, count, message, id }: SuccessModalProps) 
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // 2秒后重置状态
+      setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
