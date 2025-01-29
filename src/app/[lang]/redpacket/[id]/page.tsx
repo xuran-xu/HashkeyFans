@@ -22,8 +22,6 @@ const Skeleton = () => (
 const ShareModal = ({ 
   onClose, 
   amount,
-  message,
-  totalAmount,
   totalCount,
   remainingCount,
   creator,
@@ -31,8 +29,6 @@ const ShareModal = ({
 }: { 
   onClose: () => void;
   amount: string;
-  message: string;
-  totalAmount: string;
   totalCount: number;
   remainingCount: number;
   creator: string;
@@ -377,8 +373,6 @@ export default function RedPacketDetailPage() {
         <ShareModal
           onClose={() => setShowShareModal(false)}
           amount={claimedAmount}
-          message={info.message}
-          totalAmount={info.totalAmount}
           totalCount={info.totalCount}
           remainingCount={info.remainingCount}
           creator={info.creator}
