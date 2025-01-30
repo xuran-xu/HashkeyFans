@@ -32,13 +32,11 @@ export default function CreateRedPacketPage() {
 
   useEffect(() => {
     if (receipt?.logs) {
-      console.log('All logs:', receipt.logs);
       const event = receipt.logs.find(
         (log: Log) => log.topics[0] === PACKET_CREATED_TOPIC
       );
       if (event?.topics[1]) {
         const id = BigInt(event.topics[1]).toString();
-        console.log('Red Packet ID:', id);
         setPacketId(id);
         setShowSuccessModal(true);
       } else {

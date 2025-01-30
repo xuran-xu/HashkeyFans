@@ -20,12 +20,6 @@ export default function ClientProvider({
     const initI18n = async () => {
       const savedLang = localStorage.getItem('i18nextLng');
       const targetLang = savedLang || lang;
-      console.log('currentLang', currentLang);
-      console.log('Initializing with:', {
-        savedLang,
-        urlLang: lang,
-        currentI18nLang: i18n.language
-      });
 
       if (i18n.language !== targetLang) {
         try {
@@ -52,7 +46,6 @@ export default function ClientProvider({
   // 监听语言变化
   useEffect(() => {
     const handleLanguageChanged = (newLang: string) => {
-      console.log('Language changed to:', newLang);
       localStorage.setItem('i18nextLng', newLang);
       setCurrentLang(newLang);
     };

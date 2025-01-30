@@ -13,15 +13,6 @@ const RedPacketCard = ({ id }: { id: bigint }) => {
   const { t } = useTranslation();
   const { info, isLoading } = useRedPacketInfo(id.toString());
 
-  // 格式化红包ID，只显示前4位和后6位
-  const formattedId = id.toString().length > 10 
-    ? `#${id.toString().slice(0, 4)}...${id.toString().slice(-6)}`
-    : `#${id.toString()}`;
-
-  const handleClick = () => {
-    router.push(`/redpacket/${id.toString()}`);
-  };
-
   if (isLoading || !info) {
     return (
       <div className="animate-pulse bg-[#1a1a1a] p-6 rounded-xl space-y-4">
@@ -30,6 +21,14 @@ const RedPacketCard = ({ id }: { id: bigint }) => {
       </div>
     );
   }
+
+  const formattedId = id.toString().length > 10 
+    ? `#${id.toString().slice(0, 4)}...${id.toString().slice(-6)}`
+    : `#${id.toString()}`;
+
+  const handleClick = () => {
+    router.push(`/redpacket/${id.toString()}`);
+  };
 
   return (
     <div 
@@ -44,7 +43,13 @@ const RedPacketCard = ({ id }: { id: bigint }) => {
         <p className="text-white mb-4">{info.message}</p>
         <div className="flex justify-between items-center text-sm">
           <span className="text-white/80">
-            {info.claimed} / {info.totalCount} {t('redpacket.history.count')}
+            {info.isRefunded ? (
+              <span className="text-[#FFD700] bg-[#FFD700]/10 px-3 py-1 rounded-full">
+                {t('redpacket.status.refunded')}
+              </span>
+            ) : (
+              `${info.claimed} / ${info.totalCount} ${t('redpacket.history.count')}`
+            )}
           </span>
           <span className="text-[#FFD700]">{info.totalAmount} {t('redpacket.unit')}</span>
         </div>

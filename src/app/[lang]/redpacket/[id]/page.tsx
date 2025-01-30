@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { RedPacket } from '@/components/redpacket/RedPacket';
-import { useRedPacketInfo, useRedPacketClaimed, useClaimRedPacket, useRedPacketClaims } from '@/hooks/useRedPacket';
-import { useWaitForTransactionReceipt, useAccount } from 'wagmi';
+import { useRedPacketInfo, useRedPacketClaimed, useClaimRedPacket, useRedPacketClaims, useRefundRedPacket } from '@/hooks/useRedPacket';
+import { useWaitForTransactionReceipt, useAccount, usePublicClient } from 'wagmi';
 import { formatAddress } from '@/utils/format';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { toPng } from 'html-to-image';
@@ -168,10 +168,10 @@ const ShareModal = ({
 
 interface ShareModalWrapperProps {
   info: {
-    totalCount: number;
-    remainingCount: number;
-    creator: string;
-    totalAmount: string;
+    totalCount?: number;
+    remainingCount?: number;
+    creator?: string;
+    totalAmount?: string;
   };
   onClose: () => void;
   claimedAmount: string;
@@ -179,20 +179,18 @@ interface ShareModalWrapperProps {
   address: string;
 }
 
-const ShareModalWrapper = ({ info, ...props }: ShareModalWrapperProps) => {
-  console.log('ShareModal Wrapper Props:', { info, ...props });
-  
+const ShareModalWrapper = ({ info, ...props }: ShareModalWrapperProps) => {  
   if (!info) return null;
   
   return (
     <ShareModal
       onClose={props.onClose}
-      totalCount={info.totalCount}
-      remainingCount={info.remainingCount}
-      creator={info.creator}
+      totalCount={info.totalCount || 0}
+      remainingCount={info.remainingCount || 0}
+      creator={info.creator || ''}
       id={props.id}
       isCreator={info.creator === props.address}
-      totalAmount={info.totalAmount}
+      totalAmount={info.totalAmount || ''}
     />
   );
 };
@@ -216,8 +214,11 @@ export default function RedPacketDetailPage() {
   // 添加一个新的状态来控制领取过程
   const [isClaiming, setIsClaiming] = useState(false);
 
-  // 修改加载状态判断
-  const isLoading = loadingInfo || loadingClaim || loadingClaims || isClaimLoading || isConfirming || !info || isClaiming;
+  // 修改 hook 的解构
+  const { refundRedPacket, isLoading: isRefunding } = useRefundRedPacket();
+
+  // 在组件内部
+  const publicClient = usePublicClient();
 
   // 修改 handleAction 函数
   const handleAction = async () => {
@@ -241,6 +242,25 @@ export default function RedPacketDetailPage() {
       }
     } else {
       setShowDetails(true);
+    }
+  };
+
+  // 修改退回处理函数
+  const handleRefund = async () => {
+    try {
+      const hash = await refundRedPacket(id as string);
+      if (!publicClient) return;
+      const receipt = await publicClient.waitForTransactionReceipt({ hash });
+      if (receipt.status === 'success') {
+        toast.success(t('redpacket.refund.success'));
+        await refetchInfo?.();
+      }
+    } catch (err) {
+      // 只有在交易发送失败时才显示错误
+      if (err instanceof Error && err.message.includes('rejected')) {
+        console.error('Failed to refund:', err);
+        toast.error(t('redpacket.refund.failed'));
+      }
     }
   };
 
@@ -275,27 +295,6 @@ export default function RedPacketDetailPage() {
     }
   }, [isSuccess, hash, refetchInfo, refetchClaim, refetchClaims, t]);
 
-  if (isLoading) {
-    return (
-      <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-2xl mx-auto">
-            <Skeleton />
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const isCreator = info.creator === address;
-  const hasRemaining = info.remainingCount > 0;
-  // 修改 canClaim 逻辑，允许创建者也可以领取
-  const canClaim = !hasClaimed && hasRemaining;
-
-  // 修改显示详情的条件
-  const shouldShowDetails = !canClaim || showDetails || (isCreator && !hasRemaining);
-
-  // 如果用户未连接钱包，显示连接提示
   if (!address) {
     return (
       <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
@@ -318,6 +317,72 @@ export default function RedPacketDetailPage() {
     );
   }
 
+  const isCreator = info?.creator === address;
+  const hasRemaining = info?.remainingCount && info.remainingCount > 0;
+  const canClaim = !hasClaimed && !!hasRemaining;
+
+  // 修改显示详情的条件
+  const shouldShowDetails = !canClaim || showDetails || (isCreator && !hasRemaining);
+
+  // 根据合约返回的状态判断显示内容
+  const getStatusDisplay = () => {
+    if (!info) return null;
+
+    if (info.canClaim) {
+      return (
+        <button
+          onClick={handleAction}
+          disabled={isClaimLoading || isConfirming}
+          className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
+        >
+          {isClaimLoading || isConfirming 
+            ? t('redpacket.claim.processing') 
+            : t('redpacket.claim.button')
+          }
+        </button>
+      );
+    }
+
+    if (info.canRefund && info.creator === address) {
+      return (
+        <button
+          onClick={handleRefund}
+          disabled={isRefunding}
+          className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
+        >
+          {isRefunding
+            ? t('redpacket.refund.processing') 
+            : t('redpacket.refund.button')
+          }
+        </button>
+      );
+    }
+
+    if (hasClaimed) {
+      return (
+        <div className="text-center">
+          <div className="text-white/60 mb-2">
+            {t('redpacket.details.myClaim')}
+          </div>
+          <div className="text-[#FFD700] text-2xl font-bold">
+            {parseFloat(claimedAmount).toFixed(4)} {t('redpacket.unit')}
+          </div>
+        </div>
+      );
+    }
+
+    // 只在用户未领取且红包已抢完时显示
+    if (info.remainingCount === 0 && !hasClaimed) {
+      return (
+        <div className="text-white/60">
+          {t('redpacket.share.noRemaining')}
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <>
       <div className="flex-1 flex flex-col min-h-[calc(100vh-180px)]">
@@ -325,41 +390,16 @@ export default function RedPacketDetailPage() {
           <div className="max-w-2xl mx-auto space-y-6">
             {/* 红包预览 */}
             <RedPacket
-              message={info.message}
+              message={info?.message || 'HashKey Chain'}
               onOpen={handleAction}
-              isOpened={hasClaimed || !hasRemaining || isCreator} // 创建者总是看到打开状态
+              isOpened={!info?.canClaim}
             />
 
-            {/* 操作按钮区域 */}
-            <div className="text-center flex gap-4 justify-center">
-              {/* 创建者且未领取时显示两个按钮 */}
-              {isCreator && !hasClaimed && hasRemaining ? (
-                <>
-                  <button
-                    onClick={handleAction}
-                    disabled={isClaimLoading || isConfirming}
-                    className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
-                  >
-                    {isClaimLoading || isConfirming ? t('redpacket.claim.processing') : t('redpacket.claim.button')}
-                  </button>
-                  <button
-                    onClick={() => setShowShareModal(true)}
-                    className="bg-gradient-to-r from-[#FFD700] to-[#FFC000] text-[#FF3B3B] px-8 py-3 rounded-full font-bold"
-                  >
-                    {t('redpacket.share.button')}
-                  </button>
-                </>
-              ) : canClaim ? (
-                // 非创建者且可领取时只显示领取按钮
-                <button
-                  onClick={handleAction}
-                  disabled={isClaimLoading || isConfirming}
-                  className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] text-white px-8 py-3 rounded-full font-bold disabled:opacity-50"
-                >
-                  {isClaimLoading || isConfirming ? t('redpacket.claim.processing') : t('redpacket.claim.button')}
-                </button>
-              ) : (hasClaimed || isCreator) && (
-                // 已领取或是创建者时显示分享按钮
+            {/* 状态显示区域 */}
+            <div className="text-center flex justify-center gap-4">
+              {getStatusDisplay()}
+              {/* 分享按钮 */}
+              {(hasClaimed || isCreator) && (
                 <button
                   onClick={() => setShowShareModal(true)}
                   className="bg-gradient-to-r from-[#FFD700] to-[#FFC000] text-[#FF3B3B] px-8 py-3 rounded-full font-bold"
@@ -370,7 +410,7 @@ export default function RedPacketDetailPage() {
             </div>
 
             {/* 详情部分 */}
-            {shouldShowDetails && (
+            {shouldShowDetails && info && (
               <>
                 {/* 领取进度卡片 */}
                 <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
@@ -391,92 +431,94 @@ export default function RedPacketDetailPage() {
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-white/60 text-sm mb-2">{t('redpacket.details.progress')}</p>
+                          <p className="text-white/60 text-sm mb-2">
+                            {info.isRefunded 
+                              ? t('redpacket.details.refundStatus')
+                              : t('redpacket.details.progress')
+                            }
+                          </p>
                           <div className="flex items-baseline justify-end">
-                            <span className="text-4xl font-bold text-[#FFD700]">{info.claimed}/{info.totalCount}</span>
-                            <span className="text-lg text-[#FFD700] ml-2">{t('redpacket.count')}</span>
+                            {info.isRefunded ? (
+                              <span className="text-[#FFD700] bg-[#FFD700]/10 px-3 py-1 rounded-full">
+                                {t('redpacket.status.refunded')}
+                              </span>
+                            ) : (
+                              <>
+                                <span className="text-4xl font-bold text-[#FFD700]">
+                                  {info.claimed}/{info.totalCount}
+                                </span>
+                                <span className="text-lg text-[#FFD700] ml-2">
+                                  {t('redpacket.count')}
+                                </span>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
 
-                      {/* 我的领取 */}
-                      {hasClaimed && (
-                        <>
-                          <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white/20 to-transparent mb-6" />
-                          <div className="text-center">
-                            <p className="text-white/60 text-sm mb-2">{t('redpacket.details.myClaim')}</p>
-                            <div className="flex items-baseline justify-center">
-                              <span className="text-4xl font-bold text-[#FFD700]">{parseFloat(claimedAmount).toFixed(4)}</span>
-                              <span className="text-lg text-[#FFD700] ml-2">{t('redpacket.unit')}</span>
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* 领取记录 */}
-                <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
-                  <div className="p-6 rounded-xl bg-[#1a1a1a]">
-                    <h2 className="text-lg font-bold mb-4 text-white">{t('redpacket.details.claimRecords')}</h2>
-                    <div className="space-y-4">
-                      {loadingClaims ? (
-                        <div className="text-center py-4 text-gray-400">
-                          {t('redpacket.details.loading')}
-                        </div>
-                      ) : claims && claims.length > 0 ? (
-                        claims.map((claim, index) => {
-                          // 找出金额最大的那个领取记录
-                          const isLuckiest = claim.amount === Math.max(...claims.map(c => Number(c.amount))).toString();
-                          
-                          return (
-                            <div 
-                              key={index}
-                              className="bg-gradient-to-r from-[#FF3B3B]/10 to-[#FF5B5C]/10 p-4 rounded-lg"
-                            >
-                              <div className="flex justify-between items-center">
-                                <div>
-                                  <p className="font-medium text-white mb-1">
-                                    {formatAddress(claim.address)}
-                                  </p>
-                                  <p className="text-sm text-gray-400">
-                                    {new Date(claim.timestamp * 1000).toLocaleString()}
-                                  </p>
-                                </div>
-                                <div className="text-right">
-                                  <p className="font-bold text-[#FFD700] mb-1">
-                                    {Number(claim.amount).toFixed(4)} {t('redpacket.unit')}
-                                  </p>
-                                  {isLuckiest && (
-                                    <div className="flex items-center gap-1 text-[#FFD700] justify-end">
-                                      <FaTrophy className="text-sm" />
-                                      <span className="text-xs">
-                                        {t('redpacket.details.luckiest')}
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
+                      {/* 领取记录 */}
+                      <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
+                        <div className="p-6 rounded-xl bg-[#1a1a1a]">
+                          <h2 className="text-lg font-bold mb-4 text-white">{t('redpacket.details.claimRecords')}</h2>
+                          <div className="space-y-4">
+                            {loadingClaims ? (
+                              <div className="text-center py-4 text-gray-400">
+                                {t('redpacket.details.loading')}
                               </div>
-                            </div>
-                          );
-                        })
-                      ) : (
-                        <div className="text-center py-4 text-gray-400">
-                          {t('redpacket.details.noRecords')}
+                            ) : claims && claims.length > 0 ? (
+                              claims.map((claim, index) => {
+                                const isLuckiest = Number(claim.amount) === Math.max(...claims.map(c => Number(c.amount)));
+                                
+                                return (
+                                  <div 
+                                    key={index}
+                                    className="bg-gradient-to-r from-[#FF3B3B]/10 to-[#FF5B5C]/10 p-4 rounded-lg"
+                                  >
+                                    <div className="flex justify-between items-center">
+                                      <div>
+                                        <p className="font-medium text-white mb-1">
+                                          {formatAddress(claim.address)}
+                                        </p>
+                                        <p className="text-sm text-gray-400">
+                                          {new Date(claim.timestamp * 1000).toLocaleString()}
+                                        </p>
+                                      </div>
+                                      <div className="text-right">
+                                        <p className="font-bold text-[#FFD700] mb-1">
+                                          {Number(claim.amount).toFixed(4)} {t('redpacket.unit')}
+                                        </p>
+                                        {isLuckiest && (
+                                          <div className="flex items-center gap-1 text-[#FFD700] justify-end">
+                                            <FaTrophy className="text-sm" />
+                                            <span className="text-xs">
+                                              {t('redpacket.details.luckiest')}
+                                            </span>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <div className="text-center py-4 text-gray-400">
+                                {t('redpacket.details.noRecords')}
+                              </div>
+                            )}
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                      </div>
 
-                {/* 创建信息 */}
-                <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl">
-                  <div className="p-6 rounded-xl bg-[#1a1a1a]">
-                    <h2 className="text-lg font-bold mb-4 text-white">{t('redpacket.details.creatorInfo')}</h2>
-                    <div className="space-y-2 text-white/80">
-                      <p>{t('redpacket.details.creator')}: {formatAddress(info.creator)}</p>
-                      <p>{t('redpacket.details.remainingAmount')}: {info.remainingAmount} {t('redpacket.unit')}</p>
+                      {/* 创建信息 */}
+                      <div className="bg-gradient-to-r from-[#FF3B3B] to-[#FF5B5C] p-[1px] rounded-xl mt-4">
+                        <div className="p-6 rounded-xl bg-[#1a1a1a]">
+                          <h2 className="text-lg font-bold mb-4 text-white">{t('redpacket.details.creatorInfo')}</h2>
+                          <div className="space-y-2 text-white/80">
+                            <p>{t('redpacket.details.creator')}: {formatAddress(info.creator)}</p>
+                            <p>{t('redpacket.details.remainingAmount')}: {info.remainingAmount} {t('redpacket.unit')}</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

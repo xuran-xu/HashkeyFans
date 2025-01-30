@@ -90,6 +90,7 @@ export default {
       remainingAmount: "剩余金额",
       loading: "加载中...",
       luckiest: "手气最佳",
+      refundStatus: "退回状态",
     },
     unit: "HSK",
     count: "个",
@@ -138,6 +139,14 @@ export default {
         active: "进行中",
         completed: "已领完"
       }
+    },
+    refund: {
+      button: "退回红包",
+      processing: "退回中...",
+      success: "退回成功"
+    },
+    status: {
+      refunded: "红包已退回",
     }
   },
   // ... 其他翻译内容
