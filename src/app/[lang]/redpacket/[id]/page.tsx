@@ -13,14 +13,6 @@ import { useTranslation } from "react-i18next";
 import { toast } from 'react-toastify';
 import { FaTrophy } from 'react-icons/fa';
 
-// 骨架屏组件
-const Skeleton = () => (
-  <div className="animate-pulse space-y-4">
-    <div className="h-40 bg-gray-700 rounded-xl"></div>
-    <div className="h-10 w-32 mx-auto bg-gray-700 rounded-full"></div>
-  </div>
-);
-
 // 分享结果组件
 const ShareModal = ({ 
   onClose, 
@@ -197,8 +189,8 @@ const ShareModalWrapper = ({ info, ...props }: ShareModalWrapperProps) => {
 
 export default function RedPacketDetailPage() {
   const { id } = useParams();
-  const { info, isLoading: loadingInfo, refetch: refetchInfo } = useRedPacketInfo(id as string);
-  const { hasClaimed, claimedAmount, isLoading: loadingClaim, refetch: refetchClaim } = useRedPacketClaimed(id as string);
+  const { info, refetch: refetchInfo } = useRedPacketInfo(id as string);
+  const { hasClaimed, claimedAmount, refetch: refetchClaim } = useRedPacketClaimed(id as string);
   const { claims, isLoading: loadingClaims, refetch: refetchClaims } = useRedPacketClaims(id as string);
   const { claimRedPacket, isLoading: isClaimLoading, hash } = useClaimRedPacket();
   const [showDetails, setShowDetails] = useState(false);
@@ -213,7 +205,7 @@ export default function RedPacketDetailPage() {
 
   // 添加一个新的状态来控制领取过程
   const [isClaiming, setIsClaiming] = useState(false);
-
+  console.log('isClaiming', isClaiming);
   // 修改 hook 的解构
   const { refundRedPacket, isLoading: isRefunding } = useRefundRedPacket();
 
