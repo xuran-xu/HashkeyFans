@@ -15,7 +15,7 @@ export default function ClientProvider({
   const router = useRouter();
   const pathname = usePathname();
   const [currentLang, setCurrentLang] = useState(lang);
-
+  console.log('currentLang', currentLang);
   useEffect(() => {
     const initI18n = async () => {
       const savedLang = localStorage.getItem('i18nextLng');
