@@ -6,6 +6,26 @@ import { parseEther, formatEther } from 'viem';
 import { REDPACKET_CONTRACT } from '@/config/contracts';
 import { useAccount } from 'wagmi';
 
+interface RedPacketInfo {
+  creator: `0x${string}`;
+  message: string;
+  totalAmount: string;
+  remainingAmount: string;
+  totalCount: number;
+  remainingCount: number;
+  claimed: number;
+  createdAt: Date;
+  canClaim: boolean;
+  canRefund: boolean;
+  isRefunded: boolean;
+}
+
+interface RedPacketInfoResponse {
+  isLoading: boolean;
+  refetch?: () => void;
+  info: RedPacketInfo | null;
+}
+
 export function useCreateRedPacket() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,37 +65,32 @@ export function useCreateRedPacket() {
   };
 }
 
-export function useRedPacketInfo(id?: string) {
+export function useRedPacketInfo(id?: string): RedPacketInfoResponse {
+  const { address } = useAccount();
   const { data: packetInfo, isLoading, refetch } = useReadContract({
     address: REDPACKET_CONTRACT.address as `0x${string}`,
     abi: REDPACKET_CONTRACT.abi,
-    functionName: 'packets',
-    args: id ? [BigInt(id)] : undefined,
+    functionName: 'getPacketInfo',
+    args: id ? [BigInt(id), address || '0x0000000000000000000000000000000000000000'] : undefined,
   });
 
-  console.log('RedPacket Query:', {
-    id,
-    packetInfo,
-    isLoading,
-    contractAddress: REDPACKET_CONTRACT.address
-  });
+  if (!packetInfo) return { isLoading, refetch, info: null };
 
-  if (!packetInfo) return { isLoading, refetch };
-
-  return {
-    isLoading,
-    refetch,
-    info: {
-      creator: packetInfo[0],
-      message: packetInfo[1],
-      totalAmount: formatEther(packetInfo[2]),
-      remainingAmount: formatEther(packetInfo[3]),
-      totalCount: Number(packetInfo[4]),
-      remainingCount: Number(packetInfo[5]),
-      claimed: Number(packetInfo[4]) - Number(packetInfo[5]),
-      createdAt: new Date(Number(packetInfo[6]) * 1000),
-    }
+  const info: RedPacketInfo = {
+    creator: packetInfo[0],
+    message: packetInfo[1],
+    totalAmount: formatEther(packetInfo[2]),
+    remainingAmount: formatEther(packetInfo[3]),
+    totalCount: Number(packetInfo[4]),
+    remainingCount: Number(packetInfo[5]),
+    claimed: Number(packetInfo[4]) - Number(packetInfo[5]),
+    createdAt: new Date(Number(packetInfo[6]) * 1000),
+    canClaim: Boolean(packetInfo[7]),
+    canRefund: Boolean(packetInfo[8]),
+    isRefunded: Boolean(packetInfo[9]),
   };
+  
+  return { isLoading, refetch, info };
 }
 
 export function useRedPacketClaimed(id?: string) {
@@ -175,24 +190,46 @@ export function useUserRedPackets() {
     args: address ? [address] : undefined,
   });
 
-  console.log('UserRedPackets Query:', {
-    address,
-    data,
-    isLoading,
-    contractAddress: REDPACKET_CONTRACT.address
-  });
-
   const [created, claimed] = data || [[], []];
-
-  console.log('UserRedPackets Result:', {
-    created,
-    claimed
-  });
-
   return {
     isLoading,
     refetch,
     created: created || [],
     claimed: claimed || []
+  };
+}
+
+export function useRefundRedPacket() {
+  const { writeContractAsync } = useWriteContract();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [hash, setHash] = useState<`0x${string}`>('0x0');
+
+  const handleRefund = async (id: string) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const txHash = await writeContractAsync({
+        address: REDPACKET_CONTRACT.address as `0x${string}`,
+        abi: REDPACKET_CONTRACT.abi,
+        functionName: 'refundExpiredPacket',
+        args: [BigInt(id)],
+      });
+
+      setHash(txHash);
+      return txHash;
+    } catch (err) {
+      console.error('Failed to refund red packet:', err);
+      setError(err instanceof Error ? err.message : '退回红包失败');
+      throw err;
+    }
+  };
+
+  return {
+    refundRedPacket: handleRefund,
+    isLoading,
+    error,
+    refundHash: hash,
   };
 } 

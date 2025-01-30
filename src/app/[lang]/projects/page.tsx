@@ -14,7 +14,6 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
   const handleCopy = async (text: string) => {
     await navigator.clipboard.writeText(text);
-    console.log(copyMsg);
     setCopyMsg(t('projects.copySuccess'));
     console.log(copyMsg);
     setTimeout(() => setCopyMsg(""), 2000);

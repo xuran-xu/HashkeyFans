@@ -90,6 +90,7 @@ export default {
       remainingAmount: "Remaining Amount",
       loading: "Loading...",
       luckiest: "Best Lucky",
+      refundStatus: "Refund Status",
     },
     unit: "HSK",
     count: "packets",
@@ -138,6 +139,14 @@ export default {
         active: "Active",
         completed: "Completed"
       }
+    },
+    refund: {
+      button: "Refund",
+      processing: "Processing Refund...",
+      success: "Refund Successful"
+    },
+    status: {
+      refunded: "Red Packet Refunded",
     }
   }
 } 
