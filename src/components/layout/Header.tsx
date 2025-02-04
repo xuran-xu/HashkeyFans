@@ -108,7 +108,7 @@ export const Header = () => {
               {/* Projects Link */}
               <Link
                 href={getLocalizedHref('/projects')}
-                className="flex items-center text-whitespace-x-2 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors"
+                className="flex items-center text-white space-x-2 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors"
               >
                 <Icon name="grid" className="w-5 h-5" />
                 <span>{t('nav.projects')}</span>
