@@ -56,7 +56,7 @@ export const Header = () => {
               {/* Explore Dropdown */}
               <div className="relative group" ref={exploreRef}>
                 <button
-                  className="flex items-center space-x-2 px-3 py-2 rounded-md group-hover:bg-gray-800 transition-colors"
+                  className="flex items-center text-white space-x-2 px-3 py-2 rounded-md group-hover:bg-gray-800 transition-colors"
                 >
                   <Icon name="compass" className="w-5 h-5" />
                   <span>{t('nav.explore')}</span>
@@ -82,7 +82,7 @@ export const Header = () => {
 
               {/* Red Packet Dropdown */}
               <div className="relative group">
-                <button className="flex items-center space-x-2 px-3 py-2 rounded-md group-hover:bg-gray-800 transition-colors">
+                <button className="flex items-center text-white space-x-2 px-3 py-2 rounded-md group-hover:bg-gray-800 transition-colors">
                   <Icon name="gift" className="w-5 h-5" />
                   <span>RedPacket🧧</span>
                 </button>
@@ -108,7 +108,7 @@ export const Header = () => {
               {/* Projects Link */}
               <Link
                 href={getLocalizedHref('/projects')}
-                className="flex items-center space-x-2 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors"
+                className="flex items-center text-whitespace-x-2 px-3 py-2 rounded-md hover:bg-gray-800 transition-colors"
               >
                 <Icon name="grid" className="w-5 h-5" />
                 <span>{t('nav.projects')}</span>
