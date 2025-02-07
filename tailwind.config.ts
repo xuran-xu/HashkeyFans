@@ -45,6 +45,7 @@ const config: Config = {
     },
   },
   plugins: [
+    require('daisyui'),
     require('@tailwindcss/typography'),
     function ({ addUtilities }: { addUtilities: (utilities: Record<string, Record<string, string>>) => void }) {
       const newUtilities = {

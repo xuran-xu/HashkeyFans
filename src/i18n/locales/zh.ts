@@ -6,6 +6,7 @@ export default {
     applyNow: "申请参加",
     stayTuned: "敬请期待",
     eventEnded: "活动已结束",
+    connectWallet: "连接钱包",
   },
   nav: {
     events: "活动",
@@ -29,7 +30,8 @@ export default {
     title: "活动列表",
     current: "进行中",
     upcoming: "即将开始",
-    past: "已结束"
+    past: "已结束",
+    comingSoon: "即将推出",
   },
   news: {
     title: "新闻中心",

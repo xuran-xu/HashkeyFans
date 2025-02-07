@@ -3,12 +3,18 @@ import { useTranslation } from "react-i18next";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { Button } from "../common/Button";
 import { Icon } from "../common/Icon";
 // import { SocialLinks } from "../common/SocialLinks";
 import { LanguageSelector } from "../common/LanguageSelector";
 import { MobileMenu } from "../common/MobileMenu";
+import { ConnectButton, useAccount } from "@particle-network/connectkit";
+import styled from 'styled-components';
+
+// 创建一个自定义的包装组件
+const ConnectButtonWrapper = styled.div`
+
+`;
 
 export const Header = () => {
   const router = useRouter();
@@ -19,6 +25,7 @@ export const Header = () => {
   const exploreRef = useRef<HTMLDivElement>(null);
   const { t, i18n } = useTranslation();
   const [mounted, setMounted] = useState(false);
+  const { address } = useAccount();
 
   useEffect(() => {
     setMounted(true);
@@ -130,7 +137,17 @@ export const Header = () => {
                 setIsLangMenuOpen(false);
               }}
             />
-            <ConnectButton />
+            <ConnectButtonWrapper>
+              <ConnectButton />
+            </ConnectButtonWrapper>
+            {address && (
+              <Link 
+                href={`/profile/${address}`}
+                className="mr-4 text-sm hover:text-gray-600"
+              >
+                Profile
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}

@@ -6,6 +6,7 @@ export default {
     applyNow: "Apply Now",
     stayTuned: "Stay Tuned",
     eventEnded: "Event Ended",
+    connectWallet: "Connect Wallet",
   },
   nav: {
     events: "Events",
@@ -29,7 +30,8 @@ export default {
     title: "Events",
     current: "Current Events",
     upcoming: "Upcoming Events",
-    past: "Past Events"
+    past: "Past Events",
+    comingSoon: "Coming Soon"
   },
   news: {
     title: "News Center",

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { NavLink } from './NavLink';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectButton } from "@particle-network/connectkit";
 import { SocialLinks } from './SocialLinks';
 
 interface MobileMenuProps {
