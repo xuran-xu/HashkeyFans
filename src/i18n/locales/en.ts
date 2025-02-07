@@ -45,7 +45,10 @@ export default {
     extraPoints: "Extra Points",
     verifiedWallet: "Verified Wallet",
     verifiedProject: "Verified Project",
-    interactionReward: "Interaction Reward"
+    interactionReward: "Interaction Reward",
+    searchPlaceholder: "Search projects...",
+    foundResults: "Found {{count}} projects",
+    noResults: "No projects found",
   },
   partners: {
     title: "Our Partners",
