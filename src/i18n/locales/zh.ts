@@ -45,7 +45,10 @@ export default {
     extraPoints: "额外积分",
     verifiedWallet: "合作钱包",
     verifiedProject: "已验证项目",
-    interactionReward: "交互奖励"
+    interactionReward: "交互奖励",
+    searchPlaceholder: "搜索项目...",
+    foundResults: "找到 {{count}} 个项目",
+    noResults: "未找到相关项目",
   },
   partners: {
     title: "合作伙伴",
@@ -149,5 +152,4 @@ export default {
       refunded: "红包已退回",
     }
   },
-  // ... 其他翻译内容
 } 
