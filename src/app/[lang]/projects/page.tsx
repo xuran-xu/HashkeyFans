@@ -220,7 +220,7 @@ export default function Projects() {
   const filteredProjects = useMemo(() => {
     return projectsData.filter(project => {
       // 搜索名称
-      const nameMatch = project.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const nameMatch = project.name.includes(searchTerm);
       
       // 标签过滤
       const tagMatch = selectedTags.length === 0 || 

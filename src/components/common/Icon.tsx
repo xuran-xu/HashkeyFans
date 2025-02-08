@@ -1,7 +1,13 @@
 import { 
   FaTelegram, 
   FaDiscord, 
-  FaSquareXTwitter 
+  FaSquareXTwitter,
+  FaGithub,
+  FaMedium,
+  FaEthereum,
+  FaBitcoin,
+  FaGlobe,
+  FaLocationDot
 } from "react-icons/fa6";
 import { 
   IoNewspaperOutline, 
@@ -16,14 +22,28 @@ import {
   IoChevronDownOutline,
   IoGiftOutline,
   IoAddOutline,
-  IoTimeOutline
+  IoTimeOutline,
+  IoSearchOutline,
+  IoCheckmarkOutline,
+  IoPersonOutline,
+  IoCloseOutline,
+  IoCopyOutline,
+  IoTrophyOutline,
+  IoCameraOutline
 } from "react-icons/io5";
+import { SiSolana } from "react-icons/si";
 
-
-const icons = {
+export const icons = {
   telegram: FaTelegram,
   discord: FaDiscord,
   twitter: FaSquareXTwitter,
+  github: FaGithub,
+  medium: FaMedium,
+  ethereum: FaEthereum,
+  solana: SiSolana,
+  bitcoin: FaBitcoin,
+  globe: FaGlobe,
+  location: FaLocationDot,
   news: IoNewspaperOutline,
   grid: IoGridOutline,
   calendar: IoCalendarOutline,
@@ -36,8 +56,16 @@ const icons = {
   "chevron-down": IoChevronDownOutline,
   gift: IoGiftOutline,
   plus: IoAddOutline,
-  history: IoTimeOutline
-};
+  history: IoTimeOutline,
+  search: IoSearchOutline,
+  check: IoCheckmarkOutline,
+  user: IoPersonOutline,
+  close: IoCloseOutline,
+  copy: IoCopyOutline,
+  trophy: IoTrophyOutline,
+  camera: IoCameraOutline,
+  x: IoCloseOutline
+} as const;
 
 interface IconProps {
   name: keyof typeof icons;

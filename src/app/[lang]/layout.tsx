@@ -5,10 +5,13 @@ import type { Metadata } from 'next'
 import '../globals.css'
 import { Footer } from '@/components/layout/Footer'
 import { ReactNode } from 'react'
-import ContextProvider from '@/context'
+import { ParticleConnectkit } from '@/context'
 import '@rainbow-me/rainbowkit/styles.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import '../globals.css';
+import { WagmiProvider } from 'wagmi'
+import { config } from '@/config'
 
 const sora = Sora({
   weight: ['400', '500', '700'],
@@ -91,13 +94,15 @@ export default function RootLayout({ children, params: { lang } }: RootLayoutPro
         <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black"></div>        
         <div className="relative z-10 flex flex-col min-h-screen">
           <ClientProvider lang={lang}>
-            <ContextProvider>
-              <Header />
-              <div className="min-w-screen flex-grow flex justify-center">
-                {children}
+            <ParticleConnectkit >
+              <div className='flex flex-col min-h-screen'>
+                <Header />
+                <main className="flex-1 flex flex-col">
+                  {children}
+                </main>
+                <Footer />
               </div>
-              <Footer />
-            </ContextProvider>
+            </ParticleConnectkit>
           </ClientProvider>
         </div>
         <ToastContainer

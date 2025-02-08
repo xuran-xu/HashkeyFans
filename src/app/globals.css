@@ -24,3 +24,13 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Hide only the chain selector elements */
+.sc-bACthX .sc-duGFKm.kjdvlO {
+  display: none !important;
+}
+
+.sc-kSwkvc.bsziwj {
+  display: none !important;
+}
+
