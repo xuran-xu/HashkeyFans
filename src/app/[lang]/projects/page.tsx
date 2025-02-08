@@ -1,11 +1,11 @@
 "use client"
 
 import { useTranslation } from "react-i18next";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useMemo } from "react";
 import { FaDiscord, FaTelegram, FaExternalLinkAlt } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
 import { IoCopy, IoShield, IoTrophy, IoFlash } from "react-icons/io5";
-import { Project } from "@/types";
+import { Project, ProjectTag } from "@/data/projectsData";
 import { projectsData, tagConfig } from "@/data/projectsData";
 
 const ProjectCard = ({ project }: { project: Project }) => {
@@ -201,8 +201,43 @@ const ProjectCard = ({ project }: { project: Project }) => {
 };
 
 export default function Projects() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [copyMsg] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  // 获取所有可用的标签
+  const availableTags = useMemo(() => {
+    const tags = Object.entries(tagConfig).map(([key, value]) => ({
+      id: key,
+      name: value.name[i18n.language as 'en' | 'zh'],
+      color: value.color
+    }));
+    return tags;
+  }, [i18n.language]);
+
+  // 过滤项目
+  const filteredProjects = useMemo(() => {
+    return projectsData.filter(project => {
+      // 搜索名称
+      const nameMatch = project.name.includes(searchTerm);
+      
+      // 标签过滤
+      const tagMatch = selectedTags.length === 0 || 
+        selectedTags.some(tag => project.tags.includes(tag as ProjectTag));
+      
+      return nameMatch && tagMatch;
+    });
+  }, [searchTerm, selectedTags]);
+
+  // 处理标签选择
+  const handleTagToggle = (tagId: string) => {
+    setSelectedTags(prev => 
+      prev.includes(tagId)
+        ? prev.filter(t => t !== tagId)
+        : [...prev, tagId]
+    );
+  };
 
   return (
     <div className="w-full py-12">
@@ -210,14 +245,75 @@ export default function Projects() {
         <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
           {t('projects.title')}
         </h1>
+
+        {/* 搜索和筛选区域 */}
+        <div className="mb-8 space-y-4">
+          {/* 搜索框 */}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder={t('projects.searchPlaceholder')}
+              className="w-full h-12 pl-12 pr-4 text-gray-200 bg-gray-800/50 backdrop-blur-xl rounded-xl border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all duration-200"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg 
+                className="w-5 h-5 text-gray-400" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth="2" 
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+                />
+              </svg>
+            </div>
+          </div>
+
+          {/* 标签筛选 */}
+          <div className="flex flex-wrap gap-2">
+            {availableTags.map(tag => (
+              <button
+                key={tag.id}
+                onClick={() => handleTagToggle(tag.id)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  selectedTags.includes(tag.id)
+                    ? 'bg-gradient-to-r from-[#1a237e] via-[#311b92] to-[#4a148c] text-white shadow-lg shadow-purple-500/20'
+                    : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700'
+                }`}
+              >
+                {tag.name}
+              </button>
+            ))}
+          </div>
+
+          {/* 显示筛选结果数量 */}
+          <div className="text-sm text-gray-400">
+            {t('projects.foundResults', { count: filteredProjects.length })}
+          </div>
+        </div>
         
+        {/* 项目网格 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projectsData.map((project) => (
+          {filteredProjects.map((project) => (
             <Fragment key={project.id}>
               <ProjectCard project={project} />
             </Fragment>
           ))}
         </div>
+
+        {/* 无结果提示 */}
+        {filteredProjects.length === 0 && (
+          <div className="text-center py-12">
+            <div className="text-lg text-gray-400">
+              {t('projects.noResults')}
+            </div>
+          </div>
+        )}
 
         {copyMsg && (
           <div className="fixed bottom-4 right-4 bg-black text-white px-4 py-2 rounded shadow">

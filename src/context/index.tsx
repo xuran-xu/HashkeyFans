@@ -6,8 +6,6 @@ import { defineChain } from '@particle-network/connectkit/chains';
 import { evmWalletConnectors } from '@particle-network/connectkit/evm';
 import { wallet, EntryPosition } from '@particle-network/connectkit/wallet';
 import React from 'react';
-
-//Retrived from https://dashboard.particle.network
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID as string;
 const clientKey = process.env.NEXT_PUBLIC_CLIENT_KEY as string;
 const appId = process.env.NEXT_PUBLIC_APP_ID as string;
@@ -101,5 +99,7 @@ const config = createConfig({
 
 // Export ConnectKitProvider to be used within your index or layout file (or use createConfig directly within those files).
 export const ParticleConnectkit = ({ children }: React.PropsWithChildren) => {
-    return <ConnectKitProvider config={config}>{children}</ConnectKitProvider>;
+    return (
+        <ConnectKitProvider config={config}>{children}</ConnectKitProvider>
+    );
 };

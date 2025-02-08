@@ -9,7 +9,7 @@ export interface ProjectSocial {
   link: string;
 }
 
-export type ProjectTag = 'infrastructure' | 'bridge' | 'wallet' | 'RWA' | 'defi' | 'oracle' | 'gaming' | 'DeFi' | 'Dex';
+export type ProjectTag = 'infrastructure' | 'bridge' | 'wallet' | 'RWA' | 'defi' | 'oracle' | 'gaming' | 'DeFi' | 'Dex' | 'social' | 'explorer' | 'depin' | 'nft' | 'launchpad' ;
 
 export interface Project {
   id: string;
@@ -77,6 +77,26 @@ export const tagConfig: Record<ProjectTag, TagConfigType> = {
   bridge: {
     name: { en: 'Bridge', zh: '跨链桥' },
     color: 'bg-teal-100 text-teal-800'
+  },
+  social: {
+    name: { en: 'Social', zh: '社交' },
+    color: 'bg-red-100 text-red-800'
+  },
+  explorer: {
+    name: { en: 'Explorer', zh: '浏览器' },
+    color: 'bg-gray-100 text-gray-800'
+  },
+  depin: {
+    name: { en: 'DePIN', zh: '去中心化物理基础设施' },
+    color: 'bg-violet-100 text-violet-800'
+  },
+  nft: {
+    name: { en: 'NFT', zh: '非同质化代币' },
+    color: 'bg-pink-100 text-pink-800'
+  },
+  launchpad: {
+    name: { en: 'Launchpad', zh: '发射台' },
+    color: 'bg-amber-100 text-amber-800'
   }
 };
 
@@ -261,6 +281,29 @@ export const projectsData: Project[] = [
     ]
   },
   {
+    id: 'ParticleNetwork',
+    name: 'Particle Network',
+    logo: '/img/particlenetwork.png',
+    imgClassName: 'h-8 w-auto rounded-full',
+    link: 'https://particle.network/',
+    tags: ['wallet', 'defi'],
+    isVerified: true,
+    pointsBonus: {
+        type: 'interaction',
+        hasExtraPoints: true,
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    socials: [
+        {
+        platform: 'x',
+        link: 'https://x.com/ParticleNtwrk'
+        }
+    ]
+  },
+  {
     id: 'Asteroid_X',
     name: 'Asteroid_X',
     logo: '/img/asteroidx.webp',
@@ -284,6 +327,62 @@ export const projectsData: Project[] = [
         platform: 'discord',
         link: 'https://discord.com/invite/fCgtggqjhA'
       }
+    ]
+  },
+  {
+    id: 'TardeOS',
+    name: 'TardeOS',
+    logo: '/img/tradeos.jpg',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://www.tradeos.xyz/',
+    tags: ['social'],
+    isVerified: true,
+    pointsBonus: {
+        type: 'interaction',
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://tr.ee/P8xDXwaJqF'
+      },
+      {
+        platform: 'telegram',
+        link: 'https://tr.ee/MpRhF-LYpG'
+      },
+    ]
+  },
+  {
+    id: 'Tarta Games(Spot Zero)',
+    name: 'Tarta Games(Spot Zero)',
+    logo: '/img/spotzero.jpeg',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://spotzero.tartagames.com/',
+    tags: ['gaming'],
+    isVerified: true,
+    pointsBonus: {
+        type: 'interaction',
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/SpotZero_Game'
+      },
+      {
+        platform: 'telegram',
+        link: 'https://t.me/SpotZeroOfficial'
+      },
+      {
+        platform: 'discord',
+        link: 'https://discord.com/invite/spotzero'
+      },
     ]
   },
   {
@@ -340,7 +439,6 @@ export const projectsData: Project[] = [
       }
     ]
   },
-  
   {
     id: 'supra',
     name: 'Supra',
@@ -376,6 +474,124 @@ export const projectsData: Project[] = [
       {
         platform: 'discord',
         link: 'https://discord.com/invite/supralabs'
+      }
+    ]
+  },
+  {
+    id: 'Blockscout',
+    name: 'Blockscout',
+    logo: '/img/Blockscout.jpg',
+    isVerified: true,
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://www.blockscout.com/',
+    tags: ['infrastructure', 'explorer'],
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/blockscoutcom'
+      }
+    ]
+  },
+  {
+    id: 'OKLink',
+    name: 'OKLink',
+    logo: '/img/oklink.webp',
+    isVerified: true,
+    imgClassName: 'h-8 w-32',
+    link: 'https://www.oklink.com/zh-hans/hashkey',
+    tags: ['infrastructure', 'explorer'],
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/OKLink'
+      }
+    ]
+  },
+  {
+    id: 'CyberCharge',
+    name: 'CyberCharge',
+    logo: '/img/CyberCharge.jpg',
+    isVerified: true,
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://cybercharge.org/',
+    tags: ['depin'],
+    pointsBonus: {
+        type: 'interaction',
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/CyberChargeWeb3'
+      }
+    ]
+  },
+  {
+    id: 'Mint Club',
+    name: 'Mint Club',
+    logo: '/img/mintclub.jpg',
+    isVerified: true,
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://mint.club/',
+    tags: ['launchpad'],
+    pointsBonus: {
+        type: 'interaction',
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/MintClubPro'
+      }
+    ]
+  },
+  {
+    id: 'Novabits',
+    name: 'Novabits',
+    logo: '/img/Novabits.png',
+    isVerified: true,
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://www.momo.fun/en-US/meme/pumping/',
+    tags: ['launchpad'],
+    pointsBonus: {
+        type: 'interaction',
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/MintClubPro'
+      }
+    ]
+  },
+  {
+    id: 'Dmail',
+    name: 'Dmail',
+    logo: '/img/dmail.jpg',
+    isVerified: true,
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://dmail.ai/',
+    tags: ['social'],
+    pointsBonus: {
+        type: 'interaction',
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/dmailofficial'
       }
     ]
   },

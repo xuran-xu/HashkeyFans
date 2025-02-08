@@ -1,20 +1,20 @@
+import { icons } from '@/components/common/Icon';
+
 export interface ProfileField {
   id: string;
   name: string;
-  icon: string;
-  type: 'text' | 'url' | 'address';
-  placeholder?: string;
-  validation?: RegExp;
-  prefix?: string;
+  type: string;
+  placeholder: string;
+  icon: keyof typeof icons;
 }
 
-export interface ProfileCategory {
+export interface ProfileFieldCategory {
   id: string;
   name: string;
   fields: ProfileField[];
 }
 
-export const profileFields: ProfileCategory[] = [
+export const profileFields: ProfileFieldCategory[] = [
   {
     id: 'general',
     name: 'General',
@@ -22,86 +22,98 @@ export const profileFields: ProfileCategory[] = [
       {
         id: 'nickname',
         name: 'Nickname',
-        icon: 'user',
         type: 'text',
-        placeholder: 'Enter your nickname'
+        placeholder: 'Enter your nickname',
+        icon: 'user'
       },
       {
         id: 'bio',
-        name: 'Short Bio',
-        icon: 'document-text',
+        name: 'Bio',
         type: 'text',
-        placeholder: 'Tell us about yourself'
+        placeholder: 'Tell us about yourself',
+        icon: 'user'
       },
       {
         id: 'location',
         name: 'Location',
-        icon: 'location',
         type: 'text',
-        placeholder: 'Where are you based?'
+        placeholder: 'Where are you based?',
+        icon: 'location'
       },
       {
         id: 'website',
         name: 'Website',
-        icon: 'globe',
         type: 'url',
-        placeholder: 'https://'
+        placeholder: 'https://',
+        icon: 'globe'
       }
     ]
   },
   {
     id: 'social',
-    name: 'Social',
+    name: 'Social Media',
     fields: [
       {
         id: 'twitter',
         name: 'Twitter',
-        icon: 'twitter',
         type: 'text',
-        prefix: '@'
-      },
-      {
-        id: 'github',
-        name: 'GitHub',
-        icon: 'github',
-        type: 'text'
+        placeholder: '@username',
+        icon: 'twitter'
       },
       {
         id: 'discord',
         name: 'Discord',
-        icon: 'discord',
-        type: 'text'
+        type: 'text',
+        placeholder: 'username#0000',
+        icon: 'discord'
       },
       {
         id: 'telegram',
         name: 'Telegram',
-        icon: 'telegram',
         type: 'text',
-        prefix: '@'
+        placeholder: '@username',
+        icon: 'telegram'
+      },
+      {
+        id: 'github',
+        name: 'GitHub',
+        type: 'text',
+        placeholder: '@username',
+        icon: 'github'
+      },
+      {
+        id: 'medium',
+        name: 'Medium',
+        type: 'text',
+        placeholder: '@username',
+        icon: 'medium'
       }
     ]
   },
   {
     id: 'address',
-    name: 'Address',
+    name: 'Crypto Address',
     fields: [
       {
-        id: 'eth',
-        name: 'ETH',
-        icon: 'ethereum',
-        type: 'address'
+        id: 'ethereum',
+        name: 'Ethereum',
+        type: 'text',
+        placeholder: '0x...',
+        icon: 'ethereum'
       },
       {
-        id: 'btc',
-        name: 'BTC',
-        icon: 'bitcoin',
-        type: 'address'
+        id: 'solana',
+        name: 'Solana',
+        type: 'text',
+        placeholder: 'Solana address',
+        icon: 'solana'
       },
       {
-        id: 'sol',
-        name: 'SOL',
-        icon: 'solana',
-        type: 'address'
+        id: 'bitcoin',
+        name: 'Bitcoin',
+        type: 'text',
+        placeholder: 'Bitcoin address',
+        icon: 'bitcoin'
       }
     ]
   }

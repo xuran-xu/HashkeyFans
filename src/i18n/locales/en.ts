@@ -12,6 +12,9 @@ export default {
     events: "Events",
     news: "News",
     projects: "Projects",
+    activities: "Activities",
+    consensus: "Consensus",
+    rankings: "Rankings",
     explore: "explore"
   },
   home: {
@@ -47,7 +50,10 @@ export default {
     extraPoints: "Extra Points",
     verifiedWallet: "Verified Wallet",
     verifiedProject: "Verified Project",
-    interactionReward: "Interaction Reward"
+    interactionReward: "Interaction Reward",
+    searchPlaceholder: "Search projects...",
+    foundResults: "Found {{count}} projects",
+    noResults: "No projects found",
   },
   partners: {
     title: "Our Partners",

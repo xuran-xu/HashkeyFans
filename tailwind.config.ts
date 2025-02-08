@@ -47,6 +47,7 @@ const config: Config = {
   plugins: [
     require('daisyui'),
     require('@tailwindcss/typography'),
+    require('daisyui'),
     function ({ addUtilities }: { addUtilities: (utilities: Record<string, Record<string, string>>) => void }) {
       const newUtilities = {
         '.text-shadow-md': {
