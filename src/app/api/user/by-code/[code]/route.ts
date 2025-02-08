@@ -17,15 +17,6 @@ interface UserResponse {
   } | null;
 }
 
-async function getRandomCard() {
-  const card = await prisma.card.findFirst({
-    orderBy: {
-      id: 'asc',
-    },
-  });
-  return card;
-}
-
 export async function GET(
   req: NextRequest,
   { params }: { params: { code: string } }

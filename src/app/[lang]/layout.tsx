@@ -10,8 +10,6 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../globals.css';
-import { WagmiProvider } from 'wagmi'
-import { config } from '@/config'
 
 const sora = Sora({
   weight: ['400', '500', '700'],

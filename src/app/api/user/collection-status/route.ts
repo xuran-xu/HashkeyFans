@@ -2,27 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { withErrorHandler } from '@/lib/middleware';
 import { ApiError, ErrorCode } from '@/types/api';
-import { generateShareCode } from '@/lib/utils';
-
-// Define base types based on our Prisma schema
-interface BaseCard {
-  id: number;
-  title: string;
-  description: string | null;
-  imageUrl: string | null;
-  createdAt: Date;
-}
-
-interface BaseUserCard {
-  id: number;
-  userId: number;
-  cardId: number;
-  originalOwnerId: number;
-  originalOwnerAddress: string;
-  quantity: number;
-  createdAt: Date;
-  card: BaseCard;
-}
 
 // Define response types
 interface CardResponse {

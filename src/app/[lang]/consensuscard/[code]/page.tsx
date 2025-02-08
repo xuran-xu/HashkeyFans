@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { ConnectButton, useAccount, useWallets } from '@particle-network/connectkit';
-import { generateShareCode } from '@/lib/utils';
 
 interface CardData {
   card: {

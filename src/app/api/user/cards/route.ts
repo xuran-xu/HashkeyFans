@@ -1,42 +1,68 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { withErrorHandler } from '@/lib/middleware';
-import { redis, CACHE_KEYS, CACHE_TTL } from '@/lib/redis';
-import { getAuthUser } from '@/lib/auth';
+import { ApiError, ErrorCode } from '@/types/api';
+interface CardData {
+  id: number;
+  title: string;
+  description: string | null;
+  imageUrl: string | null;
+  createdAt: Date;
+}
 
-export async function GET(req: NextRequest) {
+interface UserCardData {
+  id: number;
+  userId: number;
+  cardId: number;
+  originalOwnerId: number;
+  originalOwnerAddress: string;
+  quantity: number;
+  createdAt: Date;
+  card: CardData;
+}
+
+interface CardResponse {
+  id: number;
+  title: string;
+  description: string | null;
+  image_url: string | null;
+  collected: boolean;
+  quantity: number;
+  owner_address: string | null;
+}
+
+export async function GET(req: NextRequest): Promise<NextResponse<CardResponse[]>> {
   return withErrorHandler(async () => {
-    const user = await getAuthUser(req);
-
-    // Try to get from cache
-    const cached = await redis.get(CACHE_KEYS.USER_CARDS(user.id));
-    if (cached) {
-      return NextResponse.json(cached);
+    const walletAddress = req.headers.get('x-wallet-address')?.toLowerCase();
+    if (!walletAddress) {
+      throw new ApiError(ErrorCode.UNAUTHORIZED, 'Wallet address is required');
     }
 
-    const userCards = await prisma.userCard.findMany({
-      where: { userId: user.id },
-      include: { card: true }
+    const userWithCards = await prisma.user.findUnique({
+      where: { walletAddress },
+      include: {
+        userCards: {
+          include: {
+            card: true
+          }
+        }
+      }
     });
 
-    const response = {
-      cards: userCards.map((uc: { card: { id: any; title: any; description: any; imageUrl: any; }; quantity: any; originalOwnerAddress: any; }) => ({
-        id: uc.card.id,
-        title: uc.card.title,
-        description: uc.card.description,
-        image_url: uc.card.imageUrl,
-        quantity: uc.quantity,
-        owner_address: uc.originalOwnerAddress
-      }))
-    };
+    if (!userWithCards) {
+      throw new ApiError(ErrorCode.NOT_FOUND, 'User not found');
+    }
 
-    // Cache the result
-    await redis.set(
-      CACHE_KEYS.USER_CARDS(user.id),
-      response,
-      { ex: CACHE_TTL.USER_CARDS }
-    );
+    const cards: CardResponse[] = userWithCards.userCards.map((userCard: UserCardData) => ({
+      id: userCard.card.id,
+      title: userCard.card.title,
+      description: userCard.card.description,
+      image_url: userCard.card.imageUrl,
+      collected: true,
+      quantity: userCard.quantity,
+      owner_address: userCard.originalOwnerAddress
+    }));
 
-    return NextResponse.json(response);
+    return NextResponse.json(cards);
   });
 } 

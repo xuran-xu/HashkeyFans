@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Icon } from '../common/Icon';
+import { Icon, IconName } from '../common/Icon';
 import { ProfileData } from '@/types/profile';
 import { IpfsImage } from '@/components/common/IpfsImage';
 
@@ -10,24 +10,7 @@ interface ProfileViewProps {
   isLoading?: boolean;
 }
 
-const icons = {
-  // Add any necessary icon imports here
-};
-
-const ipfsToHttp = (ipfsUrl: string) => {
-  if (!ipfsUrl) return '';
-  // 移除 ipfs:// 前缀，获取 CID
-  const cid = ipfsUrl.replace('ipfs://', '');
-  // 可以使用多个网关，这里列出常用的
-  return [
-    `https://ipfs.io/ipfs/${cid}`,
-    `https://cloudflare-ipfs.com/ipfs/${cid}`,
-    `https://gateway.pinata.cloud/ipfs/${cid}`,
-    `https://4everland.io/ipfs/${cid}`,
-  ][0]; // 使用第一个网关
-};
-
-const ProfileView: FC<ProfileViewProps> = ({ address, isOwner, profile, isLoading }) => {
+const ProfileView: FC<ProfileViewProps> = ({ address, isOwner, profile }) => {
   console.log('Profile data:', profile);
   console.log('Avatar URL:', profile?.avatar?.value);
 
@@ -104,7 +87,7 @@ const ProfileView: FC<ProfileViewProps> = ({ address, isOwner, profile, isLoadin
             <div className="flex flex-wrap gap-2">
               {profile?.socials?.map((social, index) => (
                 <div key={index} className="inline-flex items-center space-x-2 bg-base-200 px-4 py-2 rounded-full">
-                  <Icon name={social.platform.toLowerCase() as keyof typeof icons} className="w-6 h-6 text-primary" />
+                  <Icon name={social.platform.toLowerCase() as IconName} className="w-6 h-6 text-primary" />
                   <span>{social.handle}</span>
                   <Icon name="chevronRight" className="w-4 h-4 text-base-content/40" />
                 </div>
@@ -120,7 +103,7 @@ const ProfileView: FC<ProfileViewProps> = ({ address, isOwner, profile, isLoadin
             <div className="flex flex-wrap gap-2">
               {profile?.addresses?.map((addr, index) => (
                 <div key={index} className="inline-flex items-center space-x-2 bg-base-200 px-4 py-2 rounded-full">
-                  <Icon name={addr.chain.toLowerCase() as keyof typeof icons} className="w-6 h-6 text-base-content/60" />
+                  <Icon name={addr.chain.toLowerCase() as IconName} className="w-6 h-6 text-base-content/60" />
                   <span>{addr.addr.slice(0, 6) + '...' + addr.addr.slice(-4)}</span>
                   <Icon name="copy" className="w-4 h-4 text-base-content/40" />
                 </div>

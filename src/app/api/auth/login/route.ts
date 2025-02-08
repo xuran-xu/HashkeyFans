@@ -2,12 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { withErrorHandler } from '@/lib/middleware';
 import { generateShareCode } from '@/lib/utils';
-import { ApiError, ErrorCode } from '@/types/api';
 
 export async function POST(req: NextRequest) {
   return withErrorHandler(async () => {
     const { wallet_address } = await req.json();
-    const shareCode = generateShareCode(wallet_address);
 
     let user = await prisma.user.findUnique({
       where: { walletAddress: wallet_address },

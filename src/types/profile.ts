@@ -27,10 +27,3 @@ export interface ProfileData {
     timestamp: bigint;
   }[];
 }
-
-type ChainType = keyof typeof icons;
-
-interface Address {
-  chain: ChainType;
-  addr: string;
-} 

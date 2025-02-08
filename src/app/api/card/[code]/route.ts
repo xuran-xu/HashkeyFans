@@ -22,7 +22,7 @@ export async function GET(
     // 1. 如果是用户自己的 shareCode
     if (userShareCode === params.code) {
       // 查找用户是否已存在
-      let user = await prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: { walletAddress },
         include: {
           initialCard: true,
