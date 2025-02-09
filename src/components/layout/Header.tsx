@@ -52,13 +52,35 @@ export const Header = () => {
             <details className="dropdown">
               <summary className="flex items-center gap-2">
                 <Icon name="compass" className="h-4 w-4" />
-                {t('nav.activities')}
+                Explore
               </summary>
               <ul className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-48">
+                <li>
+                  <Link href="/news">
+                    <Icon name="news" className="h-4 w-4" />
+                    {t('nav.news')}
+                  </Link>
+                </li>
                 <li>
                   <Link href="/events">
                     <Icon name="calendar" className="h-4 w-4" />
                     {t('nav.events')}
+                  </Link>
+                </li>
+              </ul>
+            </details>
+          </li>
+          <li>
+            <details className="dropdown">
+              <summary className="flex items-center gap-2">
+                <Icon name="compass" className="h-4 w-4" />
+                Activities
+              </summary>
+              <ul className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-48">
+                <li>
+                  <Link href="/redpacket" className="relative">
+                    <Icon name="gift" className="h-4 w-4 text-red-500" />
+                    圆币
                   </Link>
                 </li>
                 <li>
@@ -89,12 +111,6 @@ export const Header = () => {
             </details>
           </li>
           <li>
-            <Link href="/news" className="flex items-center gap-2">
-              <Icon name="news" className="h-4 w-4" />
-              {t('nav.news')}
-            </Link>
-          </li>
-          <li>
             <Link href="/projects" className="flex items-center gap-2">
               <Icon name="grid" className="h-4 w-4" />
               {t('nav.projects')}
@@ -111,14 +127,13 @@ export const Header = () => {
           <Icon name="menu" className="h-5 w-5" />
         </button>
 
-        {address && (
-          <Link href="/profile" className="btn btn-ghost btn-circle hidden lg:flex">
-            <Icon name="user" className="h-5 w-5" />
-          </Link>
-        )}
-        <div className="hidden lg:flex gap-2"><ConnectButton /></div>
-
-        <div className="hidden lg:flex gap-2">
+        <div className="hidden lg:flex items-center gap-2">
+          {/* {address && (
+            <Link href="/profile" className="btn btn-ghost btn-circle">
+              <Icon name="user" className="h-5 w-5" />
+            </Link>
+          )} */}
+          <ConnectButton />
           <LanguageSelector 
             isOpen={isLangMenuOpen}
             onToggle={() => setIsLangMenuOpen(!isLangMenuOpen)}
@@ -150,6 +165,16 @@ export const Header = () => {
             <div className="flex-1 overflow-y-auto p-4">
               <ul className="menu menu-lg gap-2 w-full">
                 <li>
+                  <Link 
+                    href="/redpacket" 
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-2 text-red-500"
+                  >
+                    <Icon name="gift" className="h-5 w-5" />
+                    <span>圆币</span>
+                  </Link>
+                </li>
+                <li>
                   <details>
                     <summary>
                       <Icon name="compass" className="h-5 w-5" />
@@ -160,6 +185,16 @@ export const Header = () => {
                         <Link href="/events" onClick={() => setIsMenuOpen(false)}>
                           <Icon name="calendar" className="h-4 w-4" />
                           {t('nav.events')}
+                        </Link>
+                      </li>
+                      <li>
+                        <Link 
+                          href="/redpacket" 
+                          onClick={() => setIsMenuOpen(false)}
+                          className="relative"
+                        >
+                          <Icon name="gift" className="h-4 w-4 text-red-500" />
+                          圆币
                         </Link>
                       </li>
                       <li>
@@ -213,18 +248,6 @@ export const Header = () => {
           </div>
         </div>
       )}
-
-      <div className="navbar-end gap-2 hidden lg:flex">
-        <LanguageSelector 
-          isOpen={isLangMenuOpen}
-          onToggle={() => setIsLangMenuOpen(!isLangMenuOpen)}
-          onSelect={(lang) => {
-            i18n.changeLanguage(lang);
-            setIsLangMenuOpen(false);
-          }}
-        />
-        <ConnectButton />
-      </div>
     </div>
   );
 }; 
