@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Icon } from '@/components/common/Icon';
-import { useTranslation } from 'react-i18next';
 import { useAccount, ConnectButton, useWallets } from '@particle-network/connectkit';
 
 const LOCAL_STORAGE_KEY = 'yuanbi-red-pocket';
@@ -23,7 +22,6 @@ export default function RedPacketPage() {
   } | null>(null);
   
   const [isAnimating, setIsAnimating] = useState(false);
-  const { t } = useTranslation();
   const { isConnected } = useAccount();
   const [primaryWallet] = useWallets();
 
