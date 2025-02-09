@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Card {
+  id          Int         @id @default(autoincrement())
+  title       String      @db.VarChar(100)
+  description String?
+  imageUrl    String?     @map("image_url") @db.VarChar(255)
+  createdAt   DateTime    @default(now()) @map("created_at")
+  userCards   UserCard[]
+  users       User[]      // 用于 initialCardId 关系
+
+  @@index([id, title])
+  @@map("cards")
+}
+
+model User {
+  id              Int              @id @default(autoincrement())
+  walletAddress   String          @unique @map("wallet_address") @db.VarChar(42)
+  displayAddress  String?         @map("display_address") @db.VarChar(20)
+  shareCode       String?         @unique @map("share_code") @db.VarChar(8)
+  initialCardId   Int?           @map("initial_card_id")
+  createdAt       DateTime        @default(now()) @map("created_at")
+  userCards       UserCard[]      @relation("UserCards")
+  originalCards   UserCard[]      @relation("OriginalOwner")
+  connections     UserConnection[] @relation("UserConnections")
+  connectedBy     UserConnection[] @relation("ConnectedByUsers")
+  initialCard     Card?           @relation(fields: [initialCardId], references: [id])
+
+  @@index([walletAddress])
+  @@map("users")
+}
+
+model UserCard {
+  id                  Int      @id @default(autoincrement())
+  userId              Int      @map("user_id")
+  cardId              Int      @map("card_id")
+  originalOwnerId     Int      @map("original_owner_id")
+  originalOwnerAddress String   @map("original_owner_address") @db.VarChar(42)
+  quantity            Int      @default(1)
+  createdAt          DateTime @default(now()) @map("created_at")
+  user                User     @relation("UserCards", fields: [userId], references: [id])
+  originalOwner       User     @relation("OriginalOwner", fields: [originalOwnerId], references: [id])
+  card                Card     @relation(fields: [cardId], references: [id])
+
+  @@index([userId, cardId])
+  @@index([cardId])
+  @@unique([userId, cardId, originalOwnerId])
+  @@map("user_cards")
+}
+
+model UserConnection {
+  id              Int      @id @default(autoincrement())
+  userId          Int      @map("user_id")
+  connectedUserId Int      @map("connected_user_id")
+  createdAt       DateTime @default(now()) @map("created_at")
+  user            User     @relation("UserConnections", fields: [userId], references: [id])
+  connectedUser   User     @relation("ConnectedByUsers", fields: [connectedUserId], references: [id])
+
+  @@unique([userId, connectedUserId])
+  @@map("user_connections")
+} 

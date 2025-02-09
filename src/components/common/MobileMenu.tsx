@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { NavLink } from './NavLink';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import Link from 'next/link';
+import { ConnectButton } from "@particle-network/connectkit";
 import { SocialLinks } from './SocialLinks';
+import { Icon } from './Icon';
 
 interface MobileMenuProps {
   onClose: () => void;
@@ -11,14 +12,32 @@ export const MobileMenu = ({ onClose }: MobileMenuProps) => {
   const { t } = useTranslation();
   
   return (
-    <div onClick={onClose} className="md:hidden mt-4 space-y-2 p-2 bg-gradient-to-br from-[#1a237e]/95 via-[#311b92]/90 to-[#4a148c]/85 rounded-lg">
-      <NavLink href="/redpacket/create" icon="gift" text="发红包" />
-      <NavLink href="/redpacket/history" icon="history" text="红包记录" />
-      <div className="border-t border-white/10 my-2"></div>
-      <NavLink href="/events" icon="calendar" text={t('nav.events')} />
-      <NavLink href="/news" icon="news" text={t('nav.news')} />
-      <NavLink href="/projects" icon="grid" text={t('nav.projects')} />
-      <div className="border-t border-white/10 my-2"></div>
+    <div className="menu bg-base-200 w-full p-4 rounded-box">
+      <li>
+        <Link href="/events" onClick={onClose}>
+          <Icon name="calendar" className="h-4 w-4" />
+          {t('nav.events')}
+        </Link>
+      </li>
+      <li>
+        <Link href="/news" onClick={onClose}>
+          <Icon name="news" className="h-4 w-4" />
+          {t('nav.news')}
+        </Link>
+      </li>
+      <li>
+        <Link href="/rankings" onClick={onClose}>
+          <Icon name="trophy" className="h-4 w-4" />
+          {t('nav.rankings')}
+        </Link>
+      </li>
+      <li>
+        <Link href="/projects" onClick={onClose}>
+          <Icon name="grid" className="h-4 w-4" />
+          {t('nav.projects')}
+        </Link>
+      </li>
+      <div className="divider"></div>
       <div className="flex justify-center">
         <ConnectButton />
       </div>

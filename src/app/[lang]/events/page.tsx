@@ -44,102 +44,103 @@ export default function EventList() {
 
   const renderEventCard = (event: EventItem) => (
     <div className="w-full px-2">
-      <Card className="h-[420px] flex flex-col p-6">
-        <div className="h-48 overflow-hidden rounded-lg mb-4">
-          <img 
+      <div className="card bg-base-100 shadow-xl h-[420px]">
+        <figure className="h-48">
+          <img
             src={event.image} 
-            alt={event.title} 
+            alt={event.title}
             className="w-full h-full object-cover"
           />
+        </figure>
+        <div className="card-body">
+          <h2 className="card-title text-xl font-bold">{event.title}</h2>
+          <p className="text-base-content/70 line-clamp-2 h-12">
+            {event.content}
+          </p>
+          <div className="card-actions justify-end mt-auto">
+            {event.buttons && event.buttons.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {event.buttons.map((button, index) => (
+                  <Button 
+                    key={index}
+                    className="btn-primary"
+                  >
+                    <Link href={button.link} target="_blank">
+                      {button.text}
+                    </Link>
+                  </Button>
+                ))}
+              </div>
+            ) : (
+              <Button className="btn-primary">
+                {t('events.comingSoon')}
+              </Button>
+            )}
+          </div>
         </div>
-        <h3 className="text-xl font-bold mb-2 text-white">
-          {event.title}
-        </h3>
-        <p className="text-gray-300 text-sm mb-4 flex-grow line-clamp-3">
-          {event.content}
-        </p>
-        <div className="mt-auto">
-          {event.buttons && event.buttons.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {event.buttons.map((button, index) => (
-                <Button 
-                  key={index}
-                  variant="secondary"
-                  className="w-full"
-                >
-                  <Link href={button.link} target="_blank">
-                    {button.text}
-                  </Link>
-                </Button>
-              ))}
-            </div>
-          )}
-        </div>
-      </Card>
+      </div>
     </div>
   );
 
   return (
-    <div className="w-full py-12">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-          {t('events.title')}
-        </h1>
-        
-        {loading ? (
-          <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-              {t('common.loading')}
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[1,2,3].map((_, index) => (
-                <SkeletonCard key={index} />
-              ))}
-            </div>
-          </section>
-        ) : (
-          <>
-            {currentEvents.length > 0 && (
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                  {t('events.current')}
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {currentEvents.map((event, index) => (
-                    <div key={index}>{renderEventCard(event)}</div>
-                  ))}
-                </div>
-              </section>
-            )}
+    <div className="container mx-auto px-4 py-12">
+      <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+        {t('events.title')}
+      </h1>
+      
+      {loading ? (
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+            {t('common.loading')}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1,2,3].map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </div>
+        </section>
+      ) : (
+        <>
+          {currentEvents.length > 0 && (
+            <section className="mb-12">
+              <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                {t('events.current')}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {currentEvents.map((event, index) => (
+                  <div key={index}>{renderEventCard(event)}</div>
+                ))}
+              </div>
+            </section>
+          )}
 
-            {upcomingEvents.length > 0 && (
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                  {t('events.upcoming')}
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {upcomingEvents.map((event, index) => (
-                    <div key={index}>{renderEventCard(event)}</div>
-                  ))}
-                </div>
-              </section>
-            )}
+          {upcomingEvents.length > 0 && (
+            <section className="mb-12">
+              <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                {t('events.upcoming')}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {upcomingEvents.map((event, index) => (
+                  <div key={index}>{renderEventCard(event)}</div>
+                ))}
+              </div>
+            </section>
+          )}
 
-            {pastEvents.length > 0 && (
-              <section>
-                <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-                  {t('events.past')}
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {pastEvents.map((event, index) => (
-                    <div key={index}>{renderEventCard(event)}</div>
-                  ))}
-                </div>
-              </section>
-            )}
-          </>
-        )}
-      </div>
+          {pastEvents.length > 0 && (
+            <section>
+              <h2 className="text-2xl font-bold mb-4 text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+                {t('events.past')}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {pastEvents.map((event, index) => (
+                  <div key={index}>{renderEventCard(event)}</div>
+                ))}
+              </div>
+            </section>
+          )}
+        </>
+      )}
     </div>
   );
 }
