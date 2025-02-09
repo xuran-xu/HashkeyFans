@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useCallback, use } from 'react';
+import { FC, useState, useEffect, useCallback } from 'react';
 import { Modal } from '../common/Modal';
 import { Icon } from '../common/Icon';
 import { AddProfileFieldModal } from './AddProfileFieldModal';
@@ -24,7 +24,6 @@ interface ProfileValue {
 export const EditProfileModal: FC<EditProfileModalProps> = ({ isOpen, onClose, address, profile }) => {
   const [isAddFieldModalOpen, setIsAddFieldModalOpen] = useState(false);
   const { 
-    getProfile, 
     initProfile, 
     batchUpdateProfile,
   } = useDidContract();

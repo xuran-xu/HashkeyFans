@@ -2,14 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useAccount, useWallets } from '@particle-network/connectkit';
-import { useParams } from 'next/navigation';
 import ProfileView from '@/components/profile/ProfileView';
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
 import { ProfileData } from '@/types/profile';
 import { useDidContract } from '@/hooks/useDidContract';
-import { CollectionResponse } from '@/types/collection';
-import { useTranslation } from 'react-i18next';
-import { ConnectButton } from '@particle-network/connectkit';
 
 // 完整的类型定义
 interface Card {
@@ -33,7 +29,6 @@ interface CollectionData {
   cards: Card[];
 }
 
-// 默认值
 const defaultData: CollectionData = {
   stats: {
     total_cards: 0,
@@ -47,7 +42,6 @@ export default function ProfilePage() {
   const { isConnected } = useAccount();
   const [primaryWallet] = useWallets();
   const { getProfile } = useDidContract();
-  const { t } = useTranslation();
   
   const [profile, setProfile] = useState<ProfileData>();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);

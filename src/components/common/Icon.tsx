@@ -67,8 +67,10 @@ export const icons = {
   x: IoCloseOutline
 } as const;
 
+export type IconName = keyof typeof icons;
+
 interface IconProps {
-  name: keyof typeof icons;
+  name: IconName;
   className?: string;
 }
 

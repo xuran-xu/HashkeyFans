@@ -3,74 +3,92 @@ import { prisma } from '@/lib/prisma';
 import { withErrorHandler } from '@/lib/middleware';
 import { ApiError, ErrorCode } from '@/types/api';
 import { redis, CACHE_KEYS } from '@/lib/redis';
-import { getAuthUser } from '@/lib/auth';
 
-export async function POST(req: NextRequest) {
+interface ConnectResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    givenCard: UserCard;
+    receivedCard: UserCard;
+  };
+}
+
+interface UserCard {
+  id: number;
+  userId: number;
+  cardId: number;
+  originalOwnerId: number;
+  originalOwnerAddress: string;
+  quantity: number;
+  createdAt: Date;
+}
+
+export async function POST(req: NextRequest): Promise<NextResponse<ConnectResponse>> {
   return withErrorHandler(async () => {
     const { target_user_id } = await req.json();
-    const user = await getAuthUser(req);
+    const walletAddress = req.headers.get('x-wallet-address')?.toLowerCase();
 
-    // Validate users exist
-    const [targetUser] = await Promise.all([
-      prisma.user.findUnique({
-        where: { id: target_user_id },
-        include: { initialCard: true }
-      })
-    ]);
+    if (!walletAddress) {
+      throw new ApiError(ErrorCode.UNAUTHORIZED, 'Wallet address is required');
+    }
 
-    if (!targetUser) {
+    // 获取当前用户
+    const user = await prisma.user.findUnique({
+      where: { walletAddress },
+      include: { initialCard: true }
+    });
+
+    if (!user) {
       throw new ApiError(ErrorCode.NOT_FOUND, 'User not found');
     }
 
-    if (!user.initialCard || !targetUser.initialCard) {
-      throw new ApiError(ErrorCode.INVALID_REQUEST, 'Initial card not found');
-    }
-
-    // Check if already connected
-    const existingConnection = await prisma.userConnection.findUnique({
-      where: {
-        userId_connectedUserId: {
-          userId: user.id,
-          connectedUserId: targetUser.id
-        }
-      }
+    // 获取目标用户
+    const targetUser = await prisma.user.findUnique({
+      where: { id: target_user_id },
+      include: { initialCard: true }
     });
 
-    if (existingConnection) {
-      throw new ApiError(ErrorCode.ALREADY_CONNECTED, 'Users are already connected');
+    if (!targetUser) {
+      throw new ApiError(ErrorCode.NOT_FOUND, 'Target user not found');
     }
 
-    // Create connection and exchange cards in a transaction
-    const result = await prisma.$transaction(async (tx: { userConnection: { create: (arg0: { data: { userId: any; connectedUserId: any; }; }) => any; }; userCard: { create: (arg0: { data: { userId: any; cardId: any; originalOwnerId: any; originalOwnerAddress: any; quantity: number; } | { userId: any; cardId: any; originalOwnerId: any; originalOwnerAddress: any; quantity: number; }; include: { card: boolean; } | { card: boolean; }; }) => any; }; }) => {
-      // Create connection
-      await tx.userConnection.create({
-        data: {
-          userId: user.id,
-          connectedUserId: targetUser.id
-        }
-      });
+    // 创建连接并交换卡片
+    const result = await prisma.$transaction(async (tx) => {
+      // 创建双向连接
+      await Promise.all([
+        tx.userConnection.create({
+          data: {
+            userId: user.id,
+            connectedUserId: targetUser.id
+          }
+        }),
+        tx.userConnection.create({
+          data: {
+            userId: targetUser.id,
+            connectedUserId: user.id
+          }
+        })
+      ]);
 
-      // Exchange cards
+      // 交换卡片
       const [givenCard, receivedCard] = await Promise.all([
         tx.userCard.create({
           data: {
             userId: targetUser.id,
             cardId: user.initialCard!.id,
             originalOwnerId: user.id,
-            originalOwnerAddress: user.displayAddress,
+            originalOwnerAddress: user.walletAddress,
             quantity: 1
-          },
-          include: { card: true }
+          }
         }),
         tx.userCard.create({
           data: {
             userId: user.id,
             cardId: targetUser.initialCard!.id,
             originalOwnerId: targetUser.id,
-            originalOwnerAddress: targetUser.displayAddress,
+            originalOwnerAddress: targetUser.walletAddress,
             quantity: 1
-          },
-          include: { card: true }
+          }
         })
       ]);
 
@@ -88,14 +106,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      received_card: {
-        ...result.receivedCard.card,
-        owner_address: result.receivedCard.originalOwnerAddress
-      },
-      given_card: {
-        ...result.givenCard.card,
-        owner_address: result.givenCard.originalOwnerAddress
-      }
+      message: 'Successfully connected and exchanged cards',
+      data: result
     });
   });
 } 

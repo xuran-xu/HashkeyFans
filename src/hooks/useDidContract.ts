@@ -18,6 +18,42 @@ interface BatchUpdateData {
   }[];
 }
 
+interface RawSocialAccount {
+  platform: string;
+  handle: string;
+}
+
+interface RawCryptoAddress {
+  chain: string;
+  addr: string;
+}
+
+interface RawHistoryItem {
+  timestamp: bigint;
+  updateType: string;
+  fieldType: string;
+  key: string;
+  oldValue: string;
+  newValue: string;
+}
+
+interface RawAvatar {
+  avatarType: bigint;
+  value: string;
+  nftContract: string;
+  tokenId: bigint;
+}
+
+interface RawProfileData {
+  exists: boolean;
+  nickname: string;
+  bio: string;
+  avatar: RawAvatar;
+  socials: RawSocialAccount[];
+  addresses: RawCryptoAddress[];
+  history: RawHistoryItem[];
+}
+
 export function useDidContract() {
   const { isConnected } = useAccount();
   const [primaryWallet] = useWallets();
@@ -50,7 +86,7 @@ export function useDidContract() {
   const getProfile = useCallback(async (address: string): Promise<ProfileData | null> => {
     if (!contract) return null;
     try {
-      const fullProfile = await contract.getFullProfile(address);
+      const fullProfile = await contract.getFullProfile(address) as RawProfileData;
       console.log('Raw profile data:', fullProfile);
 
       return {
@@ -63,19 +99,19 @@ export function useDidContract() {
           nftContract: fullProfile.avatar.nftContract,
           tokenId: fullProfile.avatar.tokenId
         },
-        socials: fullProfile.socials.map((s: any) => ({
+        socials: fullProfile.socials.map((s: RawSocialAccount) => ({
           platform: s.platform,
           handle: s.handle,
           verified: false,
           verifier: ''
         })),
-        addresses: fullProfile.addresses.map((a: any) => ({
+        addresses: fullProfile.addresses.map((a: RawCryptoAddress) => ({
           chain: a.chain,
           addr: a.addr,
           verified: false,
           verifier: ''
         })),
-        history: fullProfile.history.map((h: any) => ({
+        history: fullProfile.history.map((h: RawHistoryItem) => ({
           timestamp: h.timestamp,
           updateType: h.updateType,
           fieldType: h.fieldType,

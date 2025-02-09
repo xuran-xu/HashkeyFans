@@ -2,32 +2,39 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { withErrorHandler } from '@/lib/middleware';
 import { ApiError, ErrorCode } from '@/types/api';
-import { getAuthUser } from '@/lib/auth';
 
 export async function POST(req: NextRequest) {
   return withErrorHandler(async () => {
-    const { target_user_id } = await req.json();
-    
-    // 确保 target_user_id 是数字
-    const targetUserId = parseInt(target_user_id);
-    if (isNaN(targetUserId)) {
-      throw new ApiError(ErrorCode.INVALID_REQUEST, 'Invalid target user ID');
+    const { shareCode } = await req.json();
+    const walletAddress = req.headers.get('x-wallet-address')?.toLowerCase();
+
+    if (!walletAddress || !shareCode) {
+      throw new ApiError(ErrorCode.INVALID_REQUEST, 'Missing required parameters');
     }
 
-    const user = await getAuthUser(req);
-
-    // 验证目标用户存在
-    const targetUser = await prisma.user.findUnique({
-      where: { id: targetUserId },  // 使用转换后的数字
-      include: { initialCard: true }
+    // 获取当前用户
+    const user = await prisma.user.findUnique({
+      where: { walletAddress }
     });
 
-    if (!targetUser) {
+    if (!user) {
       throw new ApiError(ErrorCode.NOT_FOUND, 'User not found');
     }
 
+    // 获取目标用户
+    const targetUser = await prisma.user.findUnique({
+      where: { shareCode },
+      include: {
+        initialCard: true
+      }
+    });
+
+    if (!targetUser) {
+      throw new ApiError(ErrorCode.NOT_FOUND, 'Target user not found');
+    }
+
     if (!targetUser.initialCard) {
-      throw new ApiError(ErrorCode.INVALID_REQUEST, 'Target user has no card');
+      throw new ApiError(ErrorCode.NOT_FOUND, 'Target user has no initial card');
     }
 
     // 检查是否已经连接
@@ -41,89 +48,32 @@ export async function POST(req: NextRequest) {
     });
 
     if (existingConnection) {
-      throw new ApiError(ErrorCode.ALREADY_CONNECTED, 'Already connected with this user');
+      throw new ApiError(ErrorCode.ALREADY_CONNECTED, 'Already connected');
     }
 
-    // 创建连接并交换卡片
-    const result = await prisma.$transaction(async (tx) => {
-      // 创建双向连接
-      await Promise.all([
-        tx.userConnection.create({
-          data: {
-            userId: user.id,
-            connectedUserId: targetUser.id
-          }
-        }),
-        tx.userConnection.create({
-          data: {
-            userId: targetUser.id,
-            connectedUserId: user.id
-          }
-        })
-      ]);
+    // 创建连接和卡片
+    const result = await prisma.$transaction([
+      // 创建连接
+      prisma.userConnection.create({
+        data: {
+          userId: user.id,
+          connectedUserId: targetUser.id
+        }
+      }),
+      // 创建卡片
+      prisma.userCard.create({
+        data: {
+          userId: user.id,
+          cardId: targetUser.initialCard.id,
+          originalOwnerId: targetUser.id,
+          originalOwnerAddress: targetUser.walletAddress
+        },
+        include: {
+          card: true
+        }
+      })
+    ]);
 
-      // 检查是否已经有这些卡片
-      const [existingGivenCard, existingReceivedCard] = await Promise.all([
-        tx.userCard.findUnique({
-          where: {
-            userId_cardId_originalOwnerId: {
-              userId: targetUser.id,
-              cardId: user.initialCard!.id,
-              originalOwnerId: user.id
-            }
-          }
-        }),
-        tx.userCard.findUnique({
-          where: {
-            userId_cardId_originalOwnerId: {
-              userId: user.id,
-              cardId: targetUser.initialCard.id,
-              originalOwnerId: targetUser.id
-            }
-          }
-        })
-      ]);
-
-      // 交换卡片
-      const [givenCard, receivedCard] = await Promise.all([
-        // 对方获得我的卡片
-        existingGivenCard 
-          ? tx.userCard.update({
-              where: { id: existingGivenCard.id },
-              data: { quantity: { increment: 1 } }
-            })
-          : tx.userCard.create({
-              data: {
-                userId: targetUser.id,
-                cardId: user.initialCard!.id,
-                originalOwnerId: user.id,
-                originalOwnerAddress: user.displayAddress!,
-                quantity: 1
-              }
-            }),
-        // 我获得对方的卡片
-        existingReceivedCard
-          ? tx.userCard.update({
-              where: { id: existingReceivedCard.id },
-              data: { quantity: { increment: 1 } }
-            })
-          : tx.userCard.create({
-              data: {
-                userId: user.id,
-                cardId: targetUser.initialCard.id,
-                originalOwnerId: targetUser.id,
-                originalOwnerAddress: targetUser.displayAddress!,
-                quantity: 1
-              }
-            })
-      ]);
-
-      return { givenCard, receivedCard };
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: 'Successfully connected and exchanged cards'
-    });
+    return NextResponse.json(result[1]);
   });
 } 

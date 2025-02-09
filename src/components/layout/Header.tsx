@@ -1,17 +1,14 @@
 "use client"
-import { useTranslation } from "react-i18next";
-import { useState, useEffect, useRef } from "react";
+import { generateShareCode } from "@/lib/utils";
+import { ConnectButton, useAccount } from "@particle-network/connectkit";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Icon } from "../common/Icon";
 import { LanguageSelector } from "../common/LanguageSelector";
-import { MobileMenu } from "../common/MobileMenu";
-import { ConnectButton, useAccount } from "@particle-network/connectkit";
-import styled from 'styled-components';
-import { generateShareCode } from "@/lib/utils";
 
 export const Header = () => {
-  const router = useRouter();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
@@ -42,15 +39,6 @@ export const Header = () => {
   }, []);
 
   if (!mounted) return null;
-
-  const getLocalizedHref = (path: string) => `/${i18n.language}${path}`;
-
-  const getCardLink = (address: string | undefined) => {
-    if (!address) return '/';
-    // 使用 generateShareCode 生成一致的 shareCode
-    const shareCode = generateShareCode(address);
-    return `/consensuscard/${shareCode}`;
-  };
 
   return (
     <div className="navbar">
