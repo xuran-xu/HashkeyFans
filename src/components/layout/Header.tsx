@@ -112,13 +112,109 @@ export const Header = () => {
         </button>
 
         {address && (
-          <Link href="/profile" className="btn btn-ghost btn-circle">
+          <Link href="/profile" className="btn btn-ghost btn-circle hidden lg:flex">
             <Icon name="user" className="h-5 w-5" />
           </Link>
         )}
+        <div className="hidden lg:flex gap-2"><ConnectButton /></div>
 
-        <ConnectButton />
+        <div className="hidden lg:flex gap-2">
+          <LanguageSelector 
+            isOpen={isLangMenuOpen}
+            onToggle={() => setIsLangMenuOpen(!isLangMenuOpen)}
+            onSelect={(lang) => {
+              i18n.changeLanguage(lang);
+              setIsLangMenuOpen(false);
+            }}
+          />
+        </div>
+      </div>
 
+      {isMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-50">
+          <div className="min-h-screen w-full bg-base-100 flex flex-col">
+            {/* 顶部导航栏 */}
+            <div className="p-4 border-b">
+              <div className="flex justify-between items-center">
+                <img src="/img/hashfans.png" alt="HashFans" className="w-32 h-8" />
+                <button 
+                  className="btn btn-ghost btn-circle"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Icon name="close" className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* 主菜单内容 */}
+            <div className="flex-1 overflow-y-auto p-4">
+              <ul className="menu menu-lg gap-2 w-full">
+                <li>
+                  <details>
+                    <summary>
+                      <Icon name="compass" className="h-5 w-5" />
+                      {t('nav.activities')}
+                    </summary>
+                    <ul className="ml-4">
+                      <li>
+                        <Link href="/events" onClick={() => setIsMenuOpen(false)}>
+                          <Icon name="calendar" className="h-4 w-4" />
+                          {t('nav.events')}
+                        </Link>
+                      </li>
+                      <li>
+                        <details>
+                          <summary>
+                            <Icon name="gift" className="h-4 w-4" />
+                            {t('nav.consensus')}
+                          </summary>
+                          <ul>
+                            <li>
+                              <Link href="/rankings" onClick={() => setIsMenuOpen(false)}>
+                                <Icon name="trophy" className="h-4 w-4" />
+                                {t('nav.rankings')}
+                              </Link>
+                            </li>
+                          </ul>
+                        </details>
+                      </li>
+                    </ul>
+                  </details>
+                </li>
+                <li>
+                  <Link href="/news" onClick={() => setIsMenuOpen(false)}>
+                    <Icon name="news" className="h-4 w-4" />
+                    {t('nav.news')}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/projects" onClick={() => setIsMenuOpen(false)}>
+                    <Icon name="grid" className="h-4 w-4" />
+                    {t('nav.projects')}
+                  </Link>
+                </li>
+              </ul>
+
+              <div className="divider my-8"></div>
+
+              {/* 底部功能区 */}
+              <div className="w-full flex justify-between items-center">
+                <ConnectButton />
+                <LanguageSelector 
+                  isOpen={isLangMenuOpen}
+                  onToggle={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                  onSelect={(lang) => {
+                    i18n.changeLanguage(lang);
+                    setIsLangMenuOpen(false);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="navbar-end gap-2 hidden lg:flex">
         <LanguageSelector 
           isOpen={isLangMenuOpen}
           onToggle={() => setIsLangMenuOpen(!isLangMenuOpen)}
@@ -127,69 +223,8 @@ export const Header = () => {
             setIsLangMenuOpen(false);
           }}
         />
+        <ConnectButton />
       </div>
-
-      {isMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-base-100">
-          <div className="p-4">
-            <div className="flex justify-between items-center mb-4">
-              <img src="/img/hashfans.png" alt="HashFans" className="w-32 h-8" />
-              <button 
-                className="btn btn-ghost btn-circle"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Icon name="close" className="h-5 w-5" />
-              </button>
-            </div>
-            <ul className="menu">
-              <li>
-                <details>
-                  <summary>
-                    <Icon name="compass" className="h-4 w-4" />
-                    {t('nav.activities')}
-                  </summary>
-                  <ul>
-                    <li>
-                      <Link href="/events" onClick={() => setIsMenuOpen(false)}>
-                        <Icon name="calendar" className="h-4 w-4" />
-                        {t('nav.events')}
-                      </Link>
-                    </li>
-                    <li>
-                      <details>
-                        <summary>
-                          <Icon name="gift" className="h-4 w-4" />
-                          {t('nav.consensus')}
-                        </summary>
-                        <ul>
-                          <li>
-                            <Link href="/rankings" onClick={() => setIsMenuOpen(false)}>
-                              <Icon name="trophy" className="h-4 w-4" />
-                              {t('nav.rankings')}
-                            </Link>
-                          </li>
-                        </ul>
-                      </details>
-                    </li>
-                  </ul>
-                </details>
-              </li>
-              <li>
-                <Link href="/news" onClick={() => setIsMenuOpen(false)}>
-                  <Icon name="news" className="h-4 w-4" />
-                  {t('nav.news')}
-                </Link>
-              </li>
-              <li>
-                <Link href="/projects" onClick={() => setIsMenuOpen(false)}>
-                  <Icon name="grid" className="h-4 w-4" />
-                  {t('nav.projects')}
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      )}
     </div>
   );
 }; 
