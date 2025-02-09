@@ -73,7 +73,8 @@ export default function RedPacketPage() {
       }
 
       try {
-        const isTestnet = process.env.NODE_ENV === 'development';
+        // const isTestnet = process.env.NODE_ENV === 'development';
+        const isTestnet = true;
         const baseUrl = isTestnet 
           ? 'https://api.hyperindex.trade/api/gift/testnet/yuanbi_gift'
           : 'https://api.hyperindex.trade/api/gift/yuanbi_gift';
