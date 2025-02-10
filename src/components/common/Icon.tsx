@@ -76,5 +76,5 @@ interface IconProps {
 
 export const Icon = ({ name, className = "w-5 h-5" }: IconProps) => {
   const IconComponent = icons[name];
-  return <IconComponent className={className} />;
+  return <IconComponent className={`${className}`} />;
 }; 
