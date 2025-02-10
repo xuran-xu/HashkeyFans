@@ -147,9 +147,9 @@ export const Header = () => {
 
       {isMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
-          <div className="h-screen w-full bg-base-100 flex flex-col">
+          <div className="h-[100dvh] w-full bg-base-100 flex flex-col">
             {/* 顶部导航栏 */}
-            <div className="p-4 border-b">
+            <div className="p-4 pt-safe border-b">
               <div className="flex justify-between items-center">
                 <img src="/img/hashfans.png" alt="HashFans" className="w-32 h-8" />
                 <button 
@@ -162,7 +162,7 @@ export const Header = () => {
             </div>
 
             {/* 主菜单内容 */}
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-4 pb-safe">
               <ul className="menu menu-lg gap-2 w-full">
                 <li>
                   <Link 
