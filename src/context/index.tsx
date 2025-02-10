@@ -36,6 +36,28 @@ const hashkeyTestnet = defineChain({
     },
 });
 
+const hashkeyMainnet = defineChain({
+    id: 177,
+    name: 'HashKey Chain',
+    nativeCurrency: {
+        decimals: 18,
+        name: 'HSK',
+        symbol: 'HSK',
+    },
+    rpcUrls: {
+        default: {
+            http: ['https://mainnet.hsk.xyz'],
+        },
+    },
+    blockExplorers: {
+        default: { name: 'Explorer', url: 'https://hashkey.blockscout.com' },
+    },
+    testnet: true,
+    custom: {
+        icon: '/img/logo.png', // TODO: add icon
+    },
+});
+
 
 const config = createConfig({
     projectId,
@@ -94,7 +116,7 @@ const config = createConfig({
             },
         }),
     ],
-    chains: [hashkeyTestnet],
+    chains: [process.env.NODE_ENV === 'development' ? hashkeyTestnet : hashkeyMainnet],
 });
 
 // Export ConnectKitProvider to be used within your index or layout file (or use createConfig directly within those files).
