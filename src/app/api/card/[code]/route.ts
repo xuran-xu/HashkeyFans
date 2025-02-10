@@ -3,7 +3,6 @@ import { prisma } from '@/lib/prisma';
 import { withErrorHandler } from '@/lib/middleware';
 import { generateShareCode } from '@/lib/utils';
 import { ApiError, ErrorCode } from '@/types/api';
-import { Prisma } from '@prisma/client';
 
 export async function GET(
   req: NextRequest,
@@ -45,7 +44,6 @@ export async function GET(
         if (!randomCard) {
           throw new ApiError(ErrorCode.INTERNAL_ERROR, 'No initial cards available');
         }
-
         // 创建新用户并关联初始卡片
         const newUser = await prisma.user.create({
           data: {
