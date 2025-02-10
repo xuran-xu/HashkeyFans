@@ -124,7 +124,7 @@ export const Header = () => {
           className="btn btn-ghost lg:hidden"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          <Icon name="menu" className="h-5 w-5" />
+          <Icon name="menu" className="h-5 w-5 text-white" />
         </button>
 
         <div className="hidden lg:flex items-center gap-2">
@@ -147,7 +147,7 @@ export const Header = () => {
 
       {isMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
-          <div className="min-h-screen w-full bg-base-100 flex flex-col">
+          <div className="h-screen w-full bg-base-100 flex flex-col">
             {/* 顶部导航栏 */}
             <div className="p-4 border-b">
               <div className="flex justify-between items-center">

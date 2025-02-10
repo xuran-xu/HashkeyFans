@@ -42,6 +42,17 @@ export default function RedPacketPage() {
 
   // 初始化检查
   useEffect(() => {
+    // 如果未连接钱包，直接显示初始状态
+    if (!isConnected) {
+      setState({
+        isReady: true,
+        isOpened: false,
+        isEmpty: false,
+        isProcessing: false
+      });
+      return;
+    }
+
     if (!primaryWallet?.accounts[0]) return;
     
     try {
@@ -72,7 +83,7 @@ export default function RedPacketPage() {
     } catch (error) {
       console.error('Error checking initial state:', error);
     }
-  }, [primaryWallet?.accounts]);
+  }, [isConnected, primaryWallet?.accounts]);
 
   // 如果状态还未初始化，显示加载状态
   if (state === null) {
@@ -173,8 +184,8 @@ export default function RedPacketPage() {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center">
-      <div className="relative">
+    <div className="relative flex items-center justify-center h-full">
+      <div className="relative h-full mt-20">
         {/* 红包封面 */}
         {!state.isOpened && (
           <div 
