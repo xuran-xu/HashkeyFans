@@ -52,7 +52,7 @@ export const Header = () => {
             <details className="dropdown">
               <summary className="flex items-center gap-2">
                 <Icon name="compass" className="h-4 w-4" />
-                Explore
+                {t('nav.explore')}
               </summary>
               <ul className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-48">
                 <li>
@@ -74,7 +74,7 @@ export const Header = () => {
             <details className="dropdown">
               <summary className="flex items-center gap-2">
                 <Icon name="compass" className="h-4 w-4" />
-                Activities
+                {t('nav.activities')}
               </summary>
               <ul className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-48">
                 <li>
@@ -147,23 +147,23 @@ export const Header = () => {
 
       {isMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
-          <div className="h-[100dvh] w-full bg-base-100 flex flex-col">
+          <div className="h-[100dvh] w-full bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col">
             {/* 顶部导航栏 */}
-            <div className="p-4 pt-safe border-b">
+            <div className="p-4 pt-safe border-b border-white/10">
               <div className="flex justify-between items-center">
                 <img src="/img/hashfans.png" alt="HashFans" className="w-32 h-8" />
                 <button 
                   className="btn btn-ghost btn-circle"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Icon name="close" className="h-5 w-5" />
+                  <Icon name="close" className="h-5 w-5 text-white" />
                 </button>
               </div>
             </div>
 
             {/* 主菜单内容 */}
             <div className="flex-1 overflow-y-auto p-4 pb-safe">
-              <ul className="menu menu-lg gap-2 w-full">
+              <ul className="menu menu-lg gap-2 w-full text-white">
                 <li>
                   <Link 
                     href="/redpacket" 
@@ -176,11 +176,11 @@ export const Header = () => {
                 </li>
                 <li>
                   <details>
-                    <summary>
-                      <Icon name="compass" className="h-5 w-5" />
-                      {t('nav.activities')}
+                    <summary className="flex items-center gap-2">
+                      <Icon name="compass" className="h-5 w-5 text-white" />
+                      <span className="text-white">{t('nav.activities')}</span>
                     </summary>
-                    <ul className="ml-4">
+                    <ul className="menu gap-2 pl-4">
                       <li>
                         <Link href="/events" onClick={() => setIsMenuOpen(false)}>
                           <Icon name="calendar" className="h-4 w-4" />

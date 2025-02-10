@@ -195,7 +195,7 @@ export default function RedPacketPage() {
             {/* 未连接钱包遮罩 */}
             {!isConnected && (
               <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center z-10 p-8">
-                <div className="animate-bounce text-4xl">🧧</div>
+                <div className="animate-bounce text-4xl mt-40">🧧</div>
                 <ConnectButton />
               </div>
             )}

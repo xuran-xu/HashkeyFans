@@ -166,7 +166,7 @@ export const Hero = () => {
         link: t('home.buttonReview.link')
       }
     });
-  }, [i18n]);
+  }, [i18n.language]);
 
   return (
     <div className="relative h-[calc(100vh-8rem)] flex items-center justify-center">

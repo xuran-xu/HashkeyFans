@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { withErrorHandler } from '@/lib/middleware';
 import { generateShareCode } from '@/lib/utils';
 import { ApiError, ErrorCode } from '@/types/api';
+import { Prisma } from '@prisma/client';
 
 export async function GET(
   req: NextRequest,
@@ -32,7 +33,50 @@ export async function GET(
 
       // 如果用户不存在，创建新用户
       if (!user) {
-        throw new ApiError(ErrorCode.INTERNAL_ERROR, 'Failed to create or find user');
+        // 先随机获取一个初始卡片
+        const totalCards = await prisma.card.count();
+        const skip = Math.floor(Math.random() * totalCards);
+
+        const randomCard = await prisma.card.findFirst({
+          skip: skip,
+          take: 1
+        });
+
+        if (!randomCard) {
+          throw new ApiError(ErrorCode.INTERNAL_ERROR, 'No initial cards available');
+        }
+
+        // 创建新用户并关联初始卡片
+        const newUser = await prisma.user.create({
+          data: {
+            walletAddress,
+            displayAddress: walletAddress,
+            shareCode: generateShareCode(walletAddress),
+            initialCardId: randomCard.id
+          },
+          include: {
+            initialCard: true,
+            _count: { select: { connections: true } }
+          }
+        });
+
+        return NextResponse.json({
+          card: {
+            id: randomCard.id,
+            title: randomCard.title,
+            description: randomCard.description,
+            image_url: randomCard.imageUrl,
+            createdAt: randomCard.createdAt
+          },
+          owner: {
+            address: newUser.walletAddress,
+            display_address: newUser.displayAddress,
+            connect_count: 0
+          },
+          is_owner: true,
+          has_card: true,
+          can_claim: false
+        });
       }
 
       return NextResponse.json({
