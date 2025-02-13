@@ -142,7 +142,7 @@ export const projectsData: Project[] = [
     socials: [
       {
         platform: 'x',
-        link: 'https://x.com/HashKeyHSK'
+        link: 'https://x.com/superbridgeapp'
       }
     ]
   },
@@ -464,12 +464,12 @@ export const projectsData: Project[] = [
     logo: '/img/apro.png',
     isVerified: true,
     imgClassName: 'h-8 w-32',
-    link: 'https://supra.com',
+    link: 'https://www.apro.com/',
     tags: ['infrastructure', 'oracle'],
     socials: [
       {
         platform: 'x',
-        link: 'https://x.com/SUPRA_Labs'
+        link: 'https://x.com/APRO_Oracle'
       },
       {
         platform: 'discord',
@@ -569,7 +569,7 @@ export const projectsData: Project[] = [
     socials: [
       {
         platform: 'x',
-        link: 'https://x.com/MintClubPro'
+        link: 'https://x.com/MOMOisFUN'
       }
     ]
   },

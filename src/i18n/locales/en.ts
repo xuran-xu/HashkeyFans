@@ -15,7 +15,9 @@ export default {
     activities: "Activities",
     consensus: "Consensus",
     rankings: "Rankings",
-    explore: "explore"
+    explore: "explore",
+    redpacket: "redpacket",
+    card: "card"
   },
   home: {
     slogan: "Web3 Voyage",

@@ -80,7 +80,7 @@ export const Header = () => {
                 <li>
                   <Link href="/redpacket" className="relative">
                     <Icon name="gift" className="h-4 w-4 text-red-500" />
-                    圆币
+                    {t('nav.redpacket')}
                   </Link>
                 </li>
                 <li>
@@ -128,11 +128,11 @@ export const Header = () => {
         </button>
 
         <div className="hidden lg:flex items-center gap-2">
-          {/* {address && (
+          {address && (
             <Link href="/profile" className="btn btn-ghost btn-circle">
               <Icon name="user" className="h-5 w-5" />
             </Link>
-          )} */}
+          )}
           <ConnectButton />
           <LanguageSelector 
             isOpen={isLangMenuOpen}
