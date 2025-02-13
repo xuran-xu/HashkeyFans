@@ -11,6 +11,7 @@ export async function GET(
   return withErrorHandler(async () => {
     const walletAddress = req.headers.get('x-wallet-address');
     if (!walletAddress) {
+      console.log('Error: Wallet address is required');
       return NextResponse.json(
         { error: 'Wallet address is required' },
         { status: 401 }
@@ -21,7 +22,7 @@ export async function GET(
 
     // 1. 如果是用户自己的 shareCode
     if (userShareCode === params.code) {
-      // 查找用户是否已存在
+      console.log('Checking for user with wallet address:', walletAddress);
       const user = await prisma.user.findUnique({
         where: { walletAddress },
         include: {
@@ -30,21 +31,30 @@ export async function GET(
         }
       });
 
-      // 如果用户不存在，创建新用户
       if (!user) {
+        console.log('User not found, creating new user...');
         // 先随机获取一个初始卡片
         const totalCards = await prisma.card.count();
         const skip = Math.floor(Math.random() * totalCards);
 
+        console.log('Total cards:', totalCards, 'Random skip:', skip);
         const randomCard = await prisma.card.findFirst({
           skip: skip,
           take: 1
         });
 
         if (!randomCard) {
+          console.log('Error: No initial cards available');
           throw new ApiError(ErrorCode.INTERNAL_ERROR, 'No initial cards available');
         }
-        // 创建新用户并关联初始卡片
+
+        console.log('Creating user with data:', {
+          walletAddress,
+          displayAddress: walletAddress,
+          shareCode: generateShareCode(walletAddress),
+          initialCardId: randomCard.id
+        });
+
         const newUser = await prisma.user.create({
           data: {
             walletAddress,
@@ -75,28 +85,30 @@ export async function GET(
           has_card: true,
           can_claim: false
         });
+      } else {
+        console.log('User found:', user);
+        return NextResponse.json({
+          card: user.initialCard ? {
+            id: user.initialCard.id,
+            title: user.initialCard.title,
+            description: user.initialCard.description,
+            image_url: user.initialCard.imageUrl,
+            createdAt: user.initialCard.createdAt
+          } : null,
+          owner: {
+            address: user.walletAddress,
+            display_address: user.displayAddress,
+            connect_count: user._count.connections
+          },
+          is_owner: true,
+          has_card: user.initialCard !== null,
+          can_claim: !user.initialCard
+        });
       }
-
-      return NextResponse.json({
-        card: user.initialCard ? {
-          id: user.initialCard.id,
-          title: user.initialCard.title,
-          description: user.initialCard.description,
-          image_url: user.initialCard.imageUrl,
-          createdAt: user.initialCard.createdAt
-        } : null,
-        owner: {
-          address: user.walletAddress,
-          display_address: user.displayAddress,
-          connect_count: user._count.connections
-        },
-        is_owner: true,
-        has_card: user.initialCard !== null,
-        can_claim: !user.initialCard
-      });
     }
 
     // 2. 如果是查看其他用户的卡片
+    console.log('Looking for card owner with share code:', params.code);
     const cardOwner = await prisma.user.findUnique({
       where: { shareCode: params.code },
       include: {
@@ -106,6 +118,7 @@ export async function GET(
     });
 
     if (!cardOwner) {
+      console.log('Error: Card owner not found');
       throw new ApiError(ErrorCode.NOT_FOUND, 'Card not found');
     }
 

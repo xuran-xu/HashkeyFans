@@ -14,7 +14,9 @@ export default {
     projects: "项目",
     activities: "活动",
     consensus: "共识大会",
-    rankings: "排行榜"
+    rankings: "排行榜",
+    redpacket: "红包",
+    card: "卡牌"
   },
   home: {
     slogan: "Web3大航海",

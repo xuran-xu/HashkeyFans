@@ -16,6 +16,7 @@ export async function GET() {
     // Try to get from cache
     const cached = await redis.get(CACHE_KEYS.RANKINGS);
     if (cached) {
+      console.log('Returning cached rankings:', cached);
       return NextResponse.json(cached);
     }
 
@@ -37,6 +38,8 @@ export async function GET() {
       }
     });
 
+    console.log('Users fetched from database:', users);
+
     const rankings = users.map((user: RankingUser, index: number) => ({
       user_id: user.id,
       display_address: user.displayAddress || '',
@@ -52,6 +55,8 @@ export async function GET() {
       response,
       { ex: CACHE_TTL.RANKINGS }
     );
+
+    console.log('Caching rankings:', response);
 
     return NextResponse.json(response);
   });
