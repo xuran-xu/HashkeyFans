@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { ConnectButton, useAccount, useWallets } from '@particle-network/connectkit';
+import { formatAddress } from '@/utils/format';
+import { generateShareCode } from '@/lib/utils';
 
 interface CardData {
   card: {
@@ -79,7 +81,7 @@ export default function SharePage() {
           'x-wallet-address': primaryWallet?.accounts[0] || ''
         },
         body: JSON.stringify({
-          target_user_id: cardData?.owner.id
+          shareCode: generateShareCode(cardData?.owner.address || '')
         })
       });
 
@@ -206,7 +208,7 @@ export default function SharePage() {
               
               <div className="flex items-center justify-between text-gray-300/80">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm">By {cardData.owner.display_address}</span>
+                  <span className="text-sm">By {formatAddress(cardData.owner.display_address)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

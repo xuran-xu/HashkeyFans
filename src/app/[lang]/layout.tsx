@@ -6,7 +6,6 @@ import '../globals.css'
 import { Footer } from '@/components/layout/Footer'
 import { ReactNode } from 'react'
 import { ParticleConnectkit } from '@/context'
-import '@rainbow-me/rainbowkit/styles.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../globals.css';
@@ -62,7 +61,6 @@ export const metadata: Metadata = {
       },
     ],
   },
-  manifest: '/manifest.json',
   viewport: {
     width: 'device-width',
     initialScale: 1,

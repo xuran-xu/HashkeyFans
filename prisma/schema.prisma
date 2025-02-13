@@ -23,7 +23,7 @@ model Card {
 model User {
   id              Int              @id @default(autoincrement())
   walletAddress   String          @unique @map("wallet_address") @db.VarChar(42)
-  displayAddress  String?         @map("display_address") @db.VarChar(20)
+  displayAddress  String?         @map("display_address") @db.VarChar(50)
   shareCode       String?         @unique @map("share_code") @db.VarChar(8)
   initialCardId   Int?           @map("initial_card_id")
   createdAt       DateTime        @default(now()) @map("created_at")
