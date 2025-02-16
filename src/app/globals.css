@@ -34,3 +34,21 @@ body {
   display: none !important;
 }
 
+/* 添加到现有的 CSS 文件中 */
+.dropdown-hover:hover > .dropdown-content {
+  display: block;
+}
+
+.dropdown-right:hover > .dropdown-content {
+  display: block;
+}
+
+/* 确保子菜单在父菜单显示时才能显示 */
+.dropdown-content .dropdown-content {
+  display: none;
+}
+
+.dropdown-content li:hover > .dropdown-content {
+  display: block;
+}
+
