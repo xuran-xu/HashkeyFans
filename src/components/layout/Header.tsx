@@ -165,28 +165,34 @@ export const Header = () => {
             <div className="flex-1 overflow-y-auto p-4 pb-safe">
               <ul className="menu menu-lg gap-2 w-full text-white">
                 <li>
-                  <Link 
-                    href="/redpacket" 
-                    onClick={() => setIsMenuOpen(false)}
-                    className="flex items-center gap-2 text-red-500"
-                  >
-                    <Icon name="gift" className="h-5 w-5" />
-                    <span>圆币</span>
-                  </Link>
-                </li>
-                <li>
                   <details>
                     <summary className="flex items-center gap-2">
-                      <Icon name="compass" className="h-5 w-5 text-white" />
-                      <span className="text-white">{t('nav.activities')}</span>
+                      <Icon name="compass" className="h-5 w-5" />
+                      {t('nav.explore')}
                     </summary>
                     <ul className="menu gap-2 pl-4">
+                      <li>
+                        <Link href="/news" onClick={() => setIsMenuOpen(false)}>
+                          <Icon name="news" className="h-4 w-4" />
+                          {t('nav.news')}
+                        </Link>
+                      </li>
                       <li>
                         <Link href="/events" onClick={() => setIsMenuOpen(false)}>
                           <Icon name="calendar" className="h-4 w-4" />
                           {t('nav.events')}
                         </Link>
                       </li>
+                    </ul>
+                  </details>
+                </li>
+                <li>
+                  <details>
+                    <summary className="flex items-center gap-2">
+                      <Icon name="compass" className="h-5 w-5" />
+                      {t('nav.activities')}
+                    </summary>
+                    <ul className="menu gap-2 pl-4">
                       <li>
                         <Link 
                           href="/redpacket" 
@@ -194,7 +200,7 @@ export const Header = () => {
                           className="relative"
                         >
                           <Icon name="gift" className="h-4 w-4 text-red-500" />
-                          圆币
+                          {t('nav.redpacket')}
                         </Link>
                       </li>
                       <li>
@@ -210,17 +216,22 @@ export const Header = () => {
                                 {t('nav.rankings')}
                               </Link>
                             </li>
+                            {address && 
+                              <li>
+                                <Link 
+                                  href={`/consensuscard/${generateShareCode(address)}`}
+                                  onClick={() => setIsMenuOpen(false)}
+                                >
+                                  <Icon name="trophy" className="h-4 w-4" />
+                                  {t('nav.card')}
+                                </Link>
+                              </li>
+                            }
                           </ul>
                         </details>
                       </li>
                     </ul>
                   </details>
-                </li>
-                <li>
-                  <Link href="/news" onClick={() => setIsMenuOpen(false)}>
-                    <Icon name="news" className="h-4 w-4" />
-                    {t('nav.news')}
-                  </Link>
                 </li>
                 <li>
                   <Link href="/projects" onClick={() => setIsMenuOpen(false)}>
@@ -233,16 +244,29 @@ export const Header = () => {
               <div className="divider my-8"></div>
 
               {/* 底部功能区 */}
-              <div className="w-full flex justify-between items-center">
-                <ConnectButton />
-                <LanguageSelector 
-                  isOpen={isLangMenuOpen}
-                  onToggle={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                  onSelect={(lang) => {
-                    i18n.changeLanguage(lang);
-                    setIsLangMenuOpen(false);
-                  }}
-                />
+              <div className="space-y-4">
+                {address && (
+                  <Link 
+                    href="/profile" 
+                    className="btn btn-block"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Icon name="user" className="h-5 w-5" />
+                    {t('nav.profile')}
+                  </Link>
+                )}
+                <div className="w-full flex justify-between items-center">
+                  <ConnectButton />
+                  <LanguageSelector 
+                    isOpen={isLangMenuOpen}
+                    onToggle={() => setIsLangMenuOpen(!isLangMenuOpen)}
+                    onSelect={(lang) => {
+                      i18n.changeLanguage(lang);
+                      setIsLangMenuOpen(false);
+                      setIsMenuOpen(false);
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
