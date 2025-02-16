@@ -15,7 +15,7 @@ export default {
     activities: "Activities",
     consensus: "Consensus",
     rankings: "Rankings",
-    explore: "explore",
+    explore: "Explore",
     redpacket: "redpacket",
     card: "card"
   },
