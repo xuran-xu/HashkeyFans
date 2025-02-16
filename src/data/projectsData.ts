@@ -595,4 +595,27 @@ export const projectsData: Project[] = [
       }
     ]
   },
+  {
+    id: 'NanonFish',
+    name: 'NanonFish',
+    logo: '/img/nanon-fish.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://t.me/NanonFishBot/NanonFish',
+    tags: ['gaming'],
+    isVerified: true,
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/NanonFish'
+      },
+      {
+        platform: 'telegram',
+        link: 'https://t.me/NanonFish'
+      },
+      {
+        platform: 'discord',
+        link: 'https://discord.com/invite/F55a3Gme3v'
+      },
+    ]
+  },
 ]; 
