@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Icon } from "../common/Icon";
 import { LanguageSelector } from "../common/LanguageSelector";
+import { menuConfig } from '@/config/menu';
 
 export const Header = () => {
   const pathname = usePathname();
@@ -38,6 +39,34 @@ export const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const renderMenuItem = (item: any) => {
+    if (item.type === 'divider') return <li className="divider"></li>;
+    
+    if (item.requireAuth && !address) return null;
+    
+    const link = item.requireAuth ? `${item.link}/${generateShareCode(address || '')}` : item.link;
+    
+    return (
+      <li key={item.key}>
+        <Link 
+          href={link} 
+          onClick={() => {
+            const dropdown = document.querySelector('.dropdown-content');
+            if (dropdown) {
+              (dropdown as HTMLElement).style.display = 'none';
+              setTimeout(() => {
+                (dropdown as HTMLElement).style.display = '';
+              }, 100);
+            }
+          }}
+        >
+          <Icon name={item.icon} className={`h-4 w-4 ${item.iconClass || ''}`} />
+          {t(item.key)}
+        </Link>
+      </li>
+    );
+  };
+
   if (!mounted) return null;
 
   return (
@@ -48,74 +77,25 @@ export const Header = () => {
         </Link>
 
         <ul className="hidden lg:flex menu menu-horizontal ml-2">
-          <li>
-            <details className="dropdown">
-              <summary className="flex items-center gap-2">
-                <Icon name="compass" className="h-4 w-4" />
-                {t('nav.explore')}
-              </summary>
-              <ul className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-48">
-                <li>
-                  <Link href="/news">
-                    <Icon name="news" className="h-4 w-4" />
-                    {t('nav.news')}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/events">
-                    <Icon name="calendar" className="h-4 w-4" />
-                    {t('nav.events')}
-                  </Link>
-                </li>
-              </ul>
-            </details>
+          {/* Explore 菜单 */}
+          <li className="dropdown dropdown-hover">
+            <div tabIndex={0} role="button" className="flex items-center gap-2">
+              <Icon name={menuConfig.explore.icon} className="h-4 w-4" />
+              {t('nav.explore')}
+            </div>
+            <ul className="dropdown-content z-[1] ml-0 menu p-2 shadow bg-base-100 rounded-box w-48">
+              {menuConfig.explore.items.map((item, index) => renderMenuItem(item))}
+            </ul>
           </li>
-          <li>
-            <details className="dropdown">
-              <summary className="flex items-center gap-2">
-                <Icon name="compass" className="h-4 w-4" />
-                {t('nav.activities')}
-              </summary>
-              <ul className="menu dropdown-content z-[1] p-2 shadow bg-base-100 rounded-box w-48">
-                <li>
-                  <Link href="/redpacket" className="relative">
-                    <Icon name="gift" className="h-4 w-4 text-red-500" />
-                    {t('nav.redpacket')}
-                  </Link>
-                </li>
-                <li>
-                  <details>
-                    <summary>
-                      <Icon name="gift" className="h-4 w-4" />
-                      {t('nav.consensus')}
-                    </summary>
-                    <ul>
-                      <li>
-                        <Link href="/rankings">
-                          <Icon name="trophy" className="h-4 w-4" />
-                          {t('nav.rankings')}
-                        </Link>
-                      </li>
-                      {address && 
-                      <li>
-                        <Link href={`/consensuscard/${generateShareCode(address)}`}>
-                          <Icon name="trophy" className="h-4 w-4" />
-                          {t('nav.card')}
-                        </Link>
-                      </li>
-                      }
-                    </ul>
-                  </details>
-                </li>
-              </ul>
-            </details>
-          </li>
-          <li>
-            <Link href="/projects" className="flex items-center gap-2">
-              <Icon name="grid" className="h-4 w-4" />
-              {t('nav.projects')}
-            </Link>
-          </li>
+
+          {menuConfig.main.map((item) => (
+            <li key={item.key}>
+              <Link href={item.link} className="flex items-center gap-2">
+                <Icon name={item.icon} className="h-4 w-4" />
+                {t(item.key)}
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
 

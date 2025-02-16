@@ -16,7 +16,8 @@ export default {
     consensus: "共识大会",
     rankings: "排行榜",
     redpacket: "红包",
-    card: "卡牌"
+    card: "卡牌",
+    explore: "探索",
   },
   home: {
     slogan: "Web3大航海",
