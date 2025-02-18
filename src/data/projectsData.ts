@@ -431,11 +431,7 @@ export const projectsData: Project[] = [
     socials: [
       {
         platform: 'x',
-        link: 'https://x.com/DigiFTTech'
-      },
-      {
-        platform: 'telegram',
-        link: 'https://t.me/DigiFTTech'
+        link: 'https://x.com/izumi_Finance'
       }
     ]
   },
@@ -488,7 +484,7 @@ export const projectsData: Project[] = [
     socials: [
       {
         platform: 'x',
-        link: 'https://x.com/blockscoutcom'
+        link: 'https://x.com/blockscout'
       }
     ]
   },
@@ -603,6 +599,13 @@ export const projectsData: Project[] = [
     link: 'https://t.me/NanonFishBot/NanonFish',
     tags: ['gaming'],
     isVerified: true,
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+      en: 'Bonus for contract interactions',
+      zh: '合约交互奖励'
+      }
+  },
     socials: [
       {
         platform: 'x',

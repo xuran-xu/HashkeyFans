@@ -12,5 +12,5 @@ export function generateShareCode(walletAddress: string): string {
 }
 
 export function generateShareLink(shareCode: string): string {
-  return `/consensuscard/${shareCode}`;
+  return `/consensuscard`;
 }

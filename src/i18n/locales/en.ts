@@ -17,7 +17,8 @@ export default {
     rankings: "Rankings",
     explore: "Explore",
     redpacket: "redpacket",
-    card: "card"
+    card: "card",
+    profile: "profile"
   },
   home: {
     slogan: "Web3 Voyage",

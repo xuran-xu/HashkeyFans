@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Icon } from "../common/Icon";
 import { LanguageSelector } from "../common/LanguageSelector";
 import { menuConfig } from '@/config/menu';
+import { formatAddress } from "@/utils/format";
 
 export const Header = () => {
   const pathname = usePathname();
@@ -100,19 +101,36 @@ export const Header = () => {
       </div>
 
       <div className="navbar-end gap-2">
-        <button 
-          className="btn btn-ghost lg:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          <Icon name="menu" className="h-5 w-5 text-white" />
-        </button>
-
-        <div className="hidden lg:flex items-center gap-2">
-          {address && (
-            <Link href="/profile" className="btn btn-ghost btn-circle">
-              <Icon name="user" className="h-5 w-5" />
-            </Link>
-          )}
+        <div className="hidden lg:flex items-center gap-3">
+          {/* {address && (
+            <div className="dropdown dropdown-end">
+              <div 
+                tabIndex={0} 
+                role="button" 
+                className="btn btn-ghost bg-white/5 hover:bg-white/10 text-white border-white/10 gap-3"
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                  <Icon name="user" className="h-4 w-4 text-white" />
+                </div>
+                <span className="text-white/80">{formatAddress(address)}</span>
+                <Icon name="x" className="h-4 w-4 text-white/60" />
+              </div>
+              <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-52 mt-2">
+                <li>
+                  <Link href="/profile" className="flex items-center gap-2">
+                    <Icon name="user" className="h-4 w-4" />
+                    {t('nav.profile')}
+                  </Link>
+                </li>
+                <li>
+                  <Link href={`/consensuscard/${generateShareCode(address)}`} className="flex items-center gap-2">
+                    <Icon name="trophy" className="h-4 w-4" />
+                    {t('nav.card')}
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          )} */}
           <ConnectButton />
           <LanguageSelector 
             isOpen={isLangMenuOpen}
@@ -123,6 +141,13 @@ export const Header = () => {
             }}
           />
         </div>
+        
+        <button 
+          className="btn btn-ghost lg:hidden"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <Icon name="menu" className="h-5 w-5 text-white" />
+        </button>
       </div>
 
       {isMenuOpen && (
@@ -143,83 +168,79 @@ export const Header = () => {
 
             {/* 主菜单内容 */}
             <div className="flex-1 overflow-y-auto p-4 pb-safe">
-              <ul className="menu menu-lg gap-2 w-full text-white">
-                <li>
-                  <details>
-                    <summary className="flex items-center gap-2">
-                      <Icon name="compass" className="h-5 w-5" />
-                      {t('nav.explore')}
-                    </summary>
-                    <ul className="menu gap-2 pl-4">
-                      <li>
-                        <Link href="/news" onClick={() => setIsMenuOpen(false)}>
-                          <Icon name="news" className="h-4 w-4" />
-                          {t('nav.news')}
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/events" onClick={() => setIsMenuOpen(false)}>
-                          <Icon name="calendar" className="h-4 w-4" />
-                          {t('nav.events')}
-                        </Link>
-                      </li>
+              {/* 用户信息区域 */}
+              {address && (
+                <div 
+                  className="mb-6 p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsMenuOpen(false);
+                    window.location.href = '/profile';
+                  }}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                      <Icon name="user" className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-sm text-white/60">Connected as</div>
+                      <div className="text-white font-medium">{formatAddress(address)}</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 菜单列表 */}
+              <div className="space-y-4">
+                {/* Explore 菜单 */}
+                <div className="collapse collapse-plus bg-base-200/10 rounded-xl">
+                  <input type="checkbox" /> 
+                  <div className="collapse-title text-white flex items-center gap-2">
+                    <Icon name={menuConfig.explore.icon} className="h-5 w-5" />
+                    {t('nav.explore')}
+                  </div>
+                  <div className="collapse-content">
+                    <ul className="menu menu-md gap-1">
+                      {menuConfig.explore.items.map((item) => {
+                        if (item.type === 'divider') return <li key="divider" className="divider" />;
+                        if (item.requireAuth && !address) return null;
+                        
+                        const link = item.requireAuth ? `${item.link}/${generateShareCode(address || '')}` : item.link;
+                        
+                        return (
+                          <li key={item.key}>
+                            <Link 
+                              href={link}
+                              onClick={() => setIsMenuOpen(false)}
+                              className="text-white/80 hover:text-white"
+                            >
+                              <Icon name={item.icon} className={`h-4 w-4 ${item.iconClass || ''}`} />
+                              {t(item.key)}
+                            </Link>
+                          </li>
+                        );
+                      })}
                     </ul>
-                  </details>
-                </li>
-                <li>
-                  <details>
-                    <summary className="flex items-center gap-2">
-                      <Icon name="compass" className="h-5 w-5" />
-                      {t('nav.activities')}
-                    </summary>
-                    <ul className="menu gap-2 pl-4">
-                      <li>
-                        <Link 
-                          href="/redpacket" 
-                          onClick={() => setIsMenuOpen(false)}
-                          className="relative"
-                        >
-                          <Icon name="gift" className="h-4 w-4 text-red-500" />
-                          {t('nav.redpacket')}
-                        </Link>
-                      </li>
-                      <li>
-                        <details>
-                          <summary>
-                            <Icon name="gift" className="h-4 w-4" />
-                            {t('nav.consensus')}
-                          </summary>
-                          <ul>
-                            <li>
-                              <Link href="/rankings" onClick={() => setIsMenuOpen(false)}>
-                                <Icon name="trophy" className="h-4 w-4" />
-                                {t('nav.rankings')}
-                              </Link>
-                            </li>
-                            {address && 
-                              <li>
-                                <Link 
-                                  href={`/consensuscard/${generateShareCode(address)}`}
-                                  onClick={() => setIsMenuOpen(false)}
-                                >
-                                  <Icon name="trophy" className="h-4 w-4" />
-                                  {t('nav.card')}
-                                </Link>
-                              </li>
-                            }
-                          </ul>
-                        </details>
-                      </li>
-                    </ul>
-                  </details>
-                </li>
-                <li>
-                  <Link href="/projects" onClick={() => setIsMenuOpen(false)}>
-                    <Icon name="grid" className="h-4 w-4" />
-                    {t('nav.projects')}
-                  </Link>
-                </li>
-              </ul>
+                  </div>
+                </div>
+
+                {/* 主菜单项 */}
+                <ul className="menu menu-md gap-1 p-0">
+                  {menuConfig.main.map((item) => (
+                    <li key={item.key}>
+                      <Link 
+                        href={item.link}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="flex items-center gap-2 text-white/80 hover:text-white rounded-xl bg-base-200/10"
+                      >
+                        <Icon name={item.icon} className="h-4 w-4" />
+                        {t(item.key)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
               <div className="divider my-8"></div>
 
@@ -228,14 +249,14 @@ export const Header = () => {
                 {address && (
                   <Link 
                     href="/profile" 
-                    className="btn btn-block"
+                    className="btn btn-block bg-white/5 hover:bg-white/10 text-white border-white/10"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <Icon name="user" className="h-5 w-5" />
                     {t('nav.profile')}
                   </Link>
                 )}
-                <div className="w-full flex justify-between items-center">
+                <div className="flex justify-between items-center gap-4">
                   <ConnectButton />
                   <LanguageSelector 
                     isOpen={isLangMenuOpen}

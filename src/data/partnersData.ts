@@ -40,7 +40,7 @@ export const partners: Record<string, Partner[]> = {
     {
       name: "SHENZHEN University",
       image: "/img/shenda.svg",
-      link: "https://x.com/0xSZUBAgst",
+      link: "https://x.com/0xSZUBA",
       width: 90,
       height: 20
     },
