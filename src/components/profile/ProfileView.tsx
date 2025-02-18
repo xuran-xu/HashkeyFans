@@ -29,16 +29,16 @@ const ProfileView: FC<ProfileViewProps> = ({ address, isOwner, profile }) => {
                   window.dispatchEvent(new CustomEvent('edit-profile'));
                 }}
               >
-                <Icon name="plus" className="w-4 h-4 mr-2" />
-                Edit profile
+                <Icon name="plus" className="w-4 h-4" />
+                <span className='hidden lg:block lg:ml-2'>Edit profile</span>
               </button>
             )}
             <button 
               className="btn btn-sm text-white bg-white/20 hover:bg-white/30 border-white/30"
               onClick={() => window.dispatchEvent(new CustomEvent('open-collection'))}
             >
-              <Icon name="grid" className="w-4 h-4 mr-2" />
-              My Collection
+              <Icon name="grid" className="w-4 h-4" />
+              <span className='hidden lg:block lg:ml-2'>My Collection</span>
             </button>
           </div>
         </div>

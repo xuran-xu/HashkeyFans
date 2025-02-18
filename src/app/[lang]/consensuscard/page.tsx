@@ -1,18 +1,18 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { ConnectButton, useAccount, useWallets } from '@particle-network/connectkit';
 import { formatAddress } from '@/utils/format';
 import { generateShareCode } from '@/lib/utils';
+import { QRCodeSVG } from 'qrcode.react';
 
 interface CardData {
   card: {
     id: number;
     title: string;
     description: string | null;
-    image_url: string | null;
+    image_url: string | null; 
   } | null;
   owner: {
     address: string;
@@ -27,16 +27,16 @@ interface CardData {
 }
 
 export default function SharePage() {
-  const params = useParams();
   const { isConnected } = useAccount();
   const [primaryWallet] = useWallets();
   const [cardData, setCardData] = useState<CardData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   useEffect(() => {
-    if (!params.code || !primaryWallet?.accounts[0]) return;
+    if (!primaryWallet?.accounts[0]) return;
     
     setLoading(true);
     const controller = new AbortController();
@@ -44,12 +44,12 @@ export default function SharePage() {
     fetchCardData(primaryWallet.accounts[0], controller.signal);
 
     return () => controller.abort();
-  }, [params.code, primaryWallet?.accounts[0]]);
+  }, [primaryWallet?.accounts[0]]);
 
   const fetchCardData = async (walletAddress?: string, signal?: AbortSignal) => {
     try {
       console.log('Original wallet address:', primaryWallet?.accounts[0]);
-      const response = await fetch(`/api/card/${params.code}`, {
+      const response = await fetch(`/api/card/${generateShareCode(primaryWallet?.accounts[0])}`, {
         headers: walletAddress ? {
           'x-wallet-address': walletAddress,
         } : {},
@@ -186,70 +186,123 @@ export default function SharePage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="card bg-base-100 shadow-xl max-w-md mx-auto aspect-[9/16] overflow-hidden">
-        <figure className="relative w-full h-full">
-          {cardData.card?.image_url && (
-            <Image
-              src={cardData.card.image_url}
-              alt={cardData.card.title}
-              fill
-              className="object-cover"
-              priority
-            />
-          )}
-          <div className="absolute bottom-0 left-0 right-0 backdrop-blur-md bg-gradient-to-t from-gray-900/90 to-gray-900/40 p-6">
-            <div className="space-y-4">
-              <h2 className="card-title text-2xl text-white">
-                {cardData.card?.title}
-              </h2>
-              <p className="text-gray-200/80">
-                {cardData.card?.description}
-              </p>
-              
-              <div className="flex items-center justify-between text-gray-300/80">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm">By {formatAddress(cardData.owner.display_address)}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                  <span className="text-sm">{cardData.owner.connect_count} Connections</span>
-                </div>
-              </div>
+      <div 
+        className="perspective-1000 cursor-pointer max-w-md mx-auto rounded-2xl"
+        onClick={() => setIsFlipped(!isFlipped)}
+      >
+        <div className={`relative transition-transform duration-700 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
+          {/* 正面 */}
+          <div className="card bg-base-100 shadow-xl aspect-[9/16] overflow-hidden backface-hidden">
+            <figure className="relative w-full h-full">
+              {cardData.card?.image_url && (
+                <Image
+                  src={cardData.card.image_url}
+                  alt={cardData.card.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              )}
+              <div className="absolute bottom-0 left-0 right-0 backdrop-blur-md bg-gradient-to-t from-gray-900/90 to-gray-900/40 p-6">
+                <div className="space-y-4">
+                  <h2 className="card-title text-2xl text-white">
+                    {cardData.card?.title}
+                  </h2>
+                  <p className="text-gray-200/80">
+                    {cardData.card?.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between text-gray-300/80">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm">By {formatAddress(cardData.owner.display_address)}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                      <span className="text-sm">{cardData.owner.connect_count} Connections</span>
+                    </div>
+                  </div>
 
-              {!cardData.is_owner && (
-                <div className="card-actions justify-end mt-4">
-                  {!isConnected ? (
-                    <ConnectButton />
-                  ) : cardData.is_connected ? (
-                    <button 
-                      className="btn btn-disabled btn-sm glass"
-                      disabled
-                    >
-                      Already Connected
-                    </button>
-                  ) : (
-                    <button 
-                      className="btn btn-primary btn-sm glass"
-                      onClick={handleConnect}
-                      disabled={connecting}
-                    >
-                      {connecting ? (
-                        <>
-                          <span className="loading loading-spinner loading-xs"></span>
-                          Connecting...
-                        </>
+                  {!cardData.is_owner && (
+                    <div className="card-actions justify-end mt-4">
+                      {!isConnected ? (
+                        <ConnectButton />
+                      ) : cardData.is_connected ? (
+                        <button 
+                          className="btn btn-disabled btn-sm glass"
+                          disabled
+                        >
+                          Already Connected
+                        </button>
                       ) : (
-                        'Connect with Card'
+                        <button 
+                          className="btn btn-primary btn-sm glass"
+                          onClick={handleConnect}
+                          disabled={connecting}
+                        >
+                          {connecting ? (
+                            <>
+                              <span className="loading loading-spinner loading-xs"></span>
+                              Connecting...
+                            </>
+                          ) : (
+                            'Connect with Card'
+                          )}
+                        </button>
                       )}
-                    </button>
+                    </div>
                   )}
                 </div>
-              )}
-            </div>
+              </div>
+            </figure>
           </div>
-        </figure>
+
+          {/* 背面 */}
+          <div className="card bg-base-100 shadow-xl border-2 border-purple-600 aspect-[9/16] overflow-hidden absolute inset-0 backface-hidden rotate-y-180">
+            <figure className="relative w-full h-full">
+              {cardData.card?.image_url && (
+                <Image
+                  src={cardData.card.image_url}
+                  alt={cardData.card.title}
+                  fill
+                  className="object-cover blur-sm brightness-50"
+                  priority
+                />
+              )}
+              <div className="absolute inset-0 bg-black/40 backdrop-blur-md" />
+              <div className="absolute inset-0 flex flex-col items-center justify-center p-8">
+                <div className="text-center space-y-6">
+                  <h3 className="text-xl font-bold text-white mb-8">
+                    Scan to View Card
+                  </h3>
+                  
+                  <div className="bg-white p-4 rounded-xl inline-block mx-auto">
+                    <QRCodeSVG
+                      value={`${window.location.origin}/consensuscard/${generateShareCode(cardData.owner.address)}`}
+                      size={200}
+                      level="H"
+                    />
+                  </div>
+
+                  <div className="mt-8 text-white/60">
+                    <p className="text-sm">Card Owner</p>
+                    <p className="text-lg font-bold mt-1">
+                      {formatAddress(cardData.owner.display_address)}
+                    </p>
+                  </div>
+
+                  <div className="text-white/60 flex items-center justify-center gap-2 mt-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <span>{cardData.owner.connect_count} Connections</span>
+                  </div>
+                </div>
+              </div>
+            </figure>
+          </div>
+        </div>
       </div>
     </div>
   );
