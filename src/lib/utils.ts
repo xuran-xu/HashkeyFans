@@ -11,6 +11,6 @@ export function generateShareCode(walletAddress: string): string {
   return hash.slice(0, 8);
 }
 
-export function generateShareLink(shareCode: string): string {
+export function generateShareLink(): string {
   return `/consensuscard`;
 }

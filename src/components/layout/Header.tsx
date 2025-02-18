@@ -9,6 +9,7 @@ import { Icon } from "../common/Icon";
 import { LanguageSelector } from "../common/LanguageSelector";
 import { menuConfig } from '@/config/menu';
 import { formatAddress } from "@/utils/format";
+import { IconName } from '@/components/common/Icon';
 
 export const Header = () => {
   const pathname = usePathname();
@@ -38,13 +39,19 @@ export const Header = () => {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [isExploreOpen]);
 
-  const renderMenuItem = (item: any) => {
+  const renderMenuItem = (item: { 
+    type?: string;
+    requireAuth?: boolean;
+    link: string;
+    key: string;
+    icon: IconName;
+    iconClass?: string;
+  }) => {
     if (item.type === 'divider') return <li className="divider"></li>;
     
     if (item.requireAuth && !address) return null;
-    
     const link = item.requireAuth ? `${item.link}/${generateShareCode(address || '')}` : item.link;
     
     return (
@@ -85,7 +92,7 @@ export const Header = () => {
               {t('nav.explore')}
             </div>
             <ul className="dropdown-content z-[1] ml-0 menu p-2 shadow bg-base-100 rounded-box w-48">
-              {menuConfig.explore.items.map((item, index) => renderMenuItem(item))}
+              {menuConfig.explore.items.map((item) => renderMenuItem(item))}
             </ul>
           </li>
 
