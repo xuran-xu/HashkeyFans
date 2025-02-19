@@ -32,36 +32,60 @@ export async function GET(req: NextRequest): Promise<NextResponse<CollectionResp
       throw new ApiError(ErrorCode.UNAUTHORIZED, 'Wallet address is required');
     }
 
-    // 使用单个查询获取所需数据
-    const userWithCards = await prisma.user.findUnique({
-      where: { walletAddress },
-      include: {
-        userCards: {
-          include: {
-            card: true
-          }
+    // 获取用户信息和所有卡片
+    const [userWithData, allCards] = await Promise.all([
+      prisma.user.findUnique({
+        where: { walletAddress },
+        include: {
+          userCards: {
+            include: {
+              card: true
+            }
+          },
+          initialCard: true
         }
-      }
-    });
+      }),
+      prisma.card.findMany({
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          imageUrl: true,
+        },
+      })
+    ]);
 
-    if (!userWithCards) {
+    if (!userWithData) {
       throw new ApiError(ErrorCode.UNAUTHORIZED, 'User not found');
     }
 
-    // 获取所有卡片（使用缓存或预加载）
-    const allCards = await prisma.card.findMany({
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        imageUrl: true,
-      },
-    });
+    // 创建收集卡片的映射
+    const collectedCards = new Set(userWithData.userCards.map(uc => uc.cardId));
+    
+    // 如果有初始卡片，添加到收集集合中
+    if (userWithData.initialCard) {
+      collectedCards.add(userWithData.initialCard.id);
+    }
 
-    // 创建用户卡片映射
-    const userCardMap = new Map(
-      userWithCards.userCards.map(uc => [uc.cardId, uc])
+    // 创建卡片所有者映射
+    const cardOwners = new Map(
+      userWithData.userCards.map(uc => [uc.cardId, uc.originalOwnerAddress])
     );
+    
+    // 如果有初始卡片，添加其所有者信息
+    if (userWithData.initialCard) {
+      cardOwners.set(userWithData.initialCard.id, walletAddress);
+    }
+
+    // 创建卡片数量映射
+    const cardQuantities = new Map(
+      userWithData.userCards.map(uc => [uc.cardId, uc.quantity])
+    );
+    
+    // 如果有初始卡片，添加其数量信息
+    if (userWithData.initialCard) {
+      cardQuantities.set(userWithData.initialCard.id, 1);
+    }
 
     // 组装响应数据
     const cards: CardResponse[] = allCards.map(card => ({
@@ -69,15 +93,16 @@ export async function GET(req: NextRequest): Promise<NextResponse<CollectionResp
       title: card.title,
       description: card.description,
       image_url: card.imageUrl,
-      collected: userCardMap.has(card.id),
-      quantity: userCardMap.get(card.id)?.quantity || 0,
-      owner_address: userCardMap.get(card.id)?.originalOwnerAddress || null
+      collected: collectedCards.has(card.id),
+      quantity: cardQuantities.get(card.id) || 0,
+      owner_address: cardOwners.get(card.id) || null
     }));
 
+    // 计算统计数据
     const stats: StatsResponse = {
       total_cards: allCards.length,
-      collected_cards: userWithCards.userCards.length,
-      total_quantity: userWithCards.userCards.reduce((sum, uc) => sum + uc.quantity, 0)
+      collected_cards: collectedCards.size,
+      total_quantity: Array.from(cardQuantities.values()).reduce((sum, qty) => sum + qty, 0)
     };
 
     return NextResponse.json({ cards, stats });
