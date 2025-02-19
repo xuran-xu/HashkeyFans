@@ -281,11 +281,11 @@ export default function ProfilePage() {
                               )}
                             </div>
                             <p className="text-sm opacity-70 line-clamp-2">{card.description}</p>
-                            {card.collected && (
+                            {/* {card.collected && (
                               <div className="text-xs opacity-60 mt-1 truncate">
-                                From: {card.owner_address}
+                                Quantity: {card.quantity}
                               </div>
-                            )}
+                            )} */}
                           </div>
                         </div>
                       </div>
