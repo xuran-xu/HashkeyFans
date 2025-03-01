@@ -330,8 +330,8 @@ export const projectsData: Project[] = [
     ]
   },
   {
-    id: 'TardeOS',
-    name: 'TardeOS',
+    id: 'TradeOS',
+    name: 'TradeOS',
     logo: '/img/tradeos.jpg',
     imgClassName: 'h-8 w-8 rounded-full',
     link: 'https://www.tradeos.xyz/',
