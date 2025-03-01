@@ -179,16 +179,16 @@ export const Hero = () => {
   }, [i18n.language, t]);
 
   return (
-    <div className="relative h-[calc(100vh-8rem)] flex items-center justify-center">
+    <div className="relative h-[calc(100vh-8rem)] flex items-center justify-center pt-8 md:pt-0">
       <BackgroundH />
-      <div className="container mx-auto text-center px-4 relative z-10">
+      <div className="container mx-auto text-center px-4 relative z-10 mt-8 md:mt-0">
         <h1 className="text-5xl md:text-7xl font-bold mb-4 font-sora text-white drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] tracking-wide">
           {content.slogan}
         </h1>
-        <p className="text-xl md:text-2xl mb-8 text-white font-semibold drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] tracking-wider">
+        <p className="text-xl md:text-2xl mb-6 md:mb-8 text-white font-semibold drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] tracking-wider">
           {content.description}
         </p>
-        <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-10 mb-12">
+        <div className="flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-10 mb-8 md:mb-12">
           <Button size="lg" variant="primary">
             <Link href={content.buttonJoin.link} className="flex items-center space-x-2">
               <Icon name="calendar" />
@@ -205,29 +205,29 @@ export const Hero = () => {
         
         {/* 事件展示区域 */}
         {content.events && content.events.length > 0 && (
-          <div className="mt-12 max-w-4xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)]">
+          <div className="mt-8 md:mt-12 max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)]">
               {t('events.current')}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {content.events.map((event) => (
                 <Link 
                   key={event.id} 
                   href={event.link}
-                  className="bg-gray-900/60 backdrop-blur-md border border-gray-700 rounded-xl p-6 transition-all hover:bg-gray-800/70 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 group"
+                  className="bg-gray-900/60 backdrop-blur-md border border-gray-700 rounded-xl p-4 md:p-6 transition-all hover:bg-gray-800/70 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 group"
                 >
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors truncate max-w-[70%]">
+                  <div className="flex justify-between items-start mb-2 md:mb-3">
+                    <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-blue-400 transition-colors truncate max-w-[70%]">
                       {event.title}
                     </h3>
-                    <span className="text-sm text-gray-400 bg-gray-800 px-2 py-1 rounded whitespace-nowrap">
+                    <span className="text-xs md:text-sm text-gray-400 bg-gray-800 px-2 py-1 rounded whitespace-nowrap">
                       {event.date}
                     </span>
                   </div>
-                  <p className="text-gray-300 mb-4 line-clamp-2 h-12">{event.description}</p>
+                  <p className="text-gray-300 mb-3 md:mb-4 line-clamp-2 h-10 md:h-12 text-sm md:text-base">{event.description}</p>
                   <div className="flex justify-end">
-                    <span className="text-blue-400 flex items-center text-sm font-medium group-hover:translate-x-1 transition-transform">
-                      {t('common.readMore')} <Icon name="chevronRight" className="ml-1 w-4 h-4" />
+                    <span className="text-blue-400 flex items-center text-xs md:text-sm font-medium group-hover:translate-x-1 transition-transform">
+                      {t('common.readMore')} <Icon name="chevronRight" className="ml-1 w-3 h-3 md:w-4 md:h-4" />
                     </span>
                   </div>
                 </Link>
