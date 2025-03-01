@@ -119,5 +119,5 @@ export default function RootLayout({ children, params: { lang } }: RootLayoutPro
 }
 
 export async function generateStaticParams() {
-  return [{ lang: 'en' }, { lang: 'zh' }];
+  return [{ lang: 'en' }, { lang: 'zh' }, { lang: 'ko' }];
 }

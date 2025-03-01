@@ -1,5 +1,6 @@
 import { Icon } from './Icon';
 import { IoChevronDownOutline } from 'react-icons/io5';
+import { useTranslation } from 'react-i18next';
 
 interface LanguageSelectorProps {
   isOpen: boolean;
@@ -8,10 +9,13 @@ interface LanguageSelectorProps {
 }
 
 export const LanguageSelector = ({ isOpen, onToggle, onSelect }: LanguageSelectorProps) => {
-  
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
+
   const languages = [
-    { code: "zh", name: '中文', flag: "🇨🇳" },
-    { code: "en", name: 'English', flag: "🇺🇸" },
+    { code: 'en', name: 'English', flag: '🇺🇸' },
+    { code: 'zh', name: '中文', flag: '🇨🇳' },
+    { code: 'ko', name: '한국어', flag: '🇰🇷' }
   ];
 
   return (

@@ -349,7 +349,7 @@ export default function RedPacketPage() {
             </div>
           </div>
         </div>
-      </div>
+              </div>
     </div>
   );
-}   
+} 

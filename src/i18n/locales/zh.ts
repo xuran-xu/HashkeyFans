@@ -21,16 +21,32 @@ export default {
     profile: "个人中心"
   },
   home: {
-    slogan: "Web3大航海",
-    description: "区块链如何融入人类文明主叙事 · 香港",
+    slogan: "$HSK 质押开启",
+    description: "质押 $HSK 赚取 $HSK",
     buttonJoin: {
-      text: "申请参加",
-      link: "https://lu.ma/hzz6mel6"
+      text: "参与质押",
+      link: "https://www.hskhodlium.xyz/"
     },
     buttonReview: {
       text: "查看链上项目",
       link: "/projects"
-    }
+    },
+    events: [
+      {
+        id: 1,
+        title: "Hackathon 太易 - 首尔",
+        description: "HashKey Chain 首次线下 Hackathon - 首尔",
+        link: "https://lu.ma/va084lwn",
+        date: "2025-03-28"
+      },
+      {
+        id: 2,
+        title: "HyperIndex",
+        description: "$1M 流动性添加 交易赛开启",
+        link: "https://happy.hyperindex.trade/",
+        date: "结束时间: 2025-03-15"
+      }
+    ]
   },
   events: {
     title: "活动列表",

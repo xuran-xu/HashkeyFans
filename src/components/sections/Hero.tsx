@@ -6,6 +6,15 @@ import Link from 'next/link';
 import { Icon } from "../common/Icon";
 import { Button } from "../common/Button";
 
+// 添加事件类型定义
+interface Event {
+  id: number;
+  title: string;
+  description: string;
+  link: string;
+  date: string;
+}
+
 const BackgroundH = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -144,16 +153,16 @@ const BackgroundH = () => {
 };
 
 export const Hero = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [content, setContent] = useState({
     slogan: "",
     description: "",
     buttonJoin: { text: "", link: "" },
-    buttonReview: { text: "", link: "" }
+    buttonReview: { text: "", link: "" },
+    events: [] as Event[]  // 指定类型为 Event[]
   });
 
   useEffect(() => {
-    const { t } = i18n;
     setContent({
       slogan: t('home.slogan'),
       description: t('home.description'),
@@ -164,9 +173,10 @@ export const Hero = () => {
       buttonReview: {
         text: t('home.buttonReview.text'),
         link: t('home.buttonReview.link')
-      }
+      },
+      events: (t('home.events', { returnObjects: true }) || []) as Event[]  // 类型断言
     });
-  }, [i18n.language]);
+  }, [i18n.language, t]);
 
   return (
     <div className="relative h-[calc(100vh-8rem)] flex items-center justify-center">
@@ -178,7 +188,7 @@ export const Hero = () => {
         <p className="text-xl md:text-2xl mb-8 text-white font-semibold drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] tracking-wider">
           {content.description}
         </p>
-        <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-10">
+        <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-10 mb-12">
           <Button size="lg" variant="primary">
             <Link href={content.buttonJoin.link} className="flex items-center space-x-2">
               <Icon name="calendar" />
@@ -192,6 +202,39 @@ export const Hero = () => {
             </Link>
           </Button>
         </div>
+        
+        {/* 事件展示区域 */}
+        {content.events && content.events.length > 0 && (
+          <div className="mt-12 max-w-4xl mx-auto">
+            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)]">
+              {t('events.current')}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {content.events.map((event) => (
+                <Link 
+                  key={event.id} 
+                  href={event.link}
+                  className="bg-gray-900/60 backdrop-blur-md border border-gray-700 rounded-xl p-6 transition-all hover:bg-gray-800/70 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 group"
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors truncate max-w-[70%]">
+                      {event.title}
+                    </h3>
+                    <span className="text-sm text-gray-400 bg-gray-800 px-2 py-1 rounded whitespace-nowrap">
+                      {event.date}
+                    </span>
+                  </div>
+                  <p className="text-gray-300 mb-4 line-clamp-2 h-12">{event.description}</p>
+                  <div className="flex justify-end">
+                    <span className="text-blue-400 flex items-center text-sm font-medium group-hover:translate-x-1 transition-transform">
+                      {t('common.readMore')} <Icon name="chevronRight" className="ml-1 w-4 h-4" />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

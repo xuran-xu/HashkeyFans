@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import en from './locales/en';
 import zh from './locales/zh';
+import ko from './locales/ko';
 
 let initialized = false;
 
@@ -13,7 +14,8 @@ const initI18n = () => {
     .init({
       resources: {
         en: { translation: en },
-        zh: { translation: zh }
+        zh: { translation: zh },
+        ko: { translation: ko }
       },
       lng: 'zh',
       fallbackLng: 'en',

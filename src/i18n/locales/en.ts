@@ -21,16 +21,32 @@ export default {
     profile: "profile"
   },
   home: {
-    slogan: "Web3 Voyage",
-    description: "How Blockchain Shapes Humanity's Main Narrative · HongKong",
+    slogan: "$HSK Staking",
+    description: "Stake $HSK to earn $HSK",
     buttonJoin: {
-      text: "Join Event",
-      link: "https://lu.ma/hzz6mel6"
+      text: "Staking",
+      link: "https://www.hskhodlium.xyz/"
     },
     buttonReview: {
       text: "All Projects",
       link: "/projects"
-    }
+    },
+    events: [
+      {
+        id: 1,
+        title: "Hackathon Taiyi",
+        description: "HashKey Chain First Hackathon in Seoul",
+        link: "https://lu.ma/va084lwn",
+        date: "2025-03-28"
+      },
+      {
+        id: 2,
+        title: "HyperIndex Trading",
+        description: "$1M liquidity added, competition now open!",
+        link: "https://happy.hyperindex.trade/",
+        date: "End: 2025-03-15"
+      }
+    ]
   },
   events: {
     title: "Events",

@@ -24,7 +24,7 @@ export const Header = () => {
   useEffect(() => {
     setMounted(true);
     const urlLang = pathname.split('/')[1];
-    if (urlLang && (urlLang === 'en' || urlLang === 'zh') && urlLang !== i18n.language) {
+    if (urlLang && (urlLang === 'en' || urlLang === 'zh' || urlLang === 'ko') && urlLang !== i18n.language) {
       i18n.changeLanguage(urlLang);
     }
   }, [pathname]);
@@ -145,6 +145,20 @@ export const Header = () => {
             onSelect={(lang) => {
               i18n.changeLanguage(lang);
               setIsLangMenuOpen(false);
+              setIsMenuOpen(false);
+              
+              // 更新URL路径，替换语言代码部分
+              const urlParts = pathname.split('/');
+              const currentLang = urlParts[1];
+              if (currentLang === 'en' || currentLang === 'zh' || currentLang === 'ko') {
+                urlParts[1] = lang;
+                const newPath = urlParts.join('/');
+                window.history.pushState({}, '', newPath);
+              } else {
+                // 如果当前URL没有语言代码，则添加
+                const newPath = `/${lang}${pathname}`;
+                window.history.pushState({}, '', newPath);
+              }
             }}
           />
         </div>
