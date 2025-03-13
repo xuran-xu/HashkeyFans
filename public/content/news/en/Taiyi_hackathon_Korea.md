@@ -29,7 +29,8 @@ As part of the **Super Chain ecosystem**, HashKey Chain natively supports **RWA 
 
 | **HashKey HSK** | **HashFans** | **Tg Group** | **Discord** |
 |-----------------|--------------|--------------|-------------|
-| ![QR Code](https://i.meee.com.tw/zDoamaN.png) | ![QR Code](https://i.meee.com.tw/ytfCuEa.png) | ![QR Code](https://i.meee.com.tw/HxalR2n.jpg) | ![QR Code](https://i.meee.com.tw/kqJo9s7.png) | 
+| <img src="https://i.meee.com.tw/zDoamaN.png" alt="HashKey HSK QR Code" style="width: 100px; height: 100px;"> | <img src="https://i.meee.com.tw/ytfCuEa.png" alt="HashFans QR Code" style="width: 100px; height: 100px;"> | <img src="https://i.meee.com.tw/HxalR2n.jpg" alt="Tg Group QR Code" style="width: 100px; height: 100px;"> | <img src="https://i.meee.com.tw/kqJo9s7.png" alt="Discord QR Code" style="width: 100px; height: 100px;"> |
+
 
 ## 🏁 Tracks
 
