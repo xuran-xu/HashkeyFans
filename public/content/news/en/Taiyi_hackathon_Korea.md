@@ -26,25 +26,10 @@ As part of the **Super Chain ecosystem**, HashKey Chain natively supports **RWA 
 <div style="text-align: center;">
   <strong>Follow us</strong>
 </div>
-<div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
-  <div style="text-align: center; flex: 1 1 25%; margin: 10px;">
-    <p><strong>HashKey HSK</strong></p>
-    <img src="https://i.meee.com.tw/zDoamaN.png" alt="Telegram QR Code" style="width: 100px; height: 100px;">
-  </div>
-  <div style="text-align: center; flex: 1 1 25%; margin: 10px;">
-    <p><strong>HashFans</strong></p>
-    <img src="https://i.meee.com.tw/ytfCuEa.png" alt="Discord QR Code" style="width: 100px; height: 100px;">
-  </div>
-  <div style="text-align: center; flex: 1 1 25%; margin: 10px;">
-    <p><strong>Tg Group</strong></p>
-    <img src="https://i.meee.com.tw/HxalR2n.jpg" alt="Telegram QR Code" style="width: 100px; height: 100px;">
-  </div>
-  <div style="text-align: center; flex: 1 1 25%; margin: 10px;">
-    <p><strong>Discord</strong></p>
-    <img src="https://i.meee.com.tw/kqJo9s7.png" alt="Discord QR Code" style="width: 100px; height: 100px;">
-  </div>
-</div>
 
+| **HashKey HSK** | **HashFans** | **Tg Group** | **Discord** |
+|-----------------|--------------|--------------|-------------|
+| ![QR Code](https://i.meee.com.tw/zDoamaN.png) | ![QR Code](https://i.meee.com.tw/ytfCuEa.png) | ![QR Code](https://i.meee.com.tw/HxalR2n.jpg) | ![QR Code](https://i.meee.com.tw/kqJo9s7.png) | 
 
 ## 🏁 Tracks
 
