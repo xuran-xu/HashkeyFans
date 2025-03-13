@@ -1,7 +1,10 @@
 # HashKey Chain Developer Event: Taiyi Hackathon
 
-![HashKey Chain Logo](https://i.meee.com.tw/2cyL4uF.png)
 
+
+<div style="text-align: center;">
+  <img src="https://i.meee.com.tw/2cyL4uF.png" alt="HashKey Chain Logo" style="width: 600px; height: auto;">
+</div>
 
 ## 📚 About the Event - [Luma](https://lu.ma/va084lwn) 
 
@@ -23,9 +26,8 @@ HashKey Chain is a **high-performance blockchain** dedicated to building a **sec
 
 As part of the **Super Chain ecosystem**, HashKey Chain natively supports **RWA and cross-chain interoperability** while offering **institutional-grade security standards** and **developer-friendly tools** to accelerate the development of Web3 financial infrastructure and drive global blockchain adoption. Moving forward, HashKey Chain will continue to evolve, creating a **unified logic and value-sharing Super Chain ecosystem**, collaborating with more partners to advance blockchain technology and unlock the future potential of decentralized finance.
 
-<div style="text-align: center;">
-  <strong>Follow us</strong>
-</div>
+
+### Follow us
 
 | **HashKey HSK** | **HashFans** | **Tg Group** | **Discord** |
 |-----------------|--------------|--------------|-------------|
@@ -45,7 +47,11 @@ As part of the **Super Chain ecosystem**, HashKey Chain natively supports **RWA 
 
 ## 🧧 Red Envelope
 
-We’ve prepared **100 Red Envelopes in HSK**! All registered builders can claim theirs upon check-in on **Hackathon Day 1**.
+We’ve prepared **100 Red Envelopes in HSK**! 
+
+All registered builders can claim theirs upon check-in on **Hackathon Day 1**.
+
+
 
 
 
