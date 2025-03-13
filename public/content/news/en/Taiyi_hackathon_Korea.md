@@ -1,8 +1,6 @@
 # HashKey Chain Developer Event: Taiyi Hackathon
 
-![HashKey Chain Logo](../../img/Taiyi_p1.png)
-
-
+![HashKey Chain Logo](https://i.meee.com.tw/2cyL4uF.png)
 
 
 ## 📚 About the Event - [Luma](https://lu.ma/va084lwn) 
@@ -31,19 +29,19 @@ As part of the **Super Chain ecosystem**, HashKey Chain natively supports **RWA 
 <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
   <div style="text-align: center; flex: 1 1 25%; margin: 10px;">
     <p><strong>HashKey HSK</strong></p>
-    <img src="../../img/hashkey_hsk" alt="Telegram QR Code" style="width: 150px; height: 150px;">
+    <img src="https://i.meee.com.tw/zDoamaN.png" alt="Telegram QR Code" style="width: 100px; height: 100px;">
   </div>
   <div style="text-align: center; flex: 1 1 25%; margin: 10px;">
     <p><strong>HashFans</strong></p>
-    <img src="../../img/X_hashfans" alt="Discord QR Code" style="width: 150px; height: 150px;">
+    <img src="https://i.meee.com.tw/ytfCuEa.png" alt="Discord QR Code" style="width: 100px; height: 100px;">
   </div>
   <div style="text-align: center; flex: 1 1 25%; margin: 10px;">
     <p><strong>Tg Group</strong></p>
-    <img src="../../img/hashfans_tg" alt="Telegram QR Code" style="width: 150px; height: 150px;">
+    <img src="https://i.meee.com.tw/HxalR2n.jpg" alt="Telegram QR Code" style="width: 100px; height: 100px;">
   </div>
   <div style="text-align: center; flex: 1 1 25%; margin: 10px;">
     <p><strong>Discord</strong></p>
-    <img src="../../img/discord_code" alt="Discord QR Code" style="width: 150px; height: 150px;">
+    <img src="https://i.meee.com.tw/kqJo9s7.png" alt="Discord QR Code" style="width: 100px; height: 100px;">
   </div>
 </div>
 
