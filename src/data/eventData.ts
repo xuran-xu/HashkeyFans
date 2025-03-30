@@ -34,8 +34,8 @@ export const eventData: Record<string, EventItem[]> = {
     },
     {
       type: 'event',
-      startDate: "TBD",
-      endDate: "2024-12-22",
+      startDate: "2025-03-28",
+      endDate: "2025-03-30",
       image: "/img/taiyi.jpg",
       title: "太易",
       content: "HashKey Chain 首次线下Hackathon - 首尔",
@@ -114,7 +114,7 @@ export const eventData: Record<string, EventItem[]> = {
     },
     {
       type: 'event',
-      startDate: "2025-03-01",
+      startDate: "2025-03-28",
       endDate: "2025-03-30",
       image: "/img/taiyi.jpg",
       title: "Taiyi",
@@ -194,7 +194,7 @@ export const eventData: Record<string, EventItem[]> = {
     },
     {
       type: 'event',
-      startDate: "2025-03-01",
+      startDate: "2025-03-28",
       endDate: "2025-03-30",
       image: "/img/taiyi.jpg",
       title: "타이이",

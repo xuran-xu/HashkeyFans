@@ -41,10 +41,10 @@ export default {
       },
       {
         id: 2,
-        title: "HyperIndex Trading",
-        description: "$1M liquidity added, competition now open!",
-        link: "https://happy.hyperindex.trade/",
-        date: "End: 2025-03-15"
+        title: "HashKey Chain Meetup - Taipei",
+        description: "Meetup in Taipei, discuss the future of HashKey Chain",
+        link: "https://lu.ma/3z9rzm6v",
+        date: "End: 2025-04-01"
       }
     ]
   },

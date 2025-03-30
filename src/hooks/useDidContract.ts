@@ -188,14 +188,69 @@ export function useDidContract() {
     }
   }, [contract]);
 
+  const verifyProfile = useCallback(async (address: string): Promise<boolean> => {
+    // 由于合约中可能还没有实现验证方法，我们可以先模拟这个功能
+    if (!contract) throw new Error('Contract not initialized');
+    try {
+      // 这里可以调用合约的验证方法
+      // const tx = await contract.verifyProfile(address);
+      // const receipt = await tx.wait();
+      
+      // 临时方案：模拟验证，将来可以替换为真实合约调用
+      console.log('Verifying profile for:', address);
+      await new Promise(resolve => setTimeout(resolve, 2000)); // 模拟网络延迟
+      return true; // 模拟验证成功
+    } catch (error) {
+      console.error('Error verifying profile:', error);
+      throw error;
+    }
+  }, [contract]);
+
   const batchUpdateProfile = useCallback(async (data: BatchUpdateData) => {
     if (!contract) throw new Error('Contract not initialized');
     try {
+      console.log('Batch update profile data:', JSON.stringify(data, null, 2));
+      
+      // 验证数据格式是否正确
+      if (!data.nickname) {
+        console.warn('Nickname is empty, will use empty string');
+      }
+      
+      if (!data.cryptoAddresses || !Array.isArray(data.cryptoAddresses)) {
+        console.warn('No crypto addresses or invalid format:', data.cryptoAddresses);
+        data.cryptoAddresses = [];
+      } else {
+        console.log('Crypto addresses count:', data.cryptoAddresses.length);
+        data.cryptoAddresses.forEach((addr, i) => {
+          console.log(`Crypto address ${i}:`, addr);
+          // 确保地址数据格式正确
+          if (!addr.chain || !addr.addr) {
+            console.error(`Invalid address data at index ${i}:`, addr);
+          }
+        });
+      }
+      
+      // 验证社交账户
+      if (!data.socialAccounts || !Array.isArray(data.socialAccounts)) {
+        console.warn('No social accounts or invalid format:', data.socialAccounts);
+        data.socialAccounts = [];
+      }
+      
+      // 准备发送交易
+      console.log('Sending batchUpdateProfile transaction with data:', data);
       const tx = await contract.batchUpdateProfile(data);
+      console.log('Transaction sent:', tx.hash);
+      
+      console.log('Waiting for transaction confirmation...');
       const receipt = await tx.wait();
+      console.log('Transaction confirmed:', receipt);
+      
       return receipt;
     } catch (error) {
       console.error('Error batch updating profile:', error);
+      if (error instanceof Error) {
+        console.error('Error details:', error.message);
+      }
       throw error;
     }
   }, [contract]);
@@ -208,6 +263,7 @@ export function useDidContract() {
     updateSocialAccount,
     updateCryptoAddress,
     getAllSocialAccounts,
+    verifyProfile,
     batchUpdateProfile,
   };
 } 

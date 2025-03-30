@@ -41,10 +41,10 @@ export default {
       },
       {
         id: 2,
-        title: "HyperIndex",
-        description: "$1M 流动性添加 交易赛开启",
-        link: "https://happy.hyperindex.trade/",
-        date: "结束时间: 2025-03-15"
+        title: "HashKey Chain Meetup - 台北",
+        description: "相约台北，一起讨论 HashKey Chain 的未来",
+        link: "https://lu.ma/3z9rzm6v",
+        date: "2025-04-01"
       }
     ]
   },

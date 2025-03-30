@@ -1,17 +1,20 @@
+import React from 'react';
 import { 
   FaTelegram, 
   FaDiscord, 
-  FaSquareXTwitter,
-  FaGithub,
-  FaMedium,
-  FaEthereum,
-  FaBitcoin,
-  FaGlobe,
-  FaLocationDot
+  FaGithub, 
+  FaMedium, 
+  FaSquareXTwitter, 
+  FaEthereum, 
+  FaBitcoin, 
+  FaGlobe, 
+  FaLocationDot,
+  FaWallet
 } from "react-icons/fa6";
-import { 
-  IoNewspaperOutline, 
-  IoGridOutline, 
+import { FaExternalLinkAlt } from "react-icons/fa";
+import {
+  IoNewspaperOutline,
+  IoGridOutline,
   IoCalendarOutline,
   IoLanguageOutline,
   IoMenuOutline,
@@ -29,7 +32,8 @@ import {
   IoCloseOutline,
   IoCopyOutline,
   IoTrophyOutline,
-  IoCameraOutline
+  IoCameraOutline,
+  IoCodeOutline
 } from "react-icons/io5";
 import { SiSolana } from "react-icons/si";
 
@@ -64,6 +68,9 @@ export const icons = {
   copy: IoCopyOutline,
   trophy: IoTrophyOutline,
   camera: IoCameraOutline,
+  code: IoCodeOutline,
+  wallet: FaWallet,
+  externalLink: FaExternalLinkAlt,
   x: IoCloseOutline
 } as const;
 
