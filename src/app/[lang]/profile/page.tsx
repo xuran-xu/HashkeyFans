@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAccount, useWallets } from '@particle-network/connectkit';
-import ProfileView from '@/components/profile/ProfileView';
+import { ProfileView } from '@/components/profile/ProfileView';
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
 import { ProfileData } from '@/types/profile';
 import { useDidContract } from '@/hooks/useDidContract';
@@ -49,6 +49,8 @@ export default function ProfilePage() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isCollectionLoading, setIsCollectionLoading] = useState(true);
+  const [contractData, setContractData] = useState<any | null>(null);
+  const [isContractLoading, setIsContractLoading] = useState(true);
 
   // 分离合约数据获取
   useEffect(() => {
@@ -59,6 +61,7 @@ export default function ProfilePage() {
       }
 
       try {
+        setIsContractLoading(true);
         const profileData = await getProfile(primaryWallet.accounts[0]);
         if (profileData) {
           setProfile(profileData);
@@ -67,6 +70,7 @@ export default function ProfilePage() {
         console.error('Contract error:', err);
       } finally {
         setIsLoading(false);
+        setIsContractLoading(false);
       }
     };
 
@@ -82,6 +86,7 @@ export default function ProfilePage() {
       }
 
       try {
+        setIsCollectionLoading(true);
         const collectionRes = await fetch('/api/user/collection-status', {
           headers: {
             'x-wallet-address': primaryWallet.accounts[0]
@@ -114,6 +119,11 @@ export default function ProfilePage() {
       window.removeEventListener('open-collection', handleOpenCollection);
     };
   }, []);
+
+  // 处理编辑资料按钮点击事件
+  const handleEditProfile = () => {
+    setIsEditModalOpen(true);
+  };
 
   if (!isConnected || !primaryWallet?.accounts?.[0]) {
     return (
@@ -189,6 +199,7 @@ export default function ProfilePage() {
         isOwner={isConnected}
         profile={profile}
         isLoading={isLoading}
+        onEdit={handleEditProfile}
       />
 
       {/* Edit Profile Modal */}

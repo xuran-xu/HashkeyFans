@@ -1,4 +1,5 @@
 "use client"
+import React from 'react';
 import { generateShareCode } from "@/lib/utils";
 import { ConnectButton, useAccount } from "@particle-network/connectkit";
 import Link from "next/link";
@@ -67,8 +68,9 @@ export const Header = () => {
               }, 100);
             }
           }}
+          className="text-white"
         >
-          <Icon name={item.icon} className={`h-4 w-4 ${item.iconClass || ''}`} />
+          <Icon name={item.icon} className={`h-4 w-4 text-white ${item.iconClass || ''}`} />
           {t(item.key)}
         </Link>
       </li>
@@ -87,8 +89,8 @@ export const Header = () => {
         <ul className="hidden lg:flex menu menu-horizontal ml-2">
           {/* Explore 菜单 */}
           <li className="dropdown dropdown-hover">
-            <div tabIndex={0} role="button" className="flex items-center gap-2">
-              <Icon name={menuConfig.explore.icon} className="h-4 w-4" />
+            <div tabIndex={0} role="button" className="flex items-center gap-2 text-white">
+              <Icon name={menuConfig.explore.icon} className="h-4 w-4 text-white" />
               {t('nav.explore')}
             </div>
             <ul className="dropdown-content z-[1] ml-0 menu p-2 shadow bg-base-100 rounded-box w-48">
@@ -98,8 +100,8 @@ export const Header = () => {
 
           {menuConfig.main.map((item) => (
             <li key={item.key}>
-              <Link href={item.link} className="flex items-center gap-2">
-                <Icon name={item.icon} className="h-4 w-4" />
+              <Link href={item.link} className="flex items-center gap-2 text-white">
+                <Icon name={item.icon} className="h-4 w-4 text-white" />
                 {t(item.key)}
               </Link>
             </li>
@@ -110,33 +112,15 @@ export const Header = () => {
       <div className="navbar-end gap-2">
         <div className="hidden lg:flex items-center gap-3">
           {/* {address && (
-            <div className="dropdown dropdown-end">
-              <div 
-                tabIndex={0} 
-                role="button" 
-                className="btn btn-ghost bg-white/5 hover:bg-white/10 text-white border-white/10 gap-3"
-              >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                  <Icon name="user" className="h-4 w-4 text-white" />
-                </div>
-                <span className="text-white/80">{formatAddress(address)}</span>
-                <Icon name="x" className="h-4 w-4 text-white/60" />
+            <Link 
+              href="/profile" 
+              className="btn btn-ghost bg-white/5 hover:bg-white/10 border-white/10 flex items-center gap-2"
+            >
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/40 to-secondary/40 flex items-center justify-center">
+                <Icon name="user" className="h-4 w-4 text-white" />
               </div>
-              <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-52 mt-2">
-                <li>
-                  <Link href="/profile" className="flex items-center gap-2">
-                    <Icon name="user" className="h-4 w-4" />
-                    {t('nav.profile')}
-                  </Link>
-                </li>
-                <li>
-                  <Link href={`/consensuscard/${generateShareCode(address)}`} className="flex items-center gap-2">
-                    <Icon name="trophy" className="h-4 w-4" />
-                    {t('nav.card')}
-                  </Link>
-                </li>
-              </ul>
-            </div>
+              <span className="text-white">{formatAddress(address)}</span>
+            </Link>
           )} */}
           <ConnectButton />
           <LanguageSelector 
@@ -190,7 +174,7 @@ export const Header = () => {
             {/* 主菜单内容 */}
             <div className="flex-1 overflow-y-auto p-4 pb-safe">
               {/* 用户信息区域 */}
-              {address && (
+              {/* {address && (
                 <div 
                   className="mb-6 p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 cursor-pointer"
                   onClick={(e) => {
@@ -210,7 +194,7 @@ export const Header = () => {
                     </div>
                   </div>
                 </div>
-              )}
+              )}  */}
 
               {/* 菜单列表 */}
               <div className="space-y-4">
@@ -218,7 +202,7 @@ export const Header = () => {
                 <div className="collapse collapse-plus bg-base-200/10 rounded-xl">
                   <input type="checkbox" /> 
                   <div className="collapse-title text-white flex items-center gap-2">
-                    <Icon name={menuConfig.explore.icon} className="h-5 w-5" />
+                    <Icon name={menuConfig.explore.icon} className="h-5 w-5 text-white" />
                     {t('nav.explore')}
                   </div>
                   <div className="collapse-content">
@@ -234,9 +218,9 @@ export const Header = () => {
                             <Link 
                               href={link}
                               onClick={() => setIsMenuOpen(false)}
-                              className="text-white/80 hover:text-white"
+                              className="text-white hover:text-white"
                             >
-                              <Icon name={item.icon} className={`h-4 w-4 ${item.iconClass || ''}`} />
+                              <Icon name={item.icon} className={`h-4 w-4 text-white ${item.iconClass || ''}`} />
                               {t(item.key)}
                             </Link>
                           </li>
@@ -253,9 +237,9 @@ export const Header = () => {
                       <Link 
                         href={item.link}
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex items-center gap-2 text-white/80 hover:text-white rounded-xl bg-base-200/10"
+                        className="flex items-center gap-2 text-white hover:text-white rounded-xl bg-base-200/10"
                       >
-                        <Icon name={item.icon} className="h-4 w-4" />
+                        <Icon name={item.icon} className="h-4 w-4 text-white" />
                         {t(item.key)}
                       </Link>
                     </li>
@@ -267,16 +251,16 @@ export const Header = () => {
 
               {/* 底部功能区 */}
               <div className="space-y-4">
-                {address && (
+                {/* {address && (
                   <Link 
                     href="/profile" 
                     className="btn btn-block bg-white/5 hover:bg-white/10 text-white border-white/10"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Icon name="user" className="h-5 w-5" />
-                    {t('nav.profile')}
+                    <Icon name="user" className="h-5 w-5 text-white" />
+                    <span className="text-white">{t('nav.profile')}</span>
                   </Link>
-                )}
+                )} */}
                 <div className="flex justify-between items-center gap-4">
                   <ConnectButton />
                   <LanguageSelector 

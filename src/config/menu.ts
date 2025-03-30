@@ -19,17 +19,6 @@ export const menuConfig: MenuConfig = {
         key: 'nav.redpacket',
         link: '/redpacket',
         iconClass: 'text-red-500'
-      },
-      {
-        icon: 'trophy',
-        key: 'nav.rankings',
-        link: '/rankings'
-      },
-      {
-        icon: 'trophy',
-        key: 'nav.card',
-        link: '/consensuscard',
-        requireAuth: true
       }
     ]
   },
