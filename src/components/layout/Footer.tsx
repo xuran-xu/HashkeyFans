@@ -30,7 +30,7 @@ export const Footer = () => {
             <a href="https://discord.gg/qvPkbrYY" className="text-white hover:text-indigo-500 transition-colors duration-200">
               <Icon name="discord" />
             </a>
-            <a href="https://x.com/HashKeyHSK" className="text-white hover:text-gray-300 transition-colors duration-200">
+            <a href="https://x.com/HSKChain" className="text-white hover:text-gray-300 transition-colors duration-200">
               <Icon name="twitter" />
             </a>
           </div>
