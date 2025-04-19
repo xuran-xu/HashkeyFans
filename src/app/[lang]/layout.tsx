@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Hash Fans',
     description: 'Web3 Voyage, How Blockchain Shapes Humanity\'s Main Narrative',
-    creator: '@HashKeyHSK',
+    creator: '@HSKChain',
     images: ['/img/logo.png'],
   },
   icons: {
