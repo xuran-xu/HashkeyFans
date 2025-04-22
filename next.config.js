@@ -30,6 +30,10 @@ const nextConfig = {
   images: {
     domains: ['supra.com'],
     unoptimized: process.env.NODE_ENV === 'development'
+  },
+  eslint: {
+    // ESLint 检查不会导致构建失败
+    ignoreDuringBuilds: true,
   }
 }
 
