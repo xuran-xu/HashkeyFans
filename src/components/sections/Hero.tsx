@@ -27,126 +27,188 @@ const BackgroundH = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Set canvas size
     const setCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.scale(dpr, dpr); // Scale for retina displays
     };
+    
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
 
-    const drawH = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      const h = canvas.height * 0.7;
-      const w = h * 0.8;
-      const thickness = h * 0.15;
-      const x = (canvas.width - w) / 2;
-      const y = (canvas.height - h) / 2;
-
-      // Create 3D effect with multiple layers
-      const layers = 30;
-      const layerSpacing = 1.5;
-      const shadowBlur = 40;
-
-      // Draw shadow first
-      ctx.shadowColor = 'rgba(255, 255, 255, 0.15)';
-      ctx.shadowBlur = shadowBlur;
-      ctx.shadowOffsetX = 0;
-      ctx.shadowOffsetY = 0;
-
-      // Draw each layer from back to front
-      for (let i = layers; i >= 0; i--) {
-        const depth = i * layerSpacing;
-        const opacity = 0.01 + (i / layers) * 0.04;
-        
-        const gradient = ctx.createLinearGradient(
-          x - depth, 
-          y - depth, 
-          x + w + depth, 
-          y + h + depth
-        );
-        gradient.addColorStop(0, `rgba(255, 255, 255, ${opacity * 0.5})`);
-        gradient.addColorStop(0.5, `rgba(255, 255, 255, ${opacity})`);
-        gradient.addColorStop(1, `rgba(255, 255, 255, ${opacity * 0.5})`);
-
-        ctx.fillStyle = gradient;
-        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.5})`;
-        ctx.lineWidth = 0.5;
-
-        // Left vertical bar
-        ctx.beginPath();
-        ctx.rect(
-          x - depth, 
-          y - depth, 
-          thickness, 
-          h
-        );
-        ctx.fill();
-        if (i % 3 === 0) ctx.stroke();
-
-        // Right vertical bar
-        ctx.beginPath();
-        ctx.rect(
-          x + w - thickness - depth, 
-          y - depth, 
-          thickness, 
-          h
-        );
-        ctx.fill();
-        if (i % 3 === 0) ctx.stroke();
-
-        // Horizontal bar
-        ctx.beginPath();
-        ctx.rect(
-          x - depth, 
-          y + (h - thickness) / 2 - depth, 
-          w, 
-          thickness
-        );
-        ctx.fill();
-        if (i % 3 === 0) ctx.stroke();
+    // Particle properties
+    const particleCount = window.innerWidth < 768 ? 60 : 150;
+    const connectionDistance = window.innerWidth < 768 ? 100 : 150;
+    const particleSize = window.innerWidth < 768 ? 1.5 : 2;
+    
+    // Mouse interaction
+    let mouseX = 0;
+    let mouseY = 0;
+    const mouseRadius = 150;
+    
+    const handleMouseMove = (e: MouseEvent | TouchEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      if ('touches' in e) {
+        // Touch event
+        if (e.touches.length > 0) {
+          mouseX = e.touches[0].clientX - rect.left;
+          mouseY = e.touches[0].clientY - rect.top;
+        }
+      } else {
+        // Mouse event
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
       }
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      const rotateX = -(e.clientY - centerY) / 30;
-      const rotateY = (e.clientX - centerX) / 30;
-      const translateZ = Math.abs(rotateX + rotateY) * 2;
-
-      container.style.transform = `
-        perspective(1000px)
-        rotateX(${rotateX}deg)
-        rotateY(${rotateY}deg)
-        translateZ(${translateZ}px)
-      `;
-    };
-
-    drawH();
+    // Add event listeners
     window.addEventListener('mousemove', handleMouseMove);
-
+    window.addEventListener('touchmove', handleMouseMove, { passive: true });
+    
+    // Create particles
+    class Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      color: string;
+      size: number;
+      connectedTo: Particle[] = [];
+      
+      constructor() {
+        this.x = Math.random() * window.innerWidth;
+        this.y = Math.random() * window.innerHeight;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.size = Math.random() * particleSize + 0.5;
+        
+        // Create futuristic colors
+        const hue = Math.floor(Math.random() * 60) + 200; // Blue to purple range
+        const saturation = Math.floor(Math.random() * 20) + 70; // High saturation
+        const lightness = Math.floor(Math.random() * 20) + 50; // Medium lightness
+        this.color = `hsla(${hue}, ${saturation}%, ${lightness}%, 0.7)`;
+      }
+      
+      update() {
+        // Add mouse interaction
+        const dx = mouseX - this.x;
+        const dy = mouseY - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        
+        if (dist < mouseRadius) {
+          const force = (mouseRadius - dist) / mouseRadius;
+          this.vx -= (dx / dist) * force * 0.2;
+          this.vy -= (dy / dist) * force * 0.2;
+        }
+        
+        // Update position
+        this.x += this.vx;
+        this.y += this.vy;
+        
+        // Bounce off edges
+        if (this.x < 0 || this.x > window.innerWidth) this.vx = -this.vx;
+        if (this.y < 0 || this.y > window.innerHeight) this.vy = -this.vy;
+        
+        // Dampen velocity
+        this.vx *= 0.99;
+        this.vy *= 0.99;
+        
+        // Add small random movement for organic feel
+        this.vx += (Math.random() - 0.5) * 0.05;
+        this.vy += (Math.random() - 0.5) * 0.05;
+      }
+      
+      draw() {
+        if (!ctx) return;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+      
+      connectParticles(particles: Particle[]) {
+        this.connectedTo = [];
+        for (const particle of particles) {
+          if (this === particle) continue;
+          
+          const dx = this.x - particle.x;
+          const dy = this.y - particle.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < connectionDistance) {
+            this.connectedTo.push(particle);
+            const opacity = 1 - (distance / connectionDistance);
+            
+            ctx!.beginPath();
+            ctx!.strokeStyle = `rgba(100, 180, 255, ${opacity * 0.2})`;
+            ctx!.lineWidth = opacity * 1.5;
+            ctx!.moveTo(this.x, this.y);
+            ctx!.lineTo(particle.x, particle.y);
+            ctx!.stroke();
+          }
+        }
+      }
+    }
+    
+    // Initialize particles
+    const particles: Particle[] = [];
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+    
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw glowing background
+      const gradient = ctx.createRadialGradient(
+        window.innerWidth / 2,
+        window.innerHeight / 2,
+        0,
+        window.innerWidth / 2,
+        window.innerHeight / 2,
+        window.innerWidth / 1.5
+      );
+      gradient.addColorStop(0, 'rgba(30, 40, 70, 0.2)');
+      gradient.addColorStop(1, 'rgba(10, 20, 40, 0)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+      
+      // Update and draw particles
+      for (const particle of particles) {
+        particle.update();
+        particle.draw();
+      }
+      
+      // Connect particles
+      for (const particle of particles) {
+        particle.connectParticles(particles);
+      }
+      
+      requestAnimationFrame(animate);
+    };
+    
+    animate();
+    
     return () => {
       window.removeEventListener('resize', setCanvasSize);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchmove', handleMouseMove);
     };
   }, []);
 
   return (
     <div 
       ref={containerRef}
-      className="absolute inset-0 hidden md:block transition-transform duration-100 ease-out"
-      style={{ transformStyle: 'preserve-3d' }}
+      className="absolute inset-0 transition-opacity duration-500"
     >
       <canvas
         ref={canvasRef}
         className="absolute inset-0 pointer-events-none"
-        style={{ 
-          zIndex: 0,
-          backfaceVisibility: 'hidden'
-        }}
       />
     </div>
   );
@@ -223,7 +285,7 @@ export const Hero = () => {
                 </span>
               </h2>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              <div className={`grid grid-cols-1 ${content.events.length === 1 ? 'md:grid-cols-1 max-w-lg mx-auto' : 'md:grid-cols-2'} gap-4 md:gap-6`}>
                 {content.events.map((event) => (
                   <Link 
                     key={event.id} 

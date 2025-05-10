@@ -73,34 +73,73 @@ export const Roadmap = () => {
   };
 
   const renderEventCard = (event: EventItem) => (
-    <Card className="h-[420px] flex flex-col p-6">
-      <div className="h-48 overflow-hidden rounded-lg mb-4">
+    <Card className="h-[380px] flex flex-col overflow-hidden w-full">
+      {/* 固定大小的图片容器 */}
+      <div className="h-[160px] overflow-hidden relative">
+        {/* 图片渐变覆盖 */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#081020] via-[#081020]/60 to-transparent opacity-70 z-10"></div>
+        
+        {/* 图片 */}
         <img 
           src={event.image} 
           alt={event.title} 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
+        
+        {/* 科技网格覆盖 */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.1)_1px,transparent_1px)] bg-[size:20px_20px] opacity-30 mix-blend-overlay z-20"></div>
+        
+        {/* 标题覆盖在图片上 */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 z-30">
+          <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] truncate">
+            {event.title}
+          </h3>
+        </div>
       </div>
-      <h3 className="text-xl font-bold mb-2 text-white">
-        {event.title}
-      </h3>
-      <p className="text-gray-300 text-sm mb-4 flex-grow line-clamp-3">
-        {event.content}
-      </p>
-      <div className="mt-auto">
-        {event.buttons?.map((button, index) => (
-          <Button key={index} variant="secondary" className="w-full">
-            <Link href={button.link}>{button.text}</Link>
-          </Button>
-        ))}
+      
+      {/* 内容区域 - 固定高度 */}
+      <div className="p-4 pb-5 flex-grow flex flex-col h-[220px]">
+        {/* 装饰线 */}
+        <div className="w-12 h-0.5 bg-blue-500/50 mb-3"></div>
+        
+        {/* 内容 - 添加省略号 */}
+        <div className="flex-grow overflow-hidden">
+          <p className="text-gray-300 text-sm leading-relaxed line-clamp-4">
+            {event.content}
+          </p>
+        </div>
+        
+        {/* 按钮区域 - 确保在底部 */}
+        <div className="mt-auto pt-4">
+          {event.buttons?.length ? (
+            <div className="flex">
+              {event.buttons.map((button, index) => (
+                <Link 
+                  key={index}
+                  href={button.link} 
+                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#1a56db] to-[#1e40af] hover:from-[#1e40af] hover:to-[#1a56db] text-white font-medium px-4 py-2.5 rounded-md transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.4)]"
+                >
+                  <span className="truncate">{button.text}</span>
+                  <Icon name="chevronRight" className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300 flex-shrink-0" />
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="flex">
+              <span className="w-full inline-flex items-center justify-center bg-gray-800/80 text-gray-400 px-4 py-2.5 rounded-md border border-gray-700/50">
+                {t('events.comingSoon')}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
     </Card>
   );
 
   return (
-    <div className="py-12">
+    <div className="py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)] tracking-wide">
+        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)] tracking-wide">
           {t('events.title')}
         </h2>
         
@@ -109,22 +148,22 @@ export const Roadmap = () => {
             <>
               <Button
                 variant="secondary"
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 rounded-full"
+                className="absolute -left-2 md:-left-5 top-1/2 -translate-y-1/2 z-30 rounded-full p-2 bg-gray-900/80 border border-gray-700/50 hover:border-blue-500/50 hover:bg-gray-800/90"
                 onClick={prevSlide}
               >
-                <Icon name="chevronLeft" />
+                <Icon name="chevronLeft" className="w-5 h-5" />
               </Button>
               <Button
                 variant="secondary"
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 rounded-full"
+                className="absolute -right-2 md:-right-5 top-1/2 -translate-y-1/2 z-30 rounded-full p-2 bg-gray-900/80 border border-gray-700/50 hover:border-blue-500/50 hover:bg-gray-800/90"
                 onClick={nextSlide}
               >
-                <Icon name="chevronRight" />
+                <Icon name="chevronRight" className="w-5 h-5" />
               </Button>
             </>
           )}
           
-          <div className="overflow-hidden">
+          <div className="overflow-hidden rounded-xl">
             <div 
               ref={slideRef}
               className="flex transition-transform duration-500 ease-in-out"
@@ -136,7 +175,8 @@ export const Roadmap = () => {
               {roadmapItems.map((item, index) => (
                 <div 
                   key={index}
-                  className={`flex-none w-full md:w-1/2 lg:w-1/3 px-2`}
+                  className={`flex-none w-full md:w-1/2 lg:w-1/3 p-3`}
+                  style={{ height: '400px', maxWidth: '392px', margin: '0 auto' }}
                 >
                   {renderEventCard(item)}
                 </div>

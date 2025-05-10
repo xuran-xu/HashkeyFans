@@ -34,17 +34,10 @@ export default {
     events: [
       {
         id: 1,
-        title: "Hackathon 太易 - 首尔",
-        description: "HashKey Chain 首次线下 Hackathon - 首尔",
-        link: "https://lu.ma/va084lwn",
-        date: "2025-03-28"
-      },
-      {
-        id: 2,
-        title: "HashKey Chain Meetup - 台北",
-        description: "相约台北，一起讨论 HashKey Chain 的未来",
-        link: "https://lu.ma/3z9rzm6v",
-        date: "2025-04-01"
+        title: "HashKey Chain Meetup - 成都",
+        description: "相约成都，一起讨论 HashKey Chain 的未来",
+        link: "https://lu.ma/tcfgd9wt",
+        date: "2025-05-27"
       }
     ]
   },

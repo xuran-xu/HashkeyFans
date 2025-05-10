@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Link from 'next/link';
 import { Card } from "@/components/common/Card";
 import { Button } from "@/components/common/Button";
+import { Icon } from "@/components/common/Icon";
 import { EventItem } from "@/types";
 import { eventData } from "@/data/eventData";
 
@@ -44,67 +45,84 @@ export default function EventList() {
   }, [lang]);
 
   const currentDate = new Date();
-  const upcomingEvents = events.filter(event => new Date(event.startDate) > currentDate);
-  const currentEvents = events.filter(event => new Date(event.startDate) <= currentDate && new Date(event.endDate) >= currentDate);
-  const pastEvents = events.filter(event => new Date(event.endDate) < currentDate);
+  
+  // 修改分类逻辑，将TBD日期的活动移到即将开始的区域
+  const upcomingEvents = events.filter(event => 
+    event.startDate === "TBD" || new Date(event.startDate) > currentDate
+  );
+  const currentEvents = events.filter(event => 
+    event.startDate !== "TBD" && 
+    new Date(event.startDate) <= currentDate && 
+    new Date(event.endDate) >= currentDate
+  );
+  const pastEvents = events.filter(event => 
+    event.startDate !== "TBD" && 
+    new Date(event.endDate) < currentDate
+  );
 
   const renderEventCard = (event: EventItem) => (
-    <div className="w-full px-2">
-      <div className="relative overflow-hidden group h-[380px] transition-all duration-300 transform hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(59,130,246,0.3)]">
-        {/* 背景遮罩 */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/90 via-gray-800/90 to-gray-900/90 border border-white/10 rounded-xl z-10"></div>
+    <Card className="h-[380px] flex flex-col overflow-hidden w-full">
+      {/* 固定大小的图片容器 */}
+      <div className="h-[160px] overflow-hidden relative">
+        {/* 图片渐变覆盖 */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#081020] via-[#081020]/60 to-transparent opacity-70 z-10"></div>
         
-        {/* 发光效果 */}
-        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-0"></div>
+        {/* 图片 */}
+        <img 
+          src={event.image} 
+          alt={event.title} 
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
         
-        {/* 科技线条装饰 */}
-        <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden z-20">
-          <div className="absolute rotate-45 top-4 -right-8 w-[1px] h-16 bg-gradient-to-b from-transparent via-blue-400/40 to-transparent"></div>
-          <div className="absolute rotate-45 top-6 -right-10 w-[1px] h-16 bg-gradient-to-b from-transparent via-purple-400/30 to-transparent"></div>
-        </div>
+        {/* 科技网格覆盖 */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.1)_1px,transparent_1px)] bg-[size:20px_20px] opacity-30 mix-blend-overlay z-20"></div>
         
-        {/* 卡片内容 */}
-        <div className="relative z-20 h-full flex flex-col rounded-xl overflow-hidden">
-          <div className="relative h-48 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60 z-10"></div>
-            <img
-              src={event.image} 
-              alt={event.title}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-            
-            {/* 科技风格的纹理覆盖 */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.1)_1px,transparent_1px)] bg-[size:20px_20px] opacity-20 mix-blend-overlay"></div>
-          </div>
-          
-          <div className="flex-1 p-4 flex flex-col">
-            <h2 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors mb-1 group-hover:text-shadow-glow">{event.title}</h2>
-            <p className="text-gray-300/90 line-clamp-2 h-10 mb-2">
-              {event.content}
-            </p>
-            <div className="mt-auto flex flex-wrap gap-2 justify-end">
-              {event.buttons && event.buttons.length > 0 ? (
-                event.buttons.map((button, index) => (
-                  <Link 
-                    key={index} 
-                    href={button.link} 
-                    target="_blank"
-                    className="relative px-4 py-1.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-md overflow-hidden group-hover:shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-all duration-300"
-                  >
-                    <span className="relative z-10">{button.text}</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </Link>
-                ))
-              ) : (
-                <div className="relative px-4 py-1.5 bg-gray-700/50 text-gray-300 rounded-md border border-gray-600/50">
-                  {t('events.comingSoon')}
-                </div>
-              )}
-            </div>
-          </div>
+        {/* 标题覆盖在图片上 */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 z-30">
+          <h3 className="text-xl font-bold text-white group-hover:text-blue-400 transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)] truncate">
+            {event.title}
+          </h3>
         </div>
       </div>
-    </div>
+      
+      {/* 内容区域 - 固定高度 */}
+      <div className="p-4 pb-5 flex-grow flex flex-col h-[220px]">
+        {/* 装饰线 */}
+        <div className="w-12 h-0.5 bg-blue-500/50 mb-3"></div>
+        
+        {/* 内容 - 添加省略号 */}
+        <div className="flex-grow overflow-hidden">
+          <p className="text-gray-300 text-sm leading-relaxed line-clamp-3">
+            {event.content}
+          </p>
+        </div>
+        
+        {/* 按钮区域 - 确保在底部 */}
+        <div className="mt-auto pt-4">
+          {event.buttons?.length ? (
+            <div className="flex">
+              {event.buttons.map((button, index) => (
+                <Link 
+                  key={index}
+                  href={button.link} 
+                  target="_blank"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-[#1a56db] to-[#1e40af] hover:from-[#1e40af] hover:to-[#1a56db] text-white font-medium px-4 py-2.5 rounded-md transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.4)]"
+                >
+                  <span className="truncate">{button.text}</span>
+                  <Icon name="chevronRight" className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300 flex-shrink-0" />
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="flex">
+              <span className="w-full inline-flex items-center justify-center bg-gray-800/80 text-gray-400 px-4 py-2.5 rounded-md border border-gray-700/50">
+                {event.startDate === "TBD" ? t('common.stayTuned') : t('events.comingSoon')}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+    </Card>
   );
 
   return (
