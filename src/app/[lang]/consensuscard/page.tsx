@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { ConnectButton, useAccount, useWallets } from '@particle-network/connectkit';
 import { formatAddress } from '@/utils/format';
 import { generateShareCode } from '@/lib/utils';
 import { QRCodeSVG } from 'qrcode.react';
+import ConnectButton from '@/components/common/ConnectButton';
 
 interface CardData {
   card: {
@@ -27,80 +27,79 @@ interface CardData {
 }
 
 export default function SharePage() {
-  const { isConnected } = useAccount();
-  const [primaryWallet] = useWallets();
+
   const [cardData, setCardData] = useState<CardData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
 
-  useEffect(() => {
-    if (!primaryWallet?.accounts[0]) return;
+  // useEffect(() => {
+  //   if (!primaryWallet?.accounts[0]) return;
     
-    setLoading(true);
-    const controller = new AbortController();
+  //   setLoading(true);
+  //   const controller = new AbortController();
 
-    fetchCardData(primaryWallet.accounts[0], controller.signal);
+  //   fetchCardData(primaryWallet.accounts[0], controller.signal);
 
-    return () => controller.abort();
-  }, [primaryWallet?.accounts[0]]);
+  //   return () => controller.abort();
+  // }, [primaryWallet?.accounts[0]]);
 
-  const fetchCardData = async (walletAddress?: string, signal?: AbortSignal) => {
-    try {
-      console.log('Original wallet address:', primaryWallet?.accounts[0]);
-      const response = await fetch(`/api/card/${generateShareCode(primaryWallet?.accounts[0])}`, {
-        headers: walletAddress ? {
-          'x-wallet-address': walletAddress,
-        } : {},
-        signal
-      });
+  // const fetchCardData = async (walletAddress?: string, signal?: AbortSignal) => {
+  //   try {
+  //     console.log('Original wallet address:', primaryWallet?.accounts[0]);
+  //     const response = await fetch(`/api/card/${generateShareCode(primaryWallet?.accounts[0])}`, {
+  //       headers: walletAddress ? {
+  //         'x-wallet-address': walletAddress,
+  //       } : {},
+  //       signal
+  //     });
       
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to fetch card');
-      }
+  //     const data = await response.json();
+  //     if (!response.ok) {
+  //       throw new Error(data.message || 'Failed to fetch card');
+  //     }
 
-      setCardData(data);
-      setError(null);
-    } catch (err) {
-      if (err instanceof Error && err.name === 'AbortError') return;
-      setError(err instanceof Error ? err.message : 'Failed to load card');
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     setCardData(data);
+  //     setError(null);
+  //   } catch (err) {
+  //     if (err instanceof Error && err.name === 'AbortError') return;
+  //     setError(err instanceof Error ? err.message : 'Failed to load card');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  const handleConnect = async () => {
-    try {
-      setConnecting(true);
-      const response = await fetch('/api/card/connect', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-wallet-address': primaryWallet?.accounts[0] || ''
-        },
-        body: JSON.stringify({
-          shareCode: generateShareCode(cardData?.owner.address || '')
-        })
-      });
+  // const handleConnect = async () => {
+  //   try {
+  //     setConnecting(true);
+  //     const response = await fetch('/api/card/connect', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'x-wallet-address': primaryWallet?.accounts[0] || ''
+  //       },
+  //       body: JSON.stringify({
+  //         shareCode: generateShareCode(cardData?.owner.address || '')
+  //       })
+  //     });
 
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to connect');
-      }
+  //     const data = await response.json();
+  //     if (!response.ok) {
+  //       throw new Error(data.message || 'Failed to connect');
+  //     }
 
-      // 刷新卡片数据
-      if (primaryWallet?.accounts[0]) {
-        fetchCardData(primaryWallet.accounts[0]);
-      }
-    } catch (err) {
-      console.error('Failed to connect:', err);
-      // 可以添加一个 toast 提示
-    } finally {
-      setConnecting(false);
-    }
-  };
+  //     // 刷新卡片数据
+  //     if (primaryWallet?.accounts[0]) {
+  //       fetchCardData(primaryWallet.accounts[0]);
+  //     }
+  //   } catch (err) {
+  //     console.error('Failed to connect:', err);
+  //     // 可以添加一个 toast 提示
+  //   } finally {
+  //     setConnecting(false);
+  //   }
+  // };
 
   if (loading) {
     return (
@@ -138,28 +137,28 @@ export default function SharePage() {
     );
   }
 
-  if (!isConnected) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="max-w-md w-full">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <div className="flex flex-col items-center text-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-warning/10 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-                <h2 className="card-title text-warning">Connect Wallet</h2>
-                <p className="text-base-content/70">Please connect your wallet to view this card</p>
-                <ConnectButton />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // if (!isConnected) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center p-4">
+  //       <div className="max-w-md w-full">
+  //         <div className="card bg-base-100 shadow-xl">
+  //           <div className="card-body">
+  //             <div className="flex flex-col items-center text-center gap-4">
+  //               <div className="w-16 h-16 rounded-full bg-warning/10 flex items-center justify-center">
+  //                 <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8 text-warning" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  //                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+  //                 </svg>
+  //               </div>
+  //               <h2 className="card-title text-warning">Connect Wallet</h2>
+  //               <p className="text-base-content/70">Please connect your wallet to view this card</p>
+  //               <ConnectButton />
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   if (!cardData) {
     return (
@@ -226,7 +225,7 @@ export default function SharePage() {
 
                   {!cardData.is_owner && (
                     <div className="card-actions justify-end mt-4">
-                      {!isConnected ? (
+                      {/* {!isConnected ? (
                         <ConnectButton />
                       ) : cardData.is_connected ? (
                         <button 
@@ -250,7 +249,7 @@ export default function SharePage() {
                             'Connect with Card'
                           )}
                         </button>
-                      )}
+                      )} */}
                     </div>
                   )}
                 </div>

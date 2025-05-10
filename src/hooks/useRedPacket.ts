@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react';
-import { ethers, formatEther, parseEther } from 'ethers';
+import { useState } from 'react';
+import { useReadContract, useWriteContract, useWatchContractEvent } from 'wagmi';
+import { parseEther, formatEther } from 'viem';
 import { REDPACKET_CONTRACT } from '@/config/contracts';
-import { useAccount, useWallets } from '@particle-network/connectkit';
-import { RedPacketClaim } from '@/types/redpacket';
+import { useAccount } from 'wagmi';
 
 interface RedPacketInfo {
   creator: `0x${string}`;
@@ -20,36 +20,34 @@ interface RedPacketInfo {
   isRefunded: boolean;
 }
 
-// interface RedPacketInfoResponse {
-//   isLoading: boolean;
-//   refetch?: () => void;
-//   info: RedPacketInfo | null;
-// }
+interface RedPacketInfoResponse {
+  isLoading: boolean;
+  refetch?: () => void;
+  info: RedPacketInfo | null;
+}
 
 export function useCreateRedPacket() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hash, setHash] = useState<`0x${string}`>('0x0');
-  const { address } = useAccount();
-  const [primaryWallet] = useWallets();
 
+  const { writeContractAsync } = useWriteContract();
 
   const handleCreate = async (message: string, amount: number, count: number) => {
-    if (!address) throw new Error('Wallet not connected');
-
-    const provider = await primaryWallet.connector.getProvider();
-    const ethersProvider = new ethers.BrowserProvider(provider as ethers.Eip1193Provider);
-    const signer = await ethersProvider.getSigner();
-    const contract = new ethers.Contract(REDPACKET_CONTRACT.address, REDPACKET_CONTRACT.abi, signer);
-
     try {
       setLoading(true);
       setError(null);
 
-      const tx = await contract.createPacket(message, count, { value: parseEther(amount.toString()) });
-      setHash(tx.hash);
-      await tx.wait(); // 等待交易确认
-      return tx.hash;
+      const txHash = await writeContractAsync({
+        address: REDPACKET_CONTRACT.address as `0x${string}`,
+        abi: REDPACKET_CONTRACT.abi,
+        functionName: 'createPacket',
+        args: [message, BigInt(count)],
+        value: parseEther(amount.toString()),
+      });
+
+      setHash(txHash);
+      return txHash;
     } catch (err) {
       console.error('Failed to create red packet:', err);
       setError(err instanceof Error ? err.message : '创建红包失败');
@@ -67,116 +65,78 @@ export function useCreateRedPacket() {
   };
 }
 
-export function useRedPacketInfo(id?: string) {
+export function useRedPacketInfo(id?: string): RedPacketInfoResponse {
   const { address } = useAccount();
-  const [info, setInfo] = useState<RedPacketInfo | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [primaryWallet] = useWallets();
+  const { data: packetInfo, isLoading, refetch } = useReadContract({
+    address: REDPACKET_CONTRACT.address as `0x${string}`,
+    abi: REDPACKET_CONTRACT.abi,
+    functionName: 'getPacketInfo',
+    args: id ? [BigInt(id), address || '0x0000000000000000000000000000000000000000'] : undefined,
+  });
 
-  const fetchRedPacketInfo = useCallback(async () => {
-    if (!id || !address) return;
+  if (!packetInfo) return { isLoading, refetch, info: null };
 
-    try {
-      const provider = await primaryWallet.connector.getProvider();
-      const ethersProvider = new ethers.BrowserProvider(provider as ethers.Eip1193Provider);
-      const signer = await ethersProvider.getSigner();
-      const contract = new ethers.Contract(REDPACKET_CONTRACT.address, REDPACKET_CONTRACT.abi, signer);
-        
-      const packetInfo = await contract['getPacketInfo(uint256,address)'](BigInt(id), address);
-      setInfo({
-        creator: packetInfo[0],
-        message: packetInfo[1],
-        totalAmount: formatEther(packetInfo[2]),
-        remainingAmount: formatEther(packetInfo[3]),
-        totalCount: Number(packetInfo[4]),
-        remainingCount: Number(packetInfo[5]),
-        claimed: Number(packetInfo[4]) - Number(packetInfo[5]),
-        createdAt: new Date(Number(packetInfo[6]) * 1000),
-        canClaim: Boolean(packetInfo[7]),
-        canRefund: Boolean(packetInfo[8]),
-        isRefunded: Boolean(packetInfo[9])
-      });
-    } catch (err) {
-      console.error('Failed to fetch red packet info:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [id, address, primaryWallet]);
-
-  useEffect(() => {
-    fetchRedPacketInfo();
-  }, [fetchRedPacketInfo]);
-
-  return { 
-    info, 
-    isLoading,
-    refetch: fetchRedPacketInfo 
+  const info: RedPacketInfo = {
+    creator: packetInfo[0],
+    message: packetInfo[1],
+    totalAmount: formatEther(packetInfo[2]),
+    remainingAmount: formatEther(packetInfo[3]),
+    totalCount: Number(packetInfo[4]),
+    remainingCount: Number(packetInfo[5]),
+    claimed: Number(packetInfo[4]) - Number(packetInfo[5]),
+    createdAt: new Date(Number(packetInfo[6]) * 1000),
+    canClaim: Boolean(packetInfo[7]),
+    canRefund: Boolean(packetInfo[8]),
+    isRefunded: Boolean(packetInfo[9]),
   };
+  
+  return { isLoading, refetch, info };
 }
 
 export function useRedPacketClaimed(id?: string) {
   const { address } = useAccount();
-  const [primaryWallet] = useWallets();
-  const [isLoading, setIsLoading] = useState(true);
-  const [claimedAmount, setClaimedAmount] = useState('0');
-  const [canClaim, setCanClaim] = useState(false);
-  const [hasClaimed, setHasClaimed] = useState(false);
+  const { data: packetInfo, isLoading, refetch } = useReadContract({
+    address: REDPACKET_CONTRACT.address as `0x${string}`,
+    abi: REDPACKET_CONTRACT.abi,
+    functionName: 'getPacketInfo',
+    args: id ? [BigInt(id), address || '0x0000000000000000000000000000000000000000'] : undefined,
+  });
 
-  const fetchClaimInfo = useCallback(async () => {
-    if (!id || !address) return;
-
-    try {
-      const provider = await primaryWallet.connector.getProvider();
-      const ethersProvider = new ethers.BrowserProvider(provider as ethers.Eip1193Provider);
-      const signer = await ethersProvider.getSigner();
-      const contract = new ethers.Contract(REDPACKET_CONTRACT.address, REDPACKET_CONTRACT.abi, signer);
-
-      const packetInfo = await contract['getPacketInfo(uint256,address)'](BigInt(id), address);
-      const claimedAmt = packetInfo[6];
-      
-      setClaimedAmount(formatEther(claimedAmt));
-      setCanClaim(packetInfo[7]);
-      setHasClaimed(claimedAmt > 0);
-    } catch (err) {
-      console.error('Failed to fetch claim info:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [id, address, primaryWallet]);
-
-  useEffect(() => {
-    fetchClaimInfo();
-  }, [fetchClaimInfo]);
+  // 现在 packetInfo[7] 是 canClaim，packetInfo[6] 是 claimedAmount
+  const claimedAmount = packetInfo?.[6] ?? BigInt(0);
+  const canClaim = packetInfo?.[7] ?? false;
+  const hasClaimed = claimedAmount > BigInt(0);
 
   return {
     isLoading,
-    refetch: fetchClaimInfo,
-    claimedAmount,
+    refetch,
+    claimedAmount: formatEther(claimedAmount),
     hasClaimed,
     canClaim
   };
 }
 
 export function useClaimRedPacket() {
+  const { writeContractAsync } = useWriteContract();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hash, setHash] = useState<`0x${string}`>('0x0');
-  const [primaryWallet] = useWallets();
 
   const handleClaim = async (id: string) => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const provider = await primaryWallet.connector.getProvider();
-      const ethersProvider = new ethers.BrowserProvider(provider as ethers.Eip1193Provider);
-      const signer = await ethersProvider.getSigner();
-      const contract = new ethers.Contract(REDPACKET_CONTRACT.address, REDPACKET_CONTRACT.abi, signer);
+      const txHash = await writeContractAsync({
+        address: REDPACKET_CONTRACT.address as `0x${string}`,
+        abi: REDPACKET_CONTRACT.abi,
+        functionName: 'claimPacket',
+        args: [BigInt(id)],
+        gas: BigInt(300000),
+      });
 
-      const tx = await contract.claimPacket(id);
-      setHash(tx.hash);
-      await tx.wait();
-      return tx.hash;
+      setHash(txHash);
+      return txHash;
     } catch (err) {
       console.error('Failed to claim red packet:', err);
       setError(err instanceof Error ? err.message : '领取红包失败');
@@ -195,100 +155,74 @@ export function useClaimRedPacket() {
 }
 
 export function useRedPacketClaims(packetId: string) {
-  const [claims, setClaims] = useState<RedPacketClaim[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [primaryWallet] = useWallets();
+  const { data, isLoading, refetch } = useReadContract({
+    address: REDPACKET_CONTRACT.address as `0x${string}`,
+    abi: REDPACKET_CONTRACT.abi,
+    functionName: 'getPacketClaimers',
+    args: [BigInt(packetId)],
+  });
 
-  const fetchClaims = useCallback(async () => {
-    try {
-      const provider = await primaryWallet.connector.getProvider();
-      const ethersProvider = new ethers.BrowserProvider(provider as ethers.Eip1193Provider);
-      const contract = new ethers.Contract(REDPACKET_CONTRACT.address, REDPACKET_CONTRACT.abi, ethersProvider);
+  // 使用 useWatchContractEvent 替代 useContractEvent
+  useWatchContractEvent({
+    address: REDPACKET_CONTRACT.address as `0x${string}`,
+    abi: REDPACKET_CONTRACT.abi,
+    eventName: 'PacketClaimed',
+    onLogs() {
+      refetch?.();
+    },
+  });
 
-      const [addresses, amounts] = await contract.getPacketClaimers(packetId);
-      const claimsData: RedPacketClaim[] = addresses.map((address: string, index: number) => ({
-        address,
-        amount: formatEther(amounts[index]),
-        timestamp: Date.now() / 1000
-      }));
-      setClaims(claimsData);
-    } catch (err) {
-      console.error('Failed to fetch claims:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [packetId, primaryWallet]);
+  const claims = data ? data[0].map((address, index) => ({
+    address,
+    amount: formatEther(data[1][index]),
+    timestamp: Date.now() / 1000
+  })) : [];
 
-  useEffect(() => {
-    fetchClaims();
-  }, [fetchClaims]);
-
-  return { claims, isLoading, refetch: fetchClaims };
+  return { claims, isLoading, refetch };
 }
 
 export function useUserRedPackets() {
   const { address } = useAccount();
-  const [primaryWallet] = useWallets();
-  const [created, setCreated] = useState<bigint[]>([]);
-  const [claimed, setClaimed] = useState<bigint[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data, isLoading, refetch } = useReadContract({
+    address: REDPACKET_CONTRACT.address as `0x${string}`,
+    abi: REDPACKET_CONTRACT.abi,
+    functionName: 'getUserRelatedPackets',
+    args: address ? [address] : undefined,
+  });
 
-  const fetchUserPackets = useCallback(async () => {
-    if (!address || !primaryWallet) return;
-
-    try {
-      const provider = await primaryWallet.connector.getProvider();
-      const ethersProvider = new ethers.BrowserProvider(provider as ethers.Eip1193Provider);
-      const contract = new ethers.Contract(REDPACKET_CONTRACT.address, REDPACKET_CONTRACT.abi, ethersProvider);
-
-      const [createdPackets, claimedPackets] = await contract['getUserRelatedPackets(address)'](address);
-      setCreated(createdPackets);
-      setClaimed(claimedPackets);
-    } catch (err) {
-      console.error('Failed to fetch user packets:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [address, primaryWallet]);
-
-  useEffect(() => {
-    fetchUserPackets();
-  }, [fetchUserPackets]);
-
+  const [created, claimed] = data || [[], []];
   return {
     isLoading,
-    refetch: fetchUserPackets,
-    created,
-    claimed
+    refetch,
+    created: created || [],
+    claimed: claimed || []
   };
 }
 
 export function useRefundRedPacket() {
+  const { writeContractAsync } = useWriteContract();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hash, setHash] = useState<`0x${string}`>('0x0');
-  const [primaryWallet] = useWallets();
 
   const handleRefund = async (id: string) => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const provider = await primaryWallet.connector.getProvider();
-      const ethersProvider = new ethers.BrowserProvider(provider as ethers.Eip1193Provider);
-      const signer = await ethersProvider.getSigner();
-      const contract = new ethers.Contract(REDPACKET_CONTRACT.address, REDPACKET_CONTRACT.abi, signer);
+      const txHash = await writeContractAsync({
+        address: REDPACKET_CONTRACT.address as `0x${string}`,
+        abi: REDPACKET_CONTRACT.abi,
+        functionName: 'refundExpiredPacket',
+        args: [BigInt(id)],
+      });
 
-      const tx = await contract.refundExpiredPacket(id);
-      setHash(tx.hash);
-      await tx.wait();
-      return tx.hash;
+      setHash(txHash);
+      return txHash;
     } catch (err) {
       console.error('Failed to refund red packet:', err);
       setError(err instanceof Error ? err.message : '退回红包失败');
       throw err;
-    } finally {
-      setIsLoading(false);
     }
   };
 

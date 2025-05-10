@@ -14,12 +14,12 @@ export const menuConfig: MenuConfig = {
         key: 'nav.events',
         link: '/events'
       },
-      {
-        icon: 'gift',
-        key: 'nav.redpacket',
-        link: '/redpacket',
-        iconClass: 'text-red-500'
-      }
+      // {
+      //   icon: 'gift',
+      //   key: 'nav.redpacket',
+      //   link: '/redpacket',
+      //   iconClass: 'text-red-500'
+      // }
     ]
   },
   main: [
