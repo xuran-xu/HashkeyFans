@@ -1,15 +1,19 @@
 import { Icon } from './Icon';
 
-export const SocialLinks = () => (
+interface SocialLinksProps {
+  className?: string;
+}
+
+export const SocialLinks = ({ className = '' }: SocialLinksProps) => (
   <>
-    <a href="https://t.me/HashKeyChainHSK" className="text-gray-300 hover:text-white transition-colors duration-200">
-      <Icon name="telegram" />
+    <a href="https://t.me/HashKeyChainHSK" className={`text-white hover:text-white transition-colors duration-200 ${className}`}>
+      <Icon name="telegram" className="text-white" />
     </a>
-    <a href="https://discord.gg/qvPkbrYY" className="text-gray-300 hover:text-white transition-colors duration-200">
-      <Icon name="discord" />
+    <a href="https://discord.gg/qvPkbrYY" className={`text-white hover:text-white transition-colors duration-200 ${className}`}>
+      <Icon name="discord" className="text-white" />
     </a>
-    <a href="https://x.com/HSKChain" className="text-gray-300 hover:text-white transition-colors duration-200">
-      <Icon name="twitter" />
+    <a href="https://x.com/HashKeyHSK" className={`text-white hover:text-white transition-colors duration-200 ${className}`}>
+      <Icon name="twitter" className="text-white" />
     </a>
   </>
 ); 

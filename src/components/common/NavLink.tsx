@@ -12,7 +12,7 @@ export const NavLink = ({ href, icon, text }: NavLinkProps) => (
     href={href} 
     className="flex items-center space-x-2 text-white px-3 py-2 rounded-lg hover:bg-white/10 transition-all duration-200"
   >
-    <Icon name={icon} />
-    <span>{text}</span>
+    <Icon name={icon} className="text-white" />
+    <span className="text-white">{text}</span>
   </Link>
 ); 
