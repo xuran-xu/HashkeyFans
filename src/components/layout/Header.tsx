@@ -1,8 +1,7 @@
-
 "use client"
 import React from 'react';
 import { generateShareCode } from "@/lib/utils";
-import { ConnectButton, useAccount } from "@particle-network/connectkit";
+import { useAccount } from 'wagmi';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -10,8 +9,9 @@ import { useTranslation } from "react-i18next";
 import { Icon } from "../common/Icon";
 import { LanguageSelector } from "../common/LanguageSelector";
 import { menuConfig } from '@/config/menu';
-import { formatAddress } from "@/utils/format";
 import { IconName } from '@/components/common/Icon';
+import ConnectButton from "@/components/common/ConnectButton";
+
 
 export const Header = () => {
   const pathname = usePathname();
@@ -112,17 +112,6 @@ export const Header = () => {
 
       <div className="navbar-end gap-2">
         <div className="hidden lg:flex items-center gap-3">
-          {/* {address && (
-            <Link 
-              href="/profile" 
-              className="btn btn-ghost bg-white/5 hover:bg-white/10 border-white/10 flex items-center gap-2"
-            >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary/40 to-secondary/40 flex items-center justify-center">
-                <Icon name="user" className="h-4 w-4 text-white" />
-              </div>
-              <span className="text-white">{formatAddress(address)}</span>
-            </Link>
-          )} */}
           <ConnectButton />
           <LanguageSelector 
             isOpen={isLangMenuOpen}
@@ -174,29 +163,6 @@ export const Header = () => {
 
             {/* 主菜单内容 */}
             <div className="flex-1 overflow-y-auto p-4 pb-safe">
-              {/* 用户信息区域 */}
-              {/* {address && (
-                <div 
-                  className="mb-6 p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 cursor-pointer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setIsMenuOpen(false);
-                    window.location.href = '/profile';
-                  }}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                      <Icon name="user" className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-sm text-white/60">Connected as</div>
-                      <div className="text-white font-medium">{formatAddress(address)}</div>
-                    </div>
-                  </div>
-                </div>
-              )}  */}
-
               {/* 菜单列表 */}
               <div className="space-y-4">
                 {/* Explore 菜单 */}
@@ -252,18 +218,8 @@ export const Header = () => {
 
               {/* 底部功能区 */}
               <div className="space-y-4">
-                {/* {address && (
-                  <Link 
-                    href="/profile" 
-                    className="btn btn-block bg-white/5 hover:bg-white/10 text-white border-white/10"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Icon name="user" className="h-5 w-5 text-white" />
-                    <span className="text-white">{t('nav.profile')}</span>
-                  </Link>
-                )} */}
                 <div className="flex justify-between items-center gap-4">
-                  <ConnectButton />
+                <ConnectButton />
                   <LanguageSelector 
                     isOpen={isLangMenuOpen}
                     onToggle={() => setIsLangMenuOpen(!isLangMenuOpen)}

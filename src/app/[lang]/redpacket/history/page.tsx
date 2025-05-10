@@ -5,7 +5,8 @@ import { useUserRedPackets, useRedPacketInfo } from "@/hooks/useRedPacket";
 import { formatAddress } from "@/utils/format";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { ConnectButton, useAccount } from "@particle-network/connectkit";
+import { useAccount } from "wagmi";
+import ConnectButton from "@/components/common/ConnectButton";
 
 const RedPacketCard = ({ id }: { id: bigint }) => {
   const router = useRouter();
