@@ -23,37 +23,50 @@ const NewsCard = ({ news, lang }: { news: NewsItem; lang: string }) => {
   const { t } = useTranslation();
   
   return (
-    <Card className="h-[420px] flex flex-col p-6">
-      <div className="h-48 overflow-hidden rounded-lg mb-4">
+    <Card className="h-[420px] flex flex-col overflow-hidden">
+      <div className="h-[160px] overflow-hidden relative">
+        {/* 图片渐变覆盖 */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#081020] via-[#081020]/60 to-transparent opacity-70 z-10"></div>
+        
         <img 
           src={news.image} 
           alt={news.title} 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
+        
+        {/* 科技网格覆盖 */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.1)_1px,transparent_1px)] bg-[size:20px_20px] opacity-30 mix-blend-overlay z-20"></div>
       </div>
-      <div className="mb-2">
-        <span className="text-gray-300 text-sm">
-          {new Date(news.date).toLocaleDateString(lang, { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-          })}
-        </span>
-      </div>
-      <h3 className="text-xl font-bold mb-2 text-white">
-        {news.title}
-      </h3>
-      <p className="text-gray-300 text-sm mb-4 flex-grow line-clamp-3">
-        {news.summary}
-      </p>
-      <div className="mt-auto">
-        <Link 
-          href={`/news/${news.slug}`}
-          className="block w-full text-center py-2 bg-white/10 hover:bg-white/20 text-white 
-                   rounded-lg transition-all duration-300"
-        >
-          {t('news.readMore')}
-        </Link>
+      
+      <div className="p-4 pb-5 flex-grow flex flex-col">
+        <div className="mb-2">
+          <span className="text-gray-300 text-sm">
+            {new Date(news.date).toLocaleDateString(lang, { 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}
+          </span>
+        </div>
+        
+        <h3 className="text-xl font-bold mb-2 text-white truncate">
+          {news.title}
+        </h3>
+        
+        <div className="flex-grow overflow-hidden">
+          <p className="text-gray-300 text-sm leading-relaxed line-clamp-4">
+            {news.summary}
+          </p>
+        </div>
+        
+        <div className="mt-auto pt-4">
+          <Link 
+            href={`/news/${news.slug}`}
+            className="block w-full text-center py-2 bg-gradient-to-r from-[#1a56db] to-[#1e40af] hover:from-[#1e40af] hover:to-[#1a56db] text-white font-medium px-4 rounded-md transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(59,130,246,0.4)]"
+          >
+            {t('news.readMore')}
+          </Link>
+        </div>
       </div>
     </Card>
   );

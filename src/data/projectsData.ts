@@ -125,6 +125,70 @@ export const projectsData: Project[] = [
     ]
   },
   {
+    id: 'Chainlink',
+    name: 'Chainlink',
+    logo: '/img/chainlink-link-logo.png',
+    imgClassName: 'h-8 w-auto',
+    link: 'https://docs.chain.link/data-streams/crypto-streams?page=1&testnetPage=1',
+    tags: ['infrastructure', 'oracle'],
+    isVerified: true,
+    pointsBonus: {
+        type: 'interaction',
+        hasExtraPoints: true,
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/chainlink'
+      },
+      {
+        platform: 'discord',
+        link: 'https://discord.com/invite/chainlink'
+      },
+      {
+        platform: 'telegram',
+        link: 'https://t.me/chainlinkofficial'
+      }
+    ]
+  },
+  {
+    id: 'CCIP',
+    name: 'CCIP',
+    logo: '/img/ccip.svg',
+    imgClassName: 'h-8 w-auto',
+    link: 'https://docs.chain.link/data-streams/crypto-streams?page=1&testnetPage=1',
+    tags: ['infrastructure', 'bridge'],
+    isVerified: true,
+    pointsBonus: {
+        type: 'interaction',
+        hasExtraPoints: true,
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    
+    socials: [
+        {
+          platform: 'x',
+          link: 'https://x.com/chainlink'
+        },
+        {
+          platform: 'discord',
+          link: 'https://discord.com/invite/chainlink'
+        },
+        {
+          platform: 'telegram',
+          link: 'https://t.me/chainlinkofficial'
+        }
+    ]
+  },
+  {
     id: 'SuperBridge',
     name: 'SuperBridge',
     logo: '/img/superbridge.jpeg',

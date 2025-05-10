@@ -34,17 +34,10 @@ export default {
     events: [
       {
         id: 1,
-        title: "Hackathon Taiyi",
-        description: "HashKey Chain First Hackathon in Seoul",
-        link: "https://lu.ma/va084lwn",
-        date: "2025-03-28"
-      },
-      {
-        id: 2,
-        title: "HashKey Chain Meetup - Taipei",
-        description: "Meetup in Taipei, discuss the future of HashKey Chain",
-        link: "https://lu.ma/3z9rzm6v",
-        date: "End: 2025-04-01"
+        title: "HashKey Chain Meetup - ChengDu",
+        description: "Meetup in Chengdu, discuss the future of HashKey Chain",
+        link: "https://lu.ma/tcfgd9wt",
+        date: "End: 2025-05-17"
       }
     ]
   },
