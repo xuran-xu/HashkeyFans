@@ -1,8 +1,28 @@
 import { useEffect, useState, useCallback } from 'react';
 import { ethers } from 'ethers';
-import { useAccount, useWallets } from '@particle-network/connectkit';
+import { useAccount, useConnectorClient } from 'wagmi';
 import { didContract } from '../config/didContract';
 import { ProfileData } from '../types/profile';
+import { type Client, type Chain, type Transport, type Account } from 'viem';
+import { useMemo } from 'react';
+
+// Ethers.js adapter functions
+function clientToSigner(client: Client<Transport, Chain, Account>) {
+  const { account, chain, transport } = client;
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  };
+  const provider = new ethers.BrowserProvider(transport);
+  const signer = new ethers.JsonRpcSigner(provider, account.address);
+  return signer;
+}
+
+function useEthersSigner({ chainId }: { chainId?: number } = {}) {
+  const { data: client } = useConnectorClient({ chainId });
+  return useMemo(() => (client ? clientToSigner(client) : undefined), [client]);
+}
 
 interface BatchUpdateData {
   nickname: string;
@@ -55,19 +75,15 @@ interface RawProfileData {
 }
 
 export function useDidContract() {
-  const { isConnected } = useAccount();
-  const [primaryWallet] = useWallets();
+  const { address, isConnected } = useAccount();
+  const signer = useEthersSigner();
   const [contract, setContract] = useState<ethers.Contract | null>(null);
 
   useEffect(() => {
     const initContract = async () => {
-      if (!isConnected || !primaryWallet) return;
+      if (!isConnected || !signer) return;
 
       try {
-        const provider = await primaryWallet.connector.getProvider();
-        const ethersProvider = new ethers.BrowserProvider(provider as ethers.Eip1193Provider);
-        const signer = await ethersProvider.getSigner();
-        
         const contractInstance = new ethers.Contract(
           didContract.address,
           didContract.abi,
@@ -81,7 +97,7 @@ export function useDidContract() {
     };
 
     initContract();
-  }, [isConnected, primaryWallet]);
+  }, [isConnected, signer]);
 
   const getProfile = useCallback(async (address: string): Promise<ProfileData | null> => {
     if (!contract) return null;
