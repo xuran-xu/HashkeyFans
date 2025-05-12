@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { useAccount } from '@particle-network/connectkit';
+import { useAccount } from 'wagmi';
 import { ProfileView } from '@/components/profile/ProfileView';
 import { useDidContract } from '@/hooks/useDidContract';
 import { ProfileData } from '@/types/profile';

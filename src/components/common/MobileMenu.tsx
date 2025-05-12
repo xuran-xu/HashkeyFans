@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import Link from 'next/link';
 import { NavLink } from './NavLink';
 import { SocialLinks } from './SocialLinks';
-import { ConnectButton } from '@particle-network/connectkit';
+import ConnectButton from "@/components/common/ConnectButton";
 
 interface MobileMenuProps {
   onClose: () => void;

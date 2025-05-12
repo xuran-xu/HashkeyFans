@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAccount, useWallets } from '@particle-network/connectkit';
+import { useAccount, useConnectorClient } from 'wagmi';
 import { ProfileView } from '@/components/profile/ProfileView';
 import { EditProfileModal } from '@/components/profile/EditProfileModal';
 import { ProfileData } from '@/types/profile';
@@ -39,8 +39,8 @@ const defaultData: CollectionData = {
 };
 
 export default function ProfilePage() {
-  const { isConnected } = useAccount();
-  const [primaryWallet] = useWallets();
+  const { address, isConnected } = useAccount();
+  const { data: connectorClient } = useConnectorClient();
   const { getProfile } = useDidContract();
   
   const [profile, setProfile] = useState<ProfileData>();
@@ -55,14 +55,14 @@ export default function ProfilePage() {
   // 分离合约数据获取
   useEffect(() => {
     const fetchContractData = async () => {
-      if (!primaryWallet?.accounts[0]) {
+      if (!address) {
         setIsLoading(false);
         return;
       }
 
       try {
         setIsContractLoading(true);
-        const profileData = await getProfile(primaryWallet.accounts[0]);
+        const profileData = await getProfile(address);
         if (profileData) {
           setProfile(profileData);
         }
@@ -75,12 +75,12 @@ export default function ProfilePage() {
     };
 
     fetchContractData();
-  }, [primaryWallet?.accounts[0], getProfile]);
+  }, [address, getProfile]);
 
   // 单独获取集合数据
   useEffect(() => {
     const fetchCollectionData = async () => {
-      if (!primaryWallet?.accounts[0]) {
+      if (!address) {
         setIsCollectionLoading(false);
         return;
       }
@@ -89,7 +89,7 @@ export default function ProfilePage() {
         setIsCollectionLoading(true);
         const collectionRes = await fetch('/api/user/collection-status', {
           headers: {
-            'x-wallet-address': primaryWallet.accounts[0]
+            'x-wallet-address': address
           }
         }).then(res => res.json());
         
@@ -102,7 +102,7 @@ export default function ProfilePage() {
     };
 
     fetchCollectionData();
-  }, [primaryWallet?.accounts[0]]);
+  }, [address]);
 
   useEffect(() => {
     const handleEditProfile = () => {
@@ -125,7 +125,7 @@ export default function ProfilePage() {
     setIsEditModalOpen(true);
   };
 
-  if (!isConnected || !primaryWallet?.accounts?.[0]) {
+  if (!isConnected || !address) {
     return (
       <div className="min-h-[80vh] flex flex-col items-center justify-center">
         <div className="loading loading-spinner loading-lg text-primary"></div>
@@ -190,7 +190,7 @@ export default function ProfilePage() {
 
   console.log('Modal open state:', isEditModalOpen);
 
-  const walletAddress = primaryWallet.accounts[0];
+  const walletAddress = address;
 
   return (
     <>
