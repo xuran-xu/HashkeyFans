@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
-import { ConnectButton, useAccount, useWallets } from '@particle-network/connectkit';
+import { useAccount, useConnectorClient } from 'wagmi';
+import ConnectButton from '@/components/common/ConnectButton';
 import { formatAddress } from '@/utils/format';
 import { generateShareCode } from '@/lib/utils';
 
@@ -28,27 +29,27 @@ interface CardData {
 
 export default function SharePage() {
   const params = useParams();
-  const { isConnected } = useAccount();
-  const [primaryWallet] = useWallets();
+  const { address, isConnected } = useAccount();
+  const { data: connectorClient } = useConnectorClient();
   const [cardData, setCardData] = useState<CardData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [connecting, setConnecting] = useState(false);
 
   useEffect(() => {
-    if (!params.card || !primaryWallet?.accounts[0]) return;
+    if (!params.card || !address) return;
     
     setLoading(true);
     const controller = new AbortController();
 
-    fetchCardData(primaryWallet.accounts[0], controller.signal);
+    fetchCardData(address, controller.signal);
 
     return () => controller.abort();
-  }, [params.card, primaryWallet?.accounts[0]]);
+  }, [params.card, address]);
 
   const fetchCardData = async (walletAddress?: string, signal?: AbortSignal) => {
     try {
-      console.log('Original wallet address:', primaryWallet?.accounts[0]);
+      console.log('Wallet address:', address);
       const response = await fetch(`/api/card/${params.card}`, {
         headers: walletAddress ? {
           'x-wallet-address': walletAddress,
@@ -78,7 +79,7 @@ export default function SharePage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-wallet-address': primaryWallet?.accounts[0] || ''
+          'x-wallet-address': address || ''
         },
         body: JSON.stringify({
           shareCode: generateShareCode(cardData?.owner.address || '')
@@ -91,8 +92,8 @@ export default function SharePage() {
       }
 
       // 刷新卡片数据
-      if (primaryWallet?.accounts[0]) {
-        fetchCardData(primaryWallet.accounts[0]);
+      if (address) {
+        fetchCardData(address);
       }
     } catch (err) {
       console.error('Failed to connect:', err);
