@@ -81,7 +81,7 @@ export const Header = () => {
   if (!mounted) return null;
 
   return (
-    <div className="navbar">
+    <div className="navbar bg-transparent" data-theme="dark">
       <div className="navbar-start flex-1">
         <Link href="/" className="btn btn-ghost px-0">
           <img src="/img/hashfans.png" alt="HashFans" className="w-32 h-8" />
@@ -94,7 +94,7 @@ export const Header = () => {
               <Icon name={menuConfig.explore.icon} className="h-4 w-4 text-white" />
               {t('nav.explore')}
             </div>
-            <ul className="dropdown-content z-[1] ml-0 menu p-2 shadow bg-base-100 rounded-box w-48">
+            <ul className="dropdown-content z-[1] ml-0 menu p-2 shadow bg-gray-800 rounded-box w-48">
               {menuConfig.explore.items.map((item) => renderMenuItem(item))}
             </ul>
           </li>
@@ -147,7 +147,7 @@ export const Header = () => {
 
       {isMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
-          <div className="h-[100dvh] w-full bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col">
+          <div className="h-[100dvh] w-full bg-gray-900 flex flex-col" data-theme="dark">
             {/* 顶部导航栏 */}
             <div className="p-4 pt-safe border-b border-white/10">
               <div className="flex justify-between items-center">
@@ -166,7 +166,7 @@ export const Header = () => {
               {/* 菜单列表 */}
               <div className="space-y-4">
                 {/* Explore 菜单 */}
-                <div className="collapse collapse-plus bg-base-200/10 rounded-xl">
+                <div className="collapse collapse-plus bg-gray-800/80 rounded-xl">
                   <input type="checkbox" /> 
                   <div className="collapse-title text-white flex items-center gap-2">
                     <Icon name={menuConfig.explore.icon} className="h-5 w-5 text-white" />
@@ -204,7 +204,7 @@ export const Header = () => {
                       <Link 
                         href={item.link}
                         onClick={() => setIsMenuOpen(false)}
-                        className="flex items-center gap-2 text-white hover:text-white rounded-xl bg-base-200/10"
+                        className="flex items-center gap-2 text-white hover:text-white rounded-xl bg-gray-800/50"
                       >
                         <Icon name={item.icon} className="h-4 w-4 text-white" />
                         {t(item.key)}
