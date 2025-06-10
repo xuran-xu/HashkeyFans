@@ -32,6 +32,31 @@ export const Header = () => {
   }, [pathname]);
 
   useEffect(() => {
+    if (isMenuOpen) {
+      // 完全禁用滚动
+      document.body.style.overflow = 'hidden';
+      document.body.style.height = '100vh';
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.height = '100vh';
+      
+      // 禁用触摸滚动
+      const preventDefault = (e: Event) => e.preventDefault();
+      document.addEventListener('touchmove', preventDefault, { passive: false });
+      document.addEventListener('wheel', preventDefault, { passive: false });
+      
+      return () => {
+        document.removeEventListener('touchmove', preventDefault);
+        document.removeEventListener('wheel', preventDefault);
+      };
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
+    }
+  }, [isMenuOpen]);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (exploreRef.current && !exploreRef.current.contains(event.target as Node)) {
         console.log('isExploreOpen', isExploreOpen);
@@ -146,89 +171,119 @@ export const Header = () => {
       </div>
 
       {isMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-50">
-          <div className="h-[100dvh] w-full bg-gray-900 flex flex-col" data-theme="dark">
-            {/* 顶部导航栏 */}
-            <div className="p-4 pt-safe border-b border-white/10">
-              <div className="flex justify-between items-center">
-                <img src="/img/hashfans.png" alt="HashFans" className="w-32 h-8" />
-                <button 
-                  className="btn btn-ghost btn-circle"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <Icon name="close" className="h-5 w-5 text-white" />
-                </button>
+        <div 
+          className="fixed inset-0 z-[99999] bg-gray-900 flex flex-col w-full"
+          style={{ 
+            width: '100vw', 
+            height: '100vh', 
+            top: 0, 
+            left: 0, 
+            position: 'fixed',
+            overflow: 'hidden'
+          }}
+        >
+          {/* Header */}
+          <div className="w-full flex items-center justify-between p-4 border-b border-gray-700">
+            <img src="/img/hashfans.png" alt="HashFans" className="w-28 h-7" />
+            <button 
+              onClick={() => setIsMenuOpen(false)}
+              className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-800"
+            >
+              <Icon name="close" className="w-6 h-6 text-white" />
+            </button>
+          </div>
+
+          {/* Menu Content */}
+          <div className="p-6 w-full">
+            {/* Explore Section */}
+            <div className="mb-8">
+              <h3 className="text-white/60 text-sm uppercase tracking-wide mb-4 flex items-center gap-2">
+                <Icon name={menuConfig.explore.icon} className="w-4 h-4" />
+                {t('nav.explore')}
+              </h3>
+              <div className="space-y-1">
+                {menuConfig.explore.items.map((item) => {
+                  if (item.type === 'divider') return null;
+                  if (item.requireAuth && !address) return null;
+                  
+                  const link = item.requireAuth ? `${item.link}/${generateShareCode(address || '')}` : item.link;
+                  
+                  return (
+                    <Link 
+                      key={item.key}
+                      href={link}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="flex items-center gap-4 p-3 text-white hover:bg-gray-800 rounded-lg transition-colors"
+                    >
+                      <Icon name={item.icon} className={`w-5 h-5 text-gray-400 ${item.iconClass || ''}`} />
+                      <span>{t(item.key)}</span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
 
-            {/* 主菜单内容 */}
-            <div className="flex-1 overflow-y-auto p-4 pb-safe">
-              {/* 菜单列表 */}
-              <div className="space-y-4">
-                {/* Explore 菜单 */}
-                <div className="collapse collapse-plus bg-gray-800/80 rounded-xl">
-                  <input type="checkbox" /> 
-                  <div className="collapse-title text-white flex items-center gap-2">
-                    <Icon name={menuConfig.explore.icon} className="h-5 w-5 text-white" />
-                    {t('nav.explore')}
-                  </div>
-                  <div className="collapse-content">
-                    <ul className="menu menu-md gap-1">
-                      {menuConfig.explore.items.map((item) => {
-                        if (item.type === 'divider') return <li key="divider" className="divider" />;
-                        if (item.requireAuth && !address) return null;
-                        
-                        const link = item.requireAuth ? `${item.link}/${generateShareCode(address || '')}` : item.link;
-                        
-                        return (
-                          <li key={item.key}>
-                            <Link 
-                              href={link}
-                              onClick={() => setIsMenuOpen(false)}
-                              className="text-white hover:text-white"
-                            >
-                              <Icon name={item.icon} className={`h-4 w-4 text-white ${item.iconClass || ''}`} />
-                              {t(item.key)}
-                            </Link>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* 主菜单项 */}
-                <ul className="menu menu-md gap-1 p-0">
-                  {menuConfig.main.map((item) => (
-                    <li key={item.key}>
-                      <Link 
-                        href={item.link}
-                        onClick={() => setIsMenuOpen(false)}
-                        className="flex items-center gap-2 text-white hover:text-white rounded-xl bg-gray-800/50"
-                      >
-                        <Icon name={item.icon} className="h-4 w-4 text-white" />
-                        {t(item.key)}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+            {/* Main Menu */}
+            <div className="mb-8">
+              <h3 className="text-white/60 text-sm uppercase tracking-wide mb-4">主菜单</h3>
+              <div className="space-y-1">
+                {menuConfig.main.map((item) => (
+                  <Link 
+                    key={item.key}
+                    href={item.link}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center gap-4 p-3 text-white hover:bg-gray-800 rounded-lg transition-colors"
+                  >
+                    <Icon name={item.icon} className="w-5 h-5 text-gray-400" />
+                    <span>{t(item.key)}</span>
+                  </Link>
+                ))}
               </div>
+            </div>
+          </div>
 
-              <div className="divider my-8"></div>
-
-              {/* 底部功能区 */}
-              <div className="space-y-4">
-                <div className="flex justify-between items-center gap-4">
-                <ConnectButton />
-                  <LanguageSelector 
-                    isOpen={isLangMenuOpen}
-                    onToggle={() => setIsLangMenuOpen(!isLangMenuOpen)}
-                    onSelect={(lang) => {
-                      i18n.changeLanguage(lang);
-                      setIsLangMenuOpen(false);
-                      setIsMenuOpen(false);
-                    }}
-                  />
+          {/* Footer */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-700 bg-gray-900">
+            <div className="space-y-4">
+              <ConnectButton />
+              
+              {/* 移动端专用语言选择器 */}
+              <div className="space-y-2">
+                <div className="text-white/60 text-sm uppercase tracking-wide mb-2">语言 / Language</div>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { code: 'zh', name: '中文', flag: '🇨🇳' },
+                    { code: 'en', name: 'English', flag: '🇺🇸' },
+                    { code: 'ko', name: '한국어', flag: '🇰🇷' }
+                  ].map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        i18n.changeLanguage(lang.code);
+                        setIsMenuOpen(false);
+                        
+                        // 更新URL路径
+                        const urlParts = pathname.split('/');
+                        const currentLang = urlParts[1];
+                        if (currentLang === 'en' || currentLang === 'zh' || currentLang === 'ko') {
+                          urlParts[1] = lang.code;
+                          const newPath = urlParts.join('/');
+                          window.history.pushState({}, '', newPath);
+                        } else {
+                          const newPath = `/${lang.code}${pathname}`;
+                          window.history.pushState({}, '', newPath);
+                        }
+                      }}
+                      className={`p-3 rounded-lg text-center transition-colors border ${
+                        i18n.language === lang.code 
+                          ? 'bg-blue-600 border-blue-500 text-white' 
+                          : 'bg-gray-800 border-gray-600 text-gray-300 hover:bg-gray-700'
+                      }`}
+                    >
+                      <div className="text-lg mb-1">{lang.flag}</div>
+                      <div className="text-xs">{lang.name}</div>
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>

@@ -394,6 +394,28 @@ export const projectsData: Project[] = [
     ]
   },
   {
+    id: 'HunYuanKYC',
+    name: 'HunYuan KYC',
+    logo: '/img/hunyuan.png',
+    imgClassName: 'h-8 w-32 rounded-full',
+    link: 'https://hunyuan.io/',
+    tags: ['infrastructure'],
+    isVerified: true,
+    pointsBonus: {
+        type: 'interaction',
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    socials: [
+      {
+        platform: 'discord',
+        link: 'https://discord.com/channels/1288318123409150013/1288826351511408791'
+      },
+    ]
+  },
+  {
     id: 'TradeOS',
     name: 'TradeOS',
     logo: '/img/tradeos.jpg',

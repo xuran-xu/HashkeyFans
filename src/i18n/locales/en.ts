@@ -16,9 +16,10 @@ export default {
     consensus: "Consensus",
     rankings: "Rankings",
     explore: "Explore",
-    redpacket: "redpacket",
-    card: "card",
-    profile: "profile"
+    redpacket: "Red Packet",
+    card: "Card",
+    profile: "Profile",
+    tokens: "Tokens"
   },
   home: {
     slogan: "$HSK Staking",
@@ -34,10 +35,17 @@ export default {
     events: [
       {
         id: 1,
-        title: "HashKey Chain Meetup - ChengDu",
-        description: "Meetup in Chengdu, discuss the future of HashKey Chain",
-        link: "https://lu.ma/tcfgd9wt",
-        date: "End: 2025-05-17"
+        title: "ETH Summer - HangZhou",
+        description: "ETH Summer - HangZhou, HashKey x LXDAO",
+        link: "https://lu.ma/va0u0jft",
+        date: "End: 2025-06-14"
+      },
+      {
+        id: 2,
+        title: "ETH Summer - Shanghai",
+        description: "ETH Summer - Shanghai, HashKey x LXDAO",
+        link: "https://lu.ma/va0u0jft",
+        date: "End: 2025-06-20"
       }
     ]
   },

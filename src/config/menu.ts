@@ -5,6 +5,11 @@ export const menuConfig: MenuConfig = {
     icon: 'compass',
     items: [
       {
+        icon: 'wallet',
+        key: 'nav.tokens',
+        link: '/tokens'
+      },
+      {
         icon: 'news',
         key: 'nav.news',
         link: '/news'

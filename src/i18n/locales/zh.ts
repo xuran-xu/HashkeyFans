@@ -18,7 +18,8 @@ export default {
     redpacket: "红包",
     card: "卡牌",
     explore: "探索",
-    profile: "个人中心"
+    profile: "个人中心",
+    tokens: "代币"
   },
   home: {
     slogan: "$HSK 质押开启",
@@ -34,10 +35,17 @@ export default {
     events: [
       {
         id: 1,
-        title: "HashKey Chain Meetup - 成都",
-        description: "相约成都，一起讨论 HashKey Chain 的未来",
-        link: "https://lu.ma/tcfgd9wt",
-        date: "2025-05-27"
+        title: "ETH Summer - 杭州",
+        description: "ETH Summer - 杭州, HashKey x LXDAO",
+        link: "https://lu.ma/va0u0jft",
+        date: "End: 2025-06-14"
+      },
+      {
+        id: 2,
+        title: "ETH Summer - 上海",
+        description: "ETH Summer - 上海, HashKey x LXDAO",
+        link: "https://lu.ma/va0u0jft",
+        date: "End: 2025-06-20"
       }
     ]
   },

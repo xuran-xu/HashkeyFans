@@ -13,12 +13,13 @@ export default {
     news: "뉴스",
     projects: "프로젝트",
     activities: "활동",
-    consensus: "컨센서스",
-    rankings: "랭킹",
+    consensus: "합의 대회",
+    rankings: "순위",
     explore: "탐색",
-    redpacket: "레드패킷",
-    card: "카드",
-    profile: "프로필"
+    redpacket: "red packet",
+    card: "card",
+    profile: "profile",
+    tokens: "토큰"
   },
   home: {
     slogan: "$HSK 스테이킹",

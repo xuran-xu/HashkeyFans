@@ -241,13 +241,13 @@ export const Hero = () => {
   }, [i18n.language, t]);
 
   return (
-    <div className="relative h-[calc(100vh-8rem)] flex items-center justify-center pt-8 md:pt-0">
+    <div className="relative min-h-[calc(100vh-4rem)] md:h-[calc(100vh-8rem)] flex items-center justify-center py-8 md:pt-8 md:py-0">
       <BackgroundH />
-      <div className="container mx-auto text-center px-4 relative z-10 mt-8 md:mt-0">
-        <h1 className="text-5xl md:text-7xl font-bold mb-4 font-sora text-white drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] tracking-wide">
+      <div className="container mx-auto text-center px-4 relative z-10">
+        <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-4 font-sora text-white drop-shadow-[0_5px_5px_rgba(0,0,0,0.7)] tracking-wide">
           {content.slogan}
         </h1>
-        <p className="text-xl md:text-2xl mb-6 md:mb-8 text-white font-semibold drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] tracking-wider">
+        <p className="text-lg md:text-xl lg:text-2xl mb-6 md:mb-8 text-white font-semibold drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] tracking-wider">
           {content.description}
         </p>
         <div className="flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-10 mb-8 md:mb-12">
@@ -270,12 +270,12 @@ export const Hero = () => {
           <div className="mt-8 md:mt-12 max-w-4xl mx-auto relative">
             {/* 科技感背景装饰 */}
             <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent blur-sm"></div>
-            <div className="absolute -left-2 top-10 w-1 h-20 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent blur-sm"></div>
-            <div className="absolute -right-2 top-10 w-1 h-20 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent blur-sm"></div>
+            <div className="absolute -left-2 top-10 w-1 h-20 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent blur-sm hidden md:block"></div>
+            <div className="absolute -right-2 top-10 w-1 h-20 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent blur-sm hidden md:block"></div>
             
             <div className="relative">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-8 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)] inline-flex items-center">
-                <div className="w-5 h-5 mr-2 relative">
+              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-6 md:mb-8 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)] inline-flex items-center">
+                <div className="w-4 h-4 md:w-5 md:h-5 mr-2 relative">
                   <div className="absolute inset-0 bg-blue-500/20 rounded-sm rotate-45"></div>
                   <div className="absolute inset-1 bg-blue-500/40 rounded-sm rotate-45"></div>
                 </div>
@@ -296,25 +296,25 @@ export const Hero = () => {
                     <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                     
                     {/* 添加科技线条装饰 */}
-                    <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden">
+                    <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden hidden md:block">
                       <div className="absolute rotate-45 top-5 -right-10 w-[2px] h-20 bg-gradient-to-b from-transparent via-blue-400/40 to-transparent"></div>
                       <div className="absolute rotate-45 top-8 -right-12 w-[1px] h-20 bg-gradient-to-b from-transparent via-purple-400/30 to-transparent"></div>
                     </div>
-                    <div className="absolute bottom-0 left-0 w-20 h-20 overflow-hidden">
+                    <div className="absolute bottom-0 left-0 w-20 h-20 overflow-hidden hidden md:block">
                       <div className="absolute rotate-45 -bottom-10 left-5 w-[2px] h-20 bg-gradient-to-t from-transparent via-blue-400/40 to-transparent"></div>
                       <div className="absolute rotate-45 -bottom-12 left-8 w-[1px] h-20 bg-gradient-to-t from-transparent via-purple-400/30 to-transparent"></div>
                     </div>
                     
                     <div className="relative z-10">
                       <div className="flex justify-between items-start mb-2 md:mb-3">
-                        <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-blue-400 transition-colors truncate max-w-[100%] group-hover:text-shadow-glow">
+                        <h3 className="text-base md:text-lg lg:text-xl font-bold text-white group-hover:text-blue-400 transition-colors max-w-full group-hover:text-shadow-glow">
                           {event.title}
                         </h3>
                       </div>
-                      <p className="text-gray-300 mb-3 md:mb-4 line-clamp-2 h-10 md:h-12 text-sm md:text-base">{event.description}</p>
-                      <div className="flex justify-between items-center">
+                      <p className="text-gray-300 mb-3 md:mb-4 line-clamp-3 md:line-clamp-2 text-sm md:text-base">{event.description}</p>
+                      <div className="flex justify-between items-center gap-2">
                         <span className="text-xs md:text-sm text-blue-100/80 bg-blue-900/50 border border-blue-500/20 px-2 py-1 rounded-md whitespace-nowrap flex items-center">
-                          <div className="w-3 h-3 mr-1 relative">
+                          <div className="w-2 h-2 md:w-3 md:h-3 mr-1 relative">
                             <div className="absolute inset-0 bg-blue-500/30 rounded-full"></div>
                           </div>
                           {event.date}
