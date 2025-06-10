@@ -18,7 +18,8 @@ export default {
     redpacket: "红包",
     card: "卡牌",
     explore: "探索",
-    profile: "个人中心"
+    profile: "个人中心",
+    tokens: "代币"
   },
   home: {
     slogan: "$HSK 质押开启",

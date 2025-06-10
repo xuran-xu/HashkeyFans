@@ -16,9 +16,10 @@ export default {
     consensus: "Consensus",
     rankings: "Rankings",
     explore: "Explore",
-    redpacket: "redpacket",
-    card: "card",
-    profile: "profile"
+    redpacket: "Red Packet",
+    card: "Card",
+    profile: "Profile",
+    tokens: "Tokens"
   },
   home: {
     slogan: "$HSK Staking",
