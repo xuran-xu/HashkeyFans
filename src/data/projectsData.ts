@@ -501,11 +501,11 @@ export const projectsData: Project[] = [
     ]
   },
   {
-    id: 'izumi',
-    name: 'iZumi',
-    logo: '/img/izumi.png',
+    id: 'EqualHub',
+    name: 'EqualHub',
+    logo: '/img/equalhub.jpg',
     imgClassName: 'h-8 w-8 rounded-full',
-    link: 'https://izumi.finance/trade/swap',
+    link: 'https://www.equalhub.xyz/',
     tags: ['DeFi', 'Dex'],
     pointsBonus: {
         type: 'interaction',
@@ -517,7 +517,7 @@ export const projectsData: Project[] = [
     socials: [
       {
         platform: 'x',
-        link: 'https://x.com/izumi_Finance'
+        link: 'https://x.com/equalhub'
       }
     ]
   },
