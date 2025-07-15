@@ -211,6 +211,28 @@ export const projectsData: Project[] = [
     ]
   },
   {
+    id: 'EqualHub',
+    name: 'EqualHub',
+    logo: '/img/equalhub.jpg',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://www.equalhub.xyz/',
+    tags: ['DeFi', 'Dex'],
+    isVerified: true,
+    pointsBonus: {
+        type: 'interaction',
+        description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+        }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/equalhub'
+      }
+    ]
+  },
+  {
     id: 'Orbiter',
     name: 'Orbiter Finance',
     logo: '/img/orbiter.png',
@@ -497,27 +519,6 @@ export const projectsData: Project[] = [
       {
         platform: 'discord',
         link: 'https://discord.com/invite/HfEcJAFu' 
-      }
-    ]
-  },
-  {
-    id: 'EqualHub',
-    name: 'EqualHub',
-    logo: '/img/equalhub.jpg',
-    imgClassName: 'h-8 w-8 rounded-full',
-    link: 'https://www.equalhub.xyz/',
-    tags: ['DeFi', 'Dex'],
-    pointsBonus: {
-        type: 'interaction',
-        description: {
-        en: 'Bonus for contract interactions',
-        zh: '合约交互奖励'
-        }
-    },
-    socials: [
-      {
-        platform: 'x',
-        link: 'https://x.com/equalhub'
       }
     ]
   },
