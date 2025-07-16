@@ -734,4 +734,215 @@ export const projectsData: Project[] = [
       }
     ]
   },
+  {
+    id: 'MesonFi',
+    name: 'Meson.Fi',
+    logo: '/img/mesonfi.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://meson.fi/',
+    tags: ['infrastructure', 'bridge'],
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+      }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/mesonfi'
+      }
+    ]
+  },
+  {
+    id: 'Bridger',
+    name: 'Bridger',
+    logo: '/img/Bridger.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://app.bridgers.xyz/#/?sourceFlag=hsk',
+    tags: ['infrastructure', 'bridge'],
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+      }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/Bridgersxyz'
+      }
+    ]
+  },
+  {
+    id: 'TokenPocket',
+    name: 'TokenPocket',
+    logo: '/img/TokenPocket.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://www.tokenpocket.pro/en',
+    tags: ['wallet', 'defi'],
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+      }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/TokenPocket_TP'
+      }
+    ]
+  },
+  {
+    id: 'OneKey',
+    name: 'OneKey',
+    logo: '/img/OneKey.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://onekey.so/download/?client=browser',
+    tags: ['wallet', 'defi'],
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+      }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/OneKeyHQ'
+      }
+    ]
+  },
+  {
+    id: 'PicWe',
+    name: 'PicWe',
+    logo: '/img/PicWe.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://www.picwe.org/en',
+    tags: ['RWA'],
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+      }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/PicWeGlobal'
+      }
+    ]
+  },
+  {
+    id: 'Asseto',
+    name: 'Asseto',
+    logo: '/img/Asseto.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://asseto.finance/product',
+    tags: ['RWA'],
+    isVerified: true,
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+      }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/AssetoFinance'
+      }
+    ]
+  },
+  {
+    id: 'ZypherNetwork',
+    name: 'Zypher Network',
+    logo: '/img/Zypher_Network.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://zypher.network/',
+    tags: ['infrastructure'],
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+      }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/Zypher_Network'
+      }
+    ]
+  },
+  {
+    id: 'TheGraph',
+    name: 'The Graph',
+    logo: '/img/The_Graph.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://thegraph.com/zh/',
+    tags: ['infrastructure'],
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+      }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/graphprotocol'
+      }
+    ]
+  },
+  {
+    id: 'MintClub',
+    name: 'Mint Club',
+    logo: '/img/Mint_Club.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://mint.club/',
+    tags: ['infrastructure'],
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+      }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/MintClubPro'
+      }
+    ]
+  },
+  {
+    id: 'MemoLabs',
+    name: 'MemoLabs',
+    logo: '/img/MemoLabs.png',
+    imgClassName: 'h-8 w-8 rounded-full',
+    link: 'https://data.memolabs.org/',
+    tags: ['infrastructure'],
+    pointsBonus: {
+      type: 'interaction',
+      description: {
+        en: 'Bonus for contract interactions',
+        zh: '合约交互奖励'
+      }
+    },
+    socials: [
+      {
+        platform: 'x',
+        link: 'https://x.com/MemoLabsOrg'
+      }
+    ]
+  },
 ]; 
