@@ -2,18 +2,9 @@
 
 import { useTranslation } from "react-i18next";
 import { useEffect, useState, useRef } from "react";
-import Link from 'next/link';
 import { Icon } from "../common/Icon";
 import { Button } from "../common/Button";
 
-// 添加事件类型定义
-interface Event {
-  id: number;
-  title: string;
-  description: string;
-  link: string;
-  date: string;
-}
 
 const BackgroundH = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -218,25 +209,13 @@ export const Hero = () => {
   const { i18n, t } = useTranslation();
   const [content, setContent] = useState({
     slogan: "",
-    description: "",
-    buttonJoin: { text: "", link: "" },
-    buttonReview: { text: "", link: "" },
-    events: [] as Event[]  // 指定类型为 Event[]
+    description: ""
   });
 
   useEffect(() => {
     setContent({
       slogan: t('home.slogan'),
-      description: t('home.description'),
-      buttonJoin: {
-        text: t('home.buttonJoin.text'),
-        link: t('home.buttonJoin.link')
-      },
-      buttonReview: {
-        text: t('home.buttonReview.text'),
-        link: t('home.buttonReview.link')
-      },
-      events: (t('home.events', { returnObjects: true }) || []) as Event[]  // 类型断言
+      description: t('home.description')
     });
   }, [i18n.language, t]);
 
@@ -250,91 +229,95 @@ export const Hero = () => {
         <p className="text-lg md:text-xl lg:text-2xl mb-6 md:mb-8 text-white font-semibold drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] tracking-wider">
           {content.description}
         </p>
-        <div className="flex flex-col md:flex-row justify-center space-y-3 md:space-y-0 md:space-x-10 mb-8 md:mb-12">
-          <Button size="lg" variant="primary">
-            <Link href={content.buttonJoin.link} className="flex items-center space-x-2">
-              <Icon name="calendar" />
-              <span>{content.buttonJoin.text}</span>
-            </Link>
-          </Button>
-          <Button size="lg" variant="secondary">
-            <Link href={content.buttonReview.link} className="flex items-center space-x-2">
-              <Icon name="grid" />
-              <span>{content.buttonReview.text}</span>
-            </Link>
-          </Button>
-        </div>
-        
-        {/* 事件展示区域 */}
-        {content.events && content.events.length > 0 && (
-          <div className="mt-8 md:mt-12 max-w-4xl mx-auto relative">
-            {/* 科技感背景装饰 */}
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent blur-sm"></div>
-            <div className="absolute -left-2 top-10 w-1 h-20 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent blur-sm hidden md:block"></div>
-            <div className="absolute -right-2 top-10 w-1 h-20 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent blur-sm hidden md:block"></div>
-            
-            <div className="relative">
-              <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-6 md:mb-8 text-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.7)] inline-flex items-center">
-                <div className="w-4 h-4 md:w-5 md:h-5 mr-2 relative">
-                  <div className="absolute inset-0 bg-blue-500/20 rounded-sm rotate-45"></div>
-                  <div className="absolute inset-1 bg-blue-500/40 rounded-sm rotate-45"></div>
-                </div>
-                <span className="relative">
-                  {t('events.current')}
-                  <span className="absolute -bottom-2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-blue-500 to-transparent"></span>
-                </span>
-              </h2>
-              
-              <div className={`grid grid-cols-1 ${content.events.length === 1 ? 'md:grid-cols-1 max-w-lg mx-auto' : 'md:grid-cols-2'} gap-4 md:gap-6`}>
-                {content.events.map((event) => (
-                  <Link 
-                    key={event.id} 
-                    href={event.link}
-                    className="relative overflow-hidden bg-gradient-to-br from-gray-900/90 via-gray-800/90 to-gray-900/90 backdrop-blur-md border border-white/10 rounded-xl p-4 md:p-6 transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(59,130,246,0.3)] group"
-                  >
-                    {/* 添加发光背景效果 */}
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                    
-                    {/* 添加科技线条装饰 */}
-                    <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden hidden md:block">
-                      <div className="absolute rotate-45 top-5 -right-10 w-[2px] h-20 bg-gradient-to-b from-transparent via-blue-400/40 to-transparent"></div>
-                      <div className="absolute rotate-45 top-8 -right-12 w-[1px] h-20 bg-gradient-to-b from-transparent via-purple-400/30 to-transparent"></div>
-                    </div>
-                    <div className="absolute bottom-0 left-0 w-20 h-20 overflow-hidden hidden md:block">
-                      <div className="absolute rotate-45 -bottom-10 left-5 w-[2px] h-20 bg-gradient-to-t from-transparent via-blue-400/40 to-transparent"></div>
-                      <div className="absolute rotate-45 -bottom-12 left-8 w-[1px] h-20 bg-gradient-to-t from-transparent via-purple-400/30 to-transparent"></div>
-                    </div>
-                    
-                    <div className="relative z-10">
-                      <div className="flex justify-between items-start mb-2 md:mb-3">
-                        <h3 className="text-base md:text-lg lg:text-xl font-bold text-white group-hover:text-blue-400 transition-colors max-w-full group-hover:text-shadow-glow">
-                          {event.title}
-                        </h3>
-                      </div>
-                      <p className="text-gray-300 mb-3 md:mb-4 line-clamp-3 md:line-clamp-2 text-sm md:text-base">{event.description}</p>
-                      <div className="flex justify-between items-center gap-2">
-                        <span className="text-xs md:text-sm text-blue-100/80 bg-blue-900/50 border border-blue-500/20 px-2 py-1 rounded-md whitespace-nowrap flex items-center">
-                          <div className="w-2 h-2 md:w-3 md:h-3 mr-1 relative">
-                            <div className="absolute inset-0 bg-blue-500/30 rounded-full"></div>
-                          </div>
-                          {event.date}
-                        </span>
-                        <span className="text-blue-400 flex items-center text-xs md:text-sm font-medium group-hover:translate-x-1 transition-transform">
-                          {t('common.readMore')} 
-                          <div className="relative ml-1 flex items-center">
-                            <Icon name="chevronRight" className="w-3 h-3 md:w-4 md:h-4 relative z-10" />
-                            <div className="absolute inset-0 bg-blue-400/20 blur-sm rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                          </div>
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+        {/* DeFi和Staking按钮区域 */}
+        <DeFiStakingButtons />
       </div>
+    </div>
+  );
+};
+
+const DeFiStakingButtons = () => {
+  const [activeButton, setActiveButton] = useState<'defi' | 'staking' | null>(null);
+
+  const handleDeFiClick = () => {
+    setActiveButton(activeButton === 'defi' ? null : 'defi');
+  };
+
+  const handleStakingClick = () => {
+    window.open('https://hskhodlium.xyz', '_blank');
+  };
+
+  const handleBackClick = () => {
+    setActiveButton(null);
+  };
+
+  return (
+    <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-8 mb-8 md:mb-12">
+      {activeButton === null ? (
+        <>
+          <Button 
+            size="lg" 
+            variant="primary" 
+            onClick={handleDeFiClick}
+            className="px-8 py-4 text-xl font-normal shadow-2xl hover:shadow-blue-500/50 transform hover:scale-105 transition-all duration-300"
+          >
+            <div className="flex items-center space-x-3">
+              <Icon name="globe" className="w-6 h-6" />
+              <span>DeFi</span>
+            </div>
+          </Button>
+          
+          <Button 
+            size="lg" 
+            variant="secondary" 
+            onClick={handleStakingClick}
+            className="px-8 py-4 text-xl font-normal shadow-2xl hover:shadow-gray-500/50 transform hover:scale-105 transition-all duration-300"
+          >
+            <div className="flex items-center space-x-3">
+              <Icon name="ethereum" className="w-6 h-6" />
+              <span>Staking</span>
+            </div>
+          </Button>
+        </>
+      ) : activeButton === 'defi' ? (
+        <>
+          <Button 
+            size="lg" 
+            variant="primary" 
+            onClick={() => window.open('https://hyperindex.trade', '_blank')}
+            className="px-6 py-3 text-lg font-normal shadow-xl hover:shadow-blue-500/40 transform hover:scale-105 transition-all duration-300"
+          >
+            <div className="flex items-center space-x-2">
+              <Icon name="grid" className="w-5 h-5" />
+              <span>Dex</span>
+            </div>
+          </Button>
+          
+          <Button 
+            size="lg" 
+            variant="primary" 
+            onClick={() => window.open('https://dev.hashprime.xyz/', '_blank')}
+            className="px-6 py-3 text-lg font-normal shadow-xl hover:shadow-blue-500/40 transform hover:scale-105 transition-all duration-300"
+          >
+            <div className="flex items-center space-x-2">
+              <Icon name="wallet" className="w-5 h-5" />
+              <span>Lending</span>
+            </div>
+          </Button>
+          
+          <Button 
+            size="lg" 
+            variant="secondary" 
+            onClick={handleBackClick}
+            className="px-6 py-3 text-lg font-normal shadow-xl hover:shadow-gray-500/40 transform hover:scale-105 transition-all duration-300"
+          >
+            <div className="flex items-center space-x-2">
+              <Icon name="chevronLeft" className="w-5 h-5" />
+              <span>返回</span>
+            </div>
+          </Button>
+        </>
+      ) : null}
     </div>
   );
 }; 

@@ -9,7 +9,7 @@ export interface ProjectSocial {
   link: string;
 }
 
-export type ProjectTag = 'infrastructure' | 'bridge' | 'wallet' | 'RWA' | 'defi' | 'oracle' | 'gaming' | 'DeFi' | 'Dex' | 'social' | 'explorer' | 'depin' | 'nft' | 'launchpad' ;
+export type ProjectTag = 'infrastructure' | 'bridge' | 'wallet' | 'RWA' | 'defi' | 'oracle' | 'gaming' | 'dex' | 'social' | 'explorer' | 'depin' | 'nft' | 'launchpad' ;
 
 export interface Project {
   id: string;
@@ -54,11 +54,7 @@ export const tagConfig: Record<ProjectTag, TagConfigType> = {
     name: { en: 'DeFi', zh: '去中心化金融' },
     color: 'bg-green-100 text-green-800'
   },
-  DeFi: {
-    name: { en: 'DeFi', zh: '去中心化金融' },
-    color: 'bg-green-100 text-green-800'
-  },
-  Dex: {
+  dex: {
     name: { en: 'DEX', zh: '去中心化交易所' },
     color: 'bg-indigo-100 text-indigo-800'
   },
@@ -216,7 +212,7 @@ export const projectsData: Project[] = [
     logo: '/img/equalhub.jpg',
     imgClassName: 'h-8 w-8 rounded-full',
     link: 'https://www.equalhub.xyz/',
-    tags: ['DeFi', 'Dex'],
+    tags: ['defi', 'dex'],
     isVerified: true,
     pointsBonus: {
         type: 'interaction',
@@ -290,7 +286,7 @@ export const projectsData: Project[] = [
     logo: '/img/index.jpg',
     imgClassName: 'h-8 w-8 rounded-full',
     link: 'https://hyperindex.trade',
-    tags: ['DeFi', 'Dex'],
+    tags: ['defi', 'dex'],
     isVerified: true,
     pointsBonus: {
         type: 'interaction',
@@ -313,7 +309,7 @@ export const projectsData: Project[] = [
     imgClassName: 'h-8 w-8 rounded-full',
     isVerified: true,
     link: 'https://app.dodoex.io/swap/network/hashkey/177-HSK/177-WHSK',
-    tags: ['DeFi', 'Dex'],
+    tags: ['defi', 'dex'],
     pointsBonus: {
         type: 'interaction',
         description: {
@@ -499,7 +495,7 @@ export const projectsData: Project[] = [
     logo: '/img/huskey.svg',
     imgClassName: 'h-8 w-16',
     link: 'https://huskeyfi.com/swap?chain=hashkey-mainnet',
-    tags: ['DeFi', 'Dex'],
+    tags: ['defi', 'dex'],
     pointsBonus: {
         type: 'interaction',
         description: {
