@@ -86,7 +86,7 @@ export default function SponsorPage() {
           {renderContactOption(
             <FaDiscord size={48} />,
             content.discord,
-            "https://discord.gg/qvPkbrYY",
+            "https://discord.gg/zskSJmtk",
             false
           )}
         </div>
