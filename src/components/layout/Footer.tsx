@@ -27,7 +27,7 @@ export const Footer = () => {
             <a href="https://t.me/HashKeyChainHSK" className="text-white hover:text-blue-500 transition-colors duration-200">
               <Icon name="telegram" />
             </a>
-            <a href="https://discord.gg/qvPkbrYY" className="text-white hover:text-indigo-500 transition-colors duration-200">
+            <a href="https://discord.com/invite/V7kypNm9cS" className="text-white hover:text-indigo-500 transition-colors duration-200">
               <Icon name="discord" />
             </a>
             <a href="https://x.com/HSKChain" className="text-white hover:text-gray-300 transition-colors duration-200">
